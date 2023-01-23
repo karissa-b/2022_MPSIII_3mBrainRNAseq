@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Karissa Barthelson" />
+
+<meta name="date" content="2022-04-23" />
+
+<title>QC</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">2022_MPSIII_3mBrainRNAseq</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="QC.html">QC</a>
+</li>
+<li>
+  <a href="analysis.html">Analysis</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">QC</h1>
+<h4 class="author">Karissa Barthelson</h4>
+<h4 class="date">2022-04-23</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-04-25
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>2022_MPSIII_3mBrainRNAseq/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220423code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20220423)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220423code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220423)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomkarissab2022MPSIII3mBrainRNAseqtreeb4f1f28c43d8b85636b53c7e8f83692dbe7e757atargetblankb4f1f28a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/tree/b4f1f28c43d8b85636b53c7e8f83692dbe7e757a" target="_blank">b4f1f28</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomkarissab2022MPSIII3mBrainRNAseqtreeb4f1f28c43d8b85636b53c7e8f83692dbe7e757atargetblankb4f1f28a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/tree/b4f1f28c43d8b85636b53c7e8f83692dbe7e757a" target="_blank">b4f1f28</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rapp.history
+    Ignored:    .Rproj.user/
+    Ignored:    data/.DS_Store
+    Ignored:    data/R_objects/
+    Ignored:    data/R_objetcs/
+
+Untracked files:
+    Untracked:  analysis/QC.Rmd
+    Untracked:  analysis/analysis.Rmd
+    Untracked:  analysis/explorationCQN.Rmd
+    Untracked:  data/RNASeqMetaData.xlsx
+    Untracked:  data/fastqc_align/
+    Untracked:  data/fastqc_dedup/
+    Untracked:  data/fastqc_raw/
+    Untracked:  data/fastqc_trim/
+    Untracked:  data/featureCountsLL/
+    Untracked:  data/featurecounts/
+    Untracked:  data/gene_sets/
+    Untracked:  data/starAlignlog/
+    Untracked:  data/v4.2.1_geneinformation.tab
+    Untracked:  data/~$RNASeqMetaData.xlsx
+
+Unstaged changes:
+    Modified:   analysis/_site.yml
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<pre class="r"><code>library(tidyverse)
+library(magrittr)
+library(readxl)
+library(ngsReports)
+library(AnnotationHub)
+library(pander)
+library(scales)
+library(pheatmap)
+library(ggpubr)
+
+theme_set(theme_bw())</code></pre>
+<pre class="r"><code># I onrmally use annotationHub to get the gene information. However, here, I am using the updated zebrafish transcriptome data from lawson et al ELife (discussed later). This file below is from here 
+# https://www.umassmed.edu/lawson-lab/reagents/zebrafish-transcriptome/
+geneInfoLL &lt;- read_tsv(&quot;data/v4.2.1_geneinformation.tab&quot;) %&gt;% 
+  mutate(gene_id = LLgeneID) %&gt;% 
+  column_to_rownames(&quot;LLgeneID&quot;)
+# Keeping the annotation hub code here just i case 
+# ah &lt;- AnnotationHub() %&gt;%
+#   subset(species == &quot;Danio rerio&quot;) %&gt;%
+#   subset(rdataclass == &quot;EnsDb&quot;)
+# 
+# ensDb &lt;- ah[[&quot;AH83189&quot;]] # for release 101, latest version and the alignment
+# grTrans &lt;- transcripts(ensDb)
+# trLengths &lt;- exonsBy(ensDb, &quot;tx&quot;) %&gt;%
+#   width() %&gt;%
+#   vapply(sum, integer(1))
+# mcols(grTrans)$length &lt;- trLengths[names(grTrans)]
+# gcGene &lt;- grTrans %&gt;%
+#   mcols() %&gt;%
+#   as.data.frame() %&gt;%
+#   dplyr::select(gene_id, tx_id, gc_content, length) %&gt;%
+#   as_tibble() %&gt;%
+#   group_by(gene_id) %&gt;%
+#   summarise(
+#     gc_content = sum(gc_content*length) / sum(length),
+#     length = ceiling(median(length))
+#   )
+# grGenes &lt;- genes(ensDb)
+# mcols(grGenes) %&lt;&gt;%
+#   as.data.frame() %&gt;%
+#   left_join(gcGene) %&gt;%
+#   as.data.frame() %&gt;%
+#   DataFrame()</code></pre>
+<pre class="r"><code># Metadata was colleted during sample prep. 
+meta &lt;- 
+  read_excel(&quot;data/RNASeqMetaData.xlsx&quot;, sheet = &quot;SAGC AB1 batch&quot;) %&gt;% 
+  na.omit() %&gt;% 
+  mutate(genotype = case_when(
+    genotype == &quot;wt&quot; ~ &quot;WT&quot;, 
+    genotype == &quot;het&quot; ~ &quot;sgsh/+&quot;,
+    genotype == &quot;naglu hom&quot; ~ &quot;MPS-IIIB&quot;, 
+    genotype == &quot;sgsh hom&quot; ~ &quot;MPS-IIIA&quot;
+  ) %&gt;% 
+    factor(levels = c(&quot;WT&quot;, &quot;sgsh/+&quot;, &quot;MPS-IIIA&quot;, &quot;MPS-IIIB&quot;))
+  )</code></pre>
+<p>Here, I will assess the quality of the RNA-seq data for the <em>sgsh</em> I388Ter vs <em>naglu</em> A603fs experiment on zebrafish 3m old brains.</p>
+<p>Total RNA was purified from the brains of individual fish. The tail end was used for gDNA extraction and PCR genotyping. The total RNA was DNase treated (to remove any genomic DNA which was carried over from the RNA extraction), then delivered to SAGC for polyA+ library preparation and sequencing using the MGI DNBSEQ technology.</p>
+<p>The sequencing was performed over four lanes which were subsequently merged. This was done using the <code>merge.sh</code> script shown below.</p>
+<!-- # ```{r meregFilesBashScript} -->
+<!-- # ## Insert the merge files script here -->
+<!-- # readLines("code/mergeFiles.sh") %>%  -->
+<!-- #   cat(sep = "\n") -->
+<!-- # ``` -->
+</div>
+<div id="fastqc-raw-data" class="section level1">
+<h1>fastqc: raw data</h1>
+<p>I will use the <code>ngsReports</code> package to combine and visualise the fastqc results.</p>
+<pre class="r"><code>fastqc_raw &lt;- list.files(
+  path = &quot;data/fastqc_raw&quot;,
+  pattern = &quot;zip&quot;, 
+  recursive = TRUE,
+  full.names = TRUE) %&gt;% 
+  FastqcDataList()</code></pre>
+<p>The total number of reads ranged between <em>100,246,141</em> and <em>132,483,757</em> reads. Note that the number of reads in the <code>R1</code> file indeed equals to the number of reads in the <code>R2</code> file.</p>
+<pre class="r"><code>readTotals(fastqc_raw) %&gt;% 
+  mutate(Read = case_when(
+    grepl(Filename, pattern = &quot;_R1&quot;) ~ &quot;R1&quot;, 
+    grepl(Filename, pattern = &quot;_R2&quot;) ~ &quot;R2&quot;
+  ), 
+  ULN = str_remove(Filename, &quot;_S[0-9]+_merged.+&quot;)
+  ) %&gt;% 
+  left_join(meta) %&gt;% 
+  ggplot(aes(x = ULN, y = Total_Sequences, fill = Read)) + 
+           geom_col(position = &quot;dodge&quot;) +
+  coord_flip() +
+  scale_fill_viridis_d(end = 0.8) +
+  facet_wrap(~genotype, scales = &quot;free_y&quot;, ncol = 1, strip.position = &quot;right&quot;)</code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-1-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<div id="quality-of-raw-data" class="section level2">
+<h2>Quality of raw data</h2>
+<p>Looks all good to me. The average read quality is always over 25.</p>
+<pre class="r"><code>plotBaseQuals(fastqc_raw)</code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-2-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="gc-content" class="section level2">
+<h2>GC Content</h2>
+<p>All samples have similar GC content, and the distribution looks similar to what we normally obserce in zebrafish brains. Therefore, no issues are present.</p>
+<pre class="r"><code>plotGcContent(
+  x = fastqc_raw, 
+  plotType = &quot;line&quot;,
+  gcType = &quot;Transcriptome&quot;, 
+  species = &quot;Drerio&quot;, 
+  usePlotly = F
+) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-3-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<div id="over-repreented-seq" class="section level3">
+<h3>Over-repreented seq</h3>
+<p>No over-represented sequences are present in this dataset (only in the neg control libraries)</p>
+<pre class="r"><code>getModule(fastqc_raw, &quot;Overrep&quot;) %&gt;% 
+  as_tibble()</code></pre>
+<pre><code># A tibble: 0 x 0</code></pre>
+</div>
+</div>
+<div id="trimmed-data-fastqc" class="section level2">
+<h2>trimmed data fastQC</h2>
+<p>The raw fastq files were then processed with <code>fastp</code>. In this step, the adaptor sequeces were trimmed from the reads. Then all length and quality filters were left as default values. Less than 2% of the reads was discarded, and no observed changes are apparent in the %GC in the reads.</p>
+<pre class="r"><code>fastqc_trim &lt;- list.files(path = &quot;data/fastqc_trim&quot;,
+  pattern = &quot;zip&quot;, 
+  recursive = TRUE,
+  full.names = TRUE) %&gt;% 
+  FastqcDataList()</code></pre>
+<pre class="r"><code>trimStats &lt;- readTotals(fastqc_raw) %&gt;%
+  dplyr::rename(Raw = Total_Sequences) %&gt;%
+  left_join(readTotals(fastqc_trim), by = &quot;Filename&quot;) %&gt;%
+  dplyr::rename(Trimmed = Total_Sequences) %&gt;%
+  mutate(
+    Discarded = 1 - Trimmed / Raw,
+    Retained = Trimmed / Raw
+  )
+
+trimStats %&gt;% 
+  mutate(ULN = str_remove(Filename, &quot;_S[0-9]+_merged.+&quot;)
+  ) %&gt;% 
+  left_join(meta) %&gt;% 
+  na.omit %&gt;% 
+  unique() %&gt;% 
+  ggplot(aes(y = ULN)) +
+  geom_col(aes(x = Discarded*100)) +
+  facet_wrap(~genotype, scales = &quot;free_y&quot;, ncol = 1, strip.position = &quot;right&quot;) +
+  labs(x = &quot;Percentage reads discarded by fastp&quot;)</code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-6-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plotBaseQuals(fastqc_trim) +
+  ggtitle(&quot;Read quality after trimming&quot;, subtitle = &quot;no apparent differences after trimming&quot;)</code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-7-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggarrange(
+  plotGcContent(
+    x = fastqc_raw, 
+    plotType = &quot;line&quot;,
+    gcType = &quot;Transcriptome&quot;, 
+    species = &quot;Drerio&quot;
+  ) +
+    theme(legend.position = &quot;none&quot;) +
+    ggtitle(&quot;Before fastp&quot;), 
+  plotGcContent(
+  x = fastqc_trim, 
+  plotType = &quot;line&quot;,
+  gcType = &quot;Transcriptome&quot;, 
+  species = &quot;Drerio&quot;
+) +
+  theme(legend.position = &quot;none&quot;)+
+  ggtitle(&quot;After fastp&quot;)
+) </code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-8-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="aligned-qc" class="section level2">
+<h2>Aligned QC</h2>
+<p>The reads were aligned to the GRCz11 genome using <code>STAR_2.5.2a</code>. The genome index was generated by &lt;Lawson et al. 2020 Elife&gt;<a href="https://elifesciences.org/articles/55792">link</a>. The majority of reads were aligned uniquely.</p>
+<pre class="r"><code>fastqc_align &lt;- list.files(
+  path = &quot;data/fastqc_align&quot;,
+  pattern = &quot;zip&quot;, 
+  recursive = TRUE,
+  full.names = TRUE) %&gt;% 
+  FastqcDataList()</code></pre>
+<pre class="r"><code>list.files(&quot;data/starAlignlog&quot;, full.names = TRUE) %&gt;% 
+  .[grepl(x = ., pattern = &quot;Log.final.out&quot;)] %&gt;% 
+  ngsReports::plotAlignmentSummary(type = &quot;star&quot;) +
+  scale_fill_viridis_d(end = 0.8) +
+  theme(legend.position = &quot;right&quot;) +
+  ggtitle(&quot;Summary of alignment (STAR)&quot;, 
+          subtitle = &quot;In all samples, the majority of reads mapped uniquely to the zebrafish genome.&quot;)</code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-10-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plotBaseQuals(fastqc_align)</code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-11-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plotGcContent(x = fastqc_align, 
+    plotType = &quot;line&quot;,
+    gcType = &quot;Transcriptome&quot;, 
+    species = &quot;Drerio&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;) </code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-12-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dedup-align-qc" class="section level2">
+<h2>Dedup align QC</h2>
+<p>This dataset was processed with UMIs, which allow PCR duplicates to be removed. I did this using <code>umi-tools</code>. After de-duplciation about half of the reads were retained.</p>
+<pre class="r"><code>fastqc_align_dedup &lt;- list.files(
+  path = &quot;data/fastqc_dedup&quot;,
+  pattern = &quot;zip&quot;, 
+  recursive = TRUE,
+  full.names = TRUE) %&gt;% 
+  FastqcDataList()</code></pre>
+<pre class="r"><code>readTotals(fastqc_align) %&gt;% 
+  mutate(align = &quot;raw&quot;) %&gt;% 
+  bind_rows(readTotals(fastqc_align_dedup) %&gt;% 
+              mutate(align = &quot;dedup&quot;)) %&gt;% 
+  mutate(ULN = str_remove(Filename, &quot;_S[0-9]+_merged.+&quot;)) %&gt;% 
+  left_join(meta) %&gt;% 
+  ggplot(aes(x = ULN, y = Total_Sequences, fill = align)) + 
+           geom_col(position = &quot;dodge&quot;) +
+  coord_flip() +
+  scale_fill_viridis_d(end = 0.8) +
+  scale_y_continuous(labels = comma) +
+  facet_wrap(~genotype, scales = &quot;free_y&quot;, ncol = 1, strip.position = &quot;right&quot;)</code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-14-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="featurecounts-summary" class="section level2">
+<h2>FeatureCounts summary</h2>
+<p>The number of reads aligning to each gene was then counted using featureCounts. The plot below is showing the number of reads aligning to the GRCz11 Ensembl release 98.</p>
+<pre class="r"><code>FC_summary &lt;- read.delim(&quot;data/featurecounts/counts.out.summary&quot;)
+
+# Tidy up the colnames
+colnames(FC_summary) %&lt;&gt;% 
+  str_remove(pattern = &quot;_S[0-9]+_merged.Aligned.sortedByCoord.dedup.out.bam&quot;) %&gt;% 
+  str_remove(pattern = &quot;X04_dedup.bam.&quot;) %&gt;% 
+  str_replace(pattern = &quot;[.]&quot;, replacement = &quot;-&quot;)
+
+FC_summary %&gt;% 
+ gather(key = &quot;ULN&quot;, value = &quot;NumReads&quot;, starts_with(&quot;22&quot;)) %&gt;% 
+  left_join(meta) %&gt;% 
+  dplyr::filter(ULN != &quot;22-00201&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  dplyr::filter(NumReads &gt; 0) %&gt;%   
+  ggplot(aes(y = ULN, x = NumReads, fill = Status)) +
+  geom_col() +
+  scale_fill_viridis_d(end = 0.8) +
+  scale_x_continuous(labels = comma) +
+  facet_wrap(~genotype, scales = &quot;free_y&quot;, ncol = 1, strip.position = &quot;right&quot;) +
+  ggtitle(&quot;FeatureCounts using Ensembl gtf file&quot;)</code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-15-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>Using the LawsonLab gtf file, the number of reads unassigned due to having no features was massively reduced. Therefore, I will do the rest of the analysis using these annotations.</p>
+<pre class="r"><code>FC_summary_LL &lt;- read.delim(&quot;data/featureCountsLL/counts.out.summary&quot;)
+
+# Tidy up the colnames
+colnames(FC_summary_LL) %&lt;&gt;% 
+  str_remove(pattern = &quot;_S[0-9]+_merged.Aligned.sortedByCoord.dedup.out.bam&quot;) %&gt;% 
+  str_remove(pattern = &quot;X04_dedupLL.bam.&quot;) %&gt;% 
+  str_replace(pattern = &quot;[.]&quot;, replacement = &quot;-&quot;)
+
+FC_summary_LL %&gt;% 
+ gather(key = &quot;ULN&quot;, value = &quot;NumReads&quot;, starts_with(&quot;22&quot;)) %&gt;% 
+  left_join(meta) %&gt;% 
+  dplyr::filter(ULN != &quot;22-00201&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  dplyr::filter(NumReads &gt; 0) %&gt;%   
+  ggplot(aes(y = ULN, x = NumReads, fill = Status)) +
+  geom_col() +
+  scale_fill_viridis_d(end = 0.8) +
+  scale_x_continuous(labels = comma) +
+  facet_wrap(~genotype, scales = &quot;free_y&quot;, ncol = 1, strip.position = &quot;right&quot;) +
+  ggtitle(&quot;FeatureCounts using LawwsonLab gtf file&quot;)</code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-16-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.2 (2020-06-22)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Mojave 10.14.3
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
+
+attached base packages:
+[1] parallel  stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] ggpubr_0.4.0         pheatmap_1.0.12      scales_1.1.1        
+ [4] pander_0.6.4         AnnotationHub_2.20.2 BiocFileCache_1.12.1
+ [7] dbplyr_2.1.1         ngsReports_1.4.2     BiocGenerics_0.34.0 
+[10] readxl_1.3.1         magrittr_2.0.1       forcats_0.5.1       
+[13] stringr_1.4.0        dplyr_1.0.7          purrr_0.3.4         
+[16] readr_1.4.0          tidyr_1.1.3          tibble_3.1.2        
+[19] ggplot2_3.3.5        tidyverse_1.3.1     
+
+loaded via a namespace (and not attached):
+  [1] backports_1.2.1               workflowr_1.6.2              
+  [3] plyr_1.8.6                    lazyeval_0.2.2               
+  [5] BiocParallel_1.22.0           GenomeInfoDb_1.24.2          
+  [7] digest_0.6.27                 htmltools_0.5.1.1            
+  [9] fansi_0.5.0                   memoise_2.0.0                
+ [11] cluster_2.1.2                 openxlsx_4.2.4               
+ [13] Biostrings_2.56.0             modelr_0.1.8                 
+ [15] matrixStats_0.59.0            jpeg_0.1-8.1                 
+ [17] colorspace_2.0-2              blob_1.2.1                   
+ [19] rvest_1.0.0                   rappdirs_0.3.3               
+ [21] ggrepel_0.9.1                 haven_2.4.1                  
+ [23] xfun_0.24                     crayon_1.4.1                 
+ [25] RCurl_1.98-1.3                jsonlite_1.7.2               
+ [27] zoo_1.8-9                     glue_1.4.2                   
+ [29] gtable_0.3.0                  zlibbioc_1.34.0              
+ [31] XVector_0.28.0                DelayedArray_0.14.1          
+ [33] car_3.0-11                    abind_1.4-5                  
+ [35] DBI_1.1.1                     rstatix_0.7.0                
+ [37] Rcpp_1.0.7                    viridisLite_0.4.0            
+ [39] xtable_1.8-4                  foreign_0.8-81               
+ [41] flashClust_1.01-2             bit_4.0.4                    
+ [43] stats4_4.0.2                  DT_0.18                      
+ [45] truncnorm_1.0-8               htmlwidgets_1.5.3            
+ [47] httr_1.4.2                    RColorBrewer_1.1-2           
+ [49] ellipsis_0.3.2                farver_2.1.0                 
+ [51] pkgconfig_2.0.3               sass_0.4.0                   
+ [53] utf8_1.2.1                    labeling_0.4.2               
+ [55] tidyselect_1.1.1              rlang_0.4.11                 
+ [57] reshape2_1.4.4                later_1.2.0                  
+ [59] AnnotationDbi_1.50.3          munsell_0.5.0                
+ [61] BiocVersion_3.11.1            cellranger_1.1.0             
+ [63] tools_4.0.2                   cachem_1.0.5                 
+ [65] cli_3.0.0                     generics_0.1.0               
+ [67] RSQLite_2.2.7                 broom_0.7.8                  
+ [69] evaluate_0.14                 fastmap_1.1.0                
+ [71] ggdendro_0.1.22               yaml_2.2.1                   
+ [73] knitr_1.33                    bit64_4.0.5                  
+ [75] fs_1.5.0                      zip_2.2.0                    
+ [77] mime_0.11                     leaps_3.1                    
+ [79] xml2_1.3.2                    compiler_4.0.2               
+ [81] rstudioapi_0.13               plotly_4.9.4.1               
+ [83] curl_4.3.2                    png_0.1-7                    
+ [85] interactiveDisplayBase_1.26.3 ggsignif_0.6.2               
+ [87] reprex_2.0.0                  bslib_0.2.5.1                
+ [89] stringi_1.6.2                 highr_0.9                    
+ [91] lattice_0.20-44               Matrix_1.3-4                 
+ [93] vctrs_0.3.8                   pillar_1.6.1                 
+ [95] lifecycle_1.0.0               BiocManager_1.30.16          
+ [97] jquerylib_0.1.4               cowplot_1.1.1                
+ [99] data.table_1.14.0             bitops_1.0-7                 
+[101] httpuv_1.6.1                  GenomicRanges_1.40.0         
+[103] R6_2.5.0                      latticeExtra_0.6-29          
+[105] hwriter_1.3.2                 promises_1.2.0.1             
+[107] ShortRead_1.46.0              rio_0.5.27                   
+[109] IRanges_2.22.2                MASS_7.3-54                  
+[111] assertthat_0.2.1              SummarizedExperiment_1.18.2  
+[113] rprojroot_2.0.2               withr_2.4.2                  
+[115] GenomicAlignments_1.24.0      Rsamtools_2.4.0              
+[117] S4Vectors_0.26.1              GenomeInfoDbData_1.2.3       
+[119] hms_1.1.0                     grid_4.0.2                   
+[121] rmarkdown_2.9                 carData_3.0-4                
+[123] git2r_0.28.0                  scatterplot3d_0.3-41         
+[125] Biobase_2.48.0                shiny_1.6.0                  
+[127] lubridate_1.7.10              FactoMineR_2.4               </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

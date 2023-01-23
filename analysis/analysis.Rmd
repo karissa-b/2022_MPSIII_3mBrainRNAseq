@@ -1,0 +1,992 @@
+---
+title: "analysis"
+author: "Karissa Barthelson"
+date: "2022-04-24"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  autodep = TRUE,
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center", 
+  out.width ="75%", 
+  out.height = "75%"
+)
+```
+
+```{r loadLibs}
+library(tidyverse)
+library(magrittr)
+library(readxl)
+library(ngsReports)
+library(AnnotationHub)
+library(msigdbr)
+library(pander)
+library(scales)
+library(pheatmap)
+library(ggpubr)
+library(ggrepel)
+library(ggeasy)
+library(ggfortify)
+library(ggforce) # for facet_zoom
+library(RColorBrewer)
+library(UpSetR)
+library(edgeR)
+library(goseq)
+library(fgsea)
+library(harmonicmeanp)
+theme_set(theme_bw())
+```
+
+Pre-processing of the RNAseq data looked all good. Therefore, I will now perform the analysis of the data. 
+
+Gene information was obtained from AnnotationHub, as well as from <Lawson et al.> [link](https://elifesciences.org/articles/55792). 
+
+```{r anno}
+ah <- AnnotationHub() %>%
+	subset(species == "Danio rerio") %>%
+	subset(rdataclass == "EnsDb")
+
+ensDb <- ah[["AH83189"]] # for release 101, latest version in Ah
+grTrans <- transcripts(ensDb)
+trLengths <- exonsBy(ensDb, "tx") %>%
+	width() %>%
+	vapply(sum, integer(1))
+mcols(grTrans)$length <- trLengths[names(grTrans)]
+gcGene <- grTrans %>%
+  mcols() %>%
+  as.data.frame() %>%
+  dplyr::select(gene_id, tx_id, gc_content, length) %>%
+  as_tibble() %>%
+  group_by(gene_id) %>%
+  summarise(
+    gc_content = sum(gc_content*length) / sum(length),
+    length = ceiling(median(length))
+  )
+grGenes <- genes(ensDb)
+mcols(grGenes) %<>%
+  as.data.frame() %>%
+  left_join(gcGene) %>%
+  as.data.frame() %>%
+  DataFrame()
+
+
+geneInfoLL <- read_tsv("data/v4.2.1_geneinformation.tab") %>% 
+  mutate(gene_id = LLgeneID) %>% 
+  column_to_rownames("LLgeneID")
+```
+
+```{r meta}
+# Metadata was generated during sample prep.
+meta <- 
+  read_excel("data/RNASeqMetaData.xlsx", sheet = "SAGC AB1 batch") %>% 
+  mutate(genotype = case_when(
+    genotype == "wt" ~ "WT", 
+    genotype == "het" ~ "sgsh/+",
+    genotype == "naglu hom" ~ "MPS-IIIB", 
+    genotype == "sgsh hom" ~ "MPS-IIIA"
+  ) %>% 
+    factor(levels = c("WT", "sgsh/+", "MPS-IIIA", "MPS-IIIB"))
+  ) %>% 
+  mutate(sample = SampleName) %>% 
+  left_join(read_excel("data/RNASeqMetaData.xlsx", sheet = "AB 1.1") %>% 
+              dplyr::select(batchKilled, Tank, Sex, sample), 
+            by = "sample"
+  ) %>% 
+  mutate(Tank = as.factor(Tank),
+         batchKilled = as.factor(batchKilled), 
+         Sex = as.factor(Sex)) %>% 
+  dplyr::filter(!is.na(ULN))
+
+# Read in gene counts, and make expression matrix with gene name as the rownames
+featureCounts <- 
+  read_delim("data/featureCountsLL/counts.out", delim = "\t", skip = 1) %>%
+  set_names(basename(names(.))) %>% 
+  set_names(names(.) %>% str_remove(pattern = "_S[0-9]+_merged.Aligned.sortedByCoord.dedup.out.bam")) %>% 
+  as_tibble() %>% 
+  dplyr::select(-c(Chr, Start, End, Length, Strand)) %>% 
+  gather(key = "ULN", value = "counts", starts_with("22")) %>% 
+  left_join(meta) %>% 
+  left_join(geneInfoLL, by = c("Geneid" = "gene_id")) %>% 
+  dplyr::select(LLgeneAbbrev, counts, SampleName) %>% 
+  dplyr::distinct(LLgeneAbbrev, SampleName, .keep_all = T) %>% 
+  spread(key = "SampleName", value = "counts") %>% 
+  dplyr::filter(!is.na(LLgeneAbbrev)) %>% 
+  column_to_rownames("LLgeneAbbrev")
+```
+
+## filter lowly expressed genes
+
+Genes which are lowly expressed in RNA-seq data are not informative for differential gene expression analysis. Since one count in one RNA-seq library and 3 counts in another library does not necesserily mean a 3 fold change. Therefore we need to filter out any genes which are lowly expressed. A general rule for filtering is having a cpm above 10/(min_lib_size/1000000) in at least one group of the RNA-seq libraries. Here, that equates to a logCPM of about 0.4. 
+
+The effect of filtering is found below. 
+
+```{r filt}
+a <- featureCounts %>% 
+    cpm(log = TRUE) %>%
+    as.data.frame() %>% 
+  pivot_longer(
+    cols = everything(),
+    names_to = "sample",
+    values_to = "logCPM"
+  ) %>%
+  split(f = .$sample) %>%
+  lapply(function(x){
+    d <- density(x$logCPM)
+    tibble(
+      sample = unique(x$sample),
+      x = d$x,
+      y = d$y
+    )
+  }) %>%
+  bind_rows() %>%
+  left_join(meta) %>% 
+  na.omit %>% 
+  ggplot(aes(x, y, colour = genotype, group = sample)) +
+  geom_line() +
+  labs(
+    x = "logCPM",
+    y = "Density",
+    colour = "Genotype"
+  )+
+  ggtitle("Before filtering") +
+  theme_bw()
+
+b <- featureCounts %>% 
+  .[rowSums(cpm(.) >= 0.4) >= 4,] %>% 
+    cpm(log = TRUE) %>%
+    as.data.frame() %>% 
+  pivot_longer(
+    cols = everything(),
+    names_to = "sample",
+    values_to = "logCPM"
+  ) %>%
+  split(f = .$sample) %>%
+  lapply(function(x){
+    d <- density(x$logCPM)
+    tibble(
+      sample = unique(x$sample),
+      x = d$x,
+      y = d$y
+    )
+  }) %>%
+  bind_rows() %>%
+  left_join(meta) %>% 
+  na.omit %>% 
+  ggplot(aes(x, y, colour = genotype, group = sample)) +
+  geom_line() +
+  labs(
+    x = "logCPM",
+    y = "Density",
+    colour = "Genotype"
+  )+
+  ggtitle("After filtering")
+
+ggarrange(a, b, common.legend = TRUE)
+```
+
+```{r dge}
+x <- 
+  featureCounts %>% 
+  .[-17] %>% 
+  as.matrix() %>% 
+  .[rowSums(cpm(.) >= 0.5) >= 4,] %>%
+  DGEList(
+    samples = tibble(sample = colnames(.)) %>%
+      left_join(meta),
+    genes = tibble(LLgeneAbbrev = rownames(.)) %>% 
+      left_join(geneInfoLL %>% 
+                  rownames_to_column("gene_idLL") %>%  
+                  dplyr::distinct(LLgeneAbbrev, .keep_all = T) 
+      )
+    ) %>%
+  calcNormFactors()
+```
+```{r libsizes}
+  x$samples %>% 
+    ggplot(aes(x = sample, lib.size)) +
+    geom_col() +
+    scale_y_continuous(labels = comma) +
+    facet_wrap(~genotype, scales = "free_x", nrow = 1) +
+    ggtitle("After filtering lowly expressed genes")
+```
+
+A DGEList object was generated, which nicely packages the gene counts, gene information and sample information in one object. When generating this object, normalization factors were calculated to scale the raw library sizes using the trimmed mean of M-values (TMM). RNA-seq libraries ranged between `r range(x$samples$lib.size) %>% comma %>% pander` reads. 
+
+## PCA
+
+```{r PCAobject}
+PCA <- x$counts %>% 
+  cpm(log=TRUE) %>% 
+  t() %>% 
+  prcomp()
+```
+
+The overall similarities between samples can be visualised by principal component analysis (PCA). PCA is a dimensionality-reduction method that transforms a large set of variables into a smaller one that still contains most of the information in the original set. The plot below shows the first principal component (PC1) against the second principal component (PC2), explaining `r summary(PCA)$importance[3,1] %>% percent()` and  `r summary(PCA)$importance[3,2] %>% percent()` of the total variation in the dataset respectively. Some seperation of the MPS-III samples is obsevred across the second principal component is observed, suggesting some subtle transcriptome differences between these disease model fish brains relative to the wt and het samples (which are not modelling the disease). 
+
+```{r}
+PCA %>% 
+  autoplot(data = tibble(sample = rownames(.$x)) %>%
+             left_join(x$samples),
+           colour = "genotype", 
+           size = 6
+  ) +
+  geom_label_repel(aes(label = sample)) +
+  theme(aspect.ratio = 1) +
+  labs(colour = "Genotype") +
+  scale_colour_manual(values = c("grey50", "#fdb42f", "#cc4778","#5c01a6" ))
+#ggsave("output/plots/PCAblue.png", width = 10, height = 10, units = "cm", dpi = 300, scale = 1.25)
+```
+
+Samples AB27 and AB1 do not cluster with the rest of the samples within their group. To check if there was a sample swap, I manually inspected the alignments at the sgsh and naglu mutation sites to confirm genotypes. However, the genotypes are as expected. 
+
+```{r PCA}
+x$counts %>% 
+  cpm(log=TRUE) %>% 
+  t() %>% 
+  prcomp() %>% 
+  autoplot(data = tibble(sample = rownames(.$x)) %>%
+      left_join(x$samples),
+    colour = "Sex", 
+    # shape = "genotype",
+    size = 6
+  ) +
+  theme(aspect.ratio = 1) +
+  geom_label_repel(aes(label = sample)) +
+  scale_color_viridis_d(end = 0.7)
+
+x$counts %>% 
+  cpm(log=TRUE) %>% 
+  t() %>% 
+  prcomp() %>% 
+  autoplot(data = tibble(sample = rownames(.$x)) %>%
+      left_join(x$samples),
+    colour = "Tank", 
+    # shape = "genotype",
+    size = 6
+  ) +
+  theme(aspect.ratio = 1) +
+  geom_label_repel(aes(label = sample)) +
+  scale_color_viridis_d(end = 0.7)
+
+x$counts %>% 
+  cpm(log=TRUE) %>% 
+  t() %>% 
+  prcomp() %>% 
+  autoplot(data = tibble(sample = rownames(.$x)) %>%
+      left_join(x$samples) %>% 
+        mutate(rnaBatch = as.factor(rnaBatch)),
+    colour = "batchKilled", 
+    # shape = "genotype",
+    size = 6
+  ) +
+  theme(aspect.ratio = 1) +
+  geom_label_repel(aes(label = sample)) +
+  scale_color_viridis_d(option = "turbo")
+```
+
+## Initial DE analysis
+
+I will now perform a differential gene expression analysis. Since Tank, sex, and batch killed did not appear to have effects on the transcriptomes, I will only do a test to test the effect of genotype. 
+
+A negative binomial generalized log-linear model was fitted to the read counts for each gene using `glmFit`, then likelihood ratio tests were performed for each genotype coefficient (sgsh/+, MPS-IIIA or MPS-IIIB) using `glmLRT` implemented in the `edgeR` package. 
+
+```{r}
+design <- model.matrix(~genotype, data = x$samples) %>% 
+  set_colnames(gsub(colnames(.), pattern = "genotype", replacement = ""))
+
+fit_1 <- x %>% 
+  estimateDisp(design) %>% 
+  glmFit(design)
+
+toptable_1 <- design %>% colnames() %>% .[2:4] %>% 
+  sapply(function(x){
+    glmLRT(fit_1, coef = x) %>%
+      topTags(n = Inf) %>%
+      .[["table"]] %>%
+      as_tibble() %>%
+      arrange(PValue) %>%
+       mutate(
+        coef = x,
+        DE = FDR < 0.05
+      ) %>% 
+      dplyr::select(
+        geneName, logFC, logCPM, PValue, FDR, DE, everything()  
+      )
+      
+  }, simplify = FALSE)
+```
+
+```{r}
+toptable_1 %>% 
+  lapply(function(y) {
+    y %>% 
+      dplyr::filter(DE == T) %>% 
+      nrow()
+  }) %>% 
+  bind_rows() %>% 
+  as_tibble() %>% 
+  gather(key = "coef", value = "numDE") %>% 
+  ggplot(aes(x = numDE, y = coef)) +
+  geom_col(fill = "grey50") +
+  geom_text(aes(label = numDE)) +
+  ggtitle("Number of DE genes in each comparison", 
+          subtitle = "The MPS-IIIA zebrafish samples have the most DE genes")
+```
+
+```{r}
+toptable_1 %>% 
+  bind_rows() %>% 
+  ggplot(aes(x = PValue)) +
+  geom_histogram(binwidth = 0.05, colour= "black") +
+  facet_wrap(~coef) +
+  ggtitle("Distribution of p-values in DE analysis")
+```
+
+The volcano and MD plots below are zoomed in for vis purposes (some genes are DE with very high p-vals)
+
+```{r}
+cpm(x, log = T) %>%
+  .["si:ch211-59h6.1",] %>%
+  as.data.frame() %>%
+  set_colnames("logCPM") %>%
+  rownames_to_column("sample") %>%
+  left_join(x$samples) %>%
+  ggplot(aes(x = genotype, y = logCPM)) +
+  geom_jitter()
+```
+
+
+```{r}
+toptable_1 %>%
+  bind_rows() %>% 
+  ggplot(aes(y = -log10(PValue), x = logFC, colour = DE)) +
+  geom_point(
+    alpha = 0.5, size = 1.25
+  ) +
+  facet_wrap(~coef) +
+  # geom_label_repel(
+  #   aes(label = gene_name),
+  #   data = .  %>% dplyr::filter(FDR < 0.05),
+  #   show.legend = FALSE
+  #   ) +
+  coord_cartesian(ylim = c(0, 20) )+
+  theme(legend.position = "bottom") +
+  scale_color_manual(values = c("grey50", "red")) 
+  #ggsave("output/plots/volvano.png", width = 18, height = 10, units = "cm", dpi = 300, scale = 1.5)
+
+toptable_1 %>%
+  bind_rows() %>% 
+  ggplot(aes(x = logCPM, y = logFC,  colour = DE)) +
+  geom_point(
+    alpha = 0.5
+  ) +
+  facet_wrap(~coef, ncol = 1) +
+  geom_smooth(method = "gam", se = F, colour = "blue") +
+  geom_hline(yintercept = 0) +
+  # geom_label_repel(
+  #   aes(label = gene_name), 
+  #   data = .  %>% dplyr::filter(FDR < 0.05), 
+  #   show.legend = FALSE
+  #   ) +
+  coord_cartesian(ylim = c(-2.5, 2.5) )+
+  theme(legend.position = "bottom") +
+  scale_color_manual(values = c("grey50", "red"))
+```
+
+When inspecting the toptables, it is clear that a lot of the DE genes come from the same chromosome as the mutation. The Manhatten plots below show this more clearly. I will explore this further later. 
+
+```{r}
+chromosomes <- geneInfoLL$LLchr %>% 
+  unique %>% 
+  .[1:25]
+
+manhat_input <- 
+	toptable_1 %>% 
+  bind_rows() %>% 
+  mutate(mid = mean(c(LLstart, LLend))) %>% 
+  dplyr::filter(LLchr %in% chromosomes) %>% 
+  group_by(gene_idLL) %>% 
+  mutate(mid = mean(c(LLstart,LLend))) %>% 
+  ungroup %>%
+  mutate(chromosome = str_remove(LLchr, pattern = "chr") %>% 
+           factor(levels = seq(1:25))) %>% 
+  group_by(chromosome) %>% 
+  summarise(chrLen = max(mid)) %>% 
+  mutate(chrSt = cumsum(chrLen)-chrLen) %>% 
+	dplyr::select(-chrLen) %>% 
+  left_join(toptable_1 %>% 
+              bind_rows() %>% 
+              left_join(x$genes %>% 
+                          as_tibble() %>% 
+                          dplyr::select(LLstart, LLend, LLchr, gene_id) %>% 
+                          group_by(gene_id) %>% 
+                          mutate(mid = mean(c(LLstart, LLend))) %>% 
+                          ungroup %>%
+                          mutate(chromosome = str_remove(LLchr, pattern = "chr") %>% 
+                                   factor(levels = seq(1:25))) 
+              )
+  ) %>% 
+  group_by(gene_id) %>% 
+  mutate(mid = mean(c(LLstart, LLend))) %>% 
+  ungroup %>% 
+  dplyr::arrange(mid, chromosome) %>% 
+  mutate(midCum = chrSt + mid)
+
+axis <- manhat_input %>%
+  group_by(chromosome) %>%
+  dplyr::arrange(chromosome) %>%
+  summarize(center = (max(midCum) + min(midCum)) / 2) %>%
+  mutate(
+    seqnames = as.numeric(chromosome),
+    colour = rep(c("grey40", "black"), length.out = 25)
+  )
+
+ggplot(manhat_input, aes(x = midCum, y = -log10(PValue))) +
+  geom_point(aes(color=chromosome), alpha = 0.5, size = 1) +
+  geom_point(alpha = 0.5, size = 1, colour = "red", 
+             data = . %>% 
+               dplyr::filter(coef == "MPS-IIIB" & chromosome == 24)) +
+  geom_point(alpha = 0.5, size = 1, colour = "red", 
+             data = . %>% 
+               dplyr::filter(coef == "MPS-IIIA" & chromosome == 22)) +
+   geom_point(alpha = 0.5, size = 1, colour = "red", 
+             data = . %>% 
+               dplyr::filter(coef == "sgsh/+" & chromosome == 22)) +
+  scale_color_manual(values = axis$colour) +
+  scale_x_continuous(label = axis$chromosome, breaks = axis$center) +
+  scale_y_continuous(limits =c(0, 10)) + # zoom in
+  facet_wrap(~coef, ncol = 1) +
+  labs(x = "Chromosome", y = expression(paste(-log[10], "(p)"))) +
+  theme( 
+    legend.position="none",
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  ) 
+```
+
+The genes on chromosome 22 in sgsh mutant fish appear to be more DE in the homozygous fish. Not really suprising here.
+
+```{r}
+DEgenesIIIA <- toptable_1$`MPS-IIIA` %>% 
+  dplyr::filter(DE == T) %>% 
+  .$LLgeneAbbrev 
+
+DEgeneshet <- toptable_1$`sgsh/+` %>% 
+  dplyr::filter(DE == T) %>% 
+  .$LLgeneAbbrev 
+
+toptable_1 %>% 
+  bind_rows() %>% 
+  dplyr::filter(coef %in% c("MPS-IIIA", "sgsh/+")) %>% 
+  dplyr::filter(LLchr == "chr22") %>% 
+  dplyr::select(LLgeneAbbrev, PValue, coef) %>% 
+  spread(key = "coef", value = "PValue") %>% 
+  mutate(DE = case_when(
+    LLgeneAbbrev %in% intersect(DEgenesIIIA, DEgeneshet) ~ "both", 
+    LLgeneAbbrev %in% DEgeneshet[!DEgeneshet %in% DEgenesIIIA] ~ "het only",
+    LLgeneAbbrev %in% DEgenesIIIA[!DEgenesIIIA %in% DEgeneshet] ~ "MPS-IIIA only", 
+    TRUE ~ "not DE"
+  )
+  ) %>% 
+  ggplot(aes(x = -log10(`MPS-IIIA`), y = -log10(`sgsh/+`))) +
+  geom_point(aes(colour = DE), 
+             alpha = 0.5, 
+             size = 2) +
+  geom_abline(slope = 1) +
+  theme(aspect.ratio = 1) +
+  scale_color_brewer(type = "qual",palette = "Dark2") +
+  facet_zoom(xlim = c(0,10), ylim = c(0,10), 
+             horizontal = F, show.area = F, zoom.size = 1) +
+  labs(x = "-log10(Pvalue) MPS-IIIA homozygous", 
+       y = "-log10(Pvalue) MPS-IIIA heterozygous")
+```
+
+I also compared the log2 fold changes of genes on chr22 in the heterozygous and homozygous samples. V
+
+```{r}
+toptable_1 %>% 
+  bind_rows() %>% 
+  dplyr::filter(coef %in% c("MPS-IIIA", "sgsh/+")) %>% 
+  dplyr::filter(LLchr == "chr22") %>% 
+  dplyr::select(LLgeneAbbrev, logFC, coef)  %>% 
+  spread(key = "coef", value = "logFC") %>% 
+  mutate(DE = case_when(
+    LLgeneAbbrev %in% intersect(DEgenesIIIA, DEgeneshet) ~ "both", 
+    LLgeneAbbrev %in% DEgeneshet[!DEgeneshet %in% DEgenesIIIA] ~ "het only",
+    LLgeneAbbrev %in% DEgenesIIIA[!DEgenesIIIA %in% DEgeneshet] ~ "MPS-IIIA only", 
+    TRUE ~ "not DE"
+  ) 
+  )%>% 
+  left_join(geneInfoLL) %>% 
+  group_by(LLgeneAbbrev) %>% 
+  mutate(mid = mean(c(LLstart, LLend))) %>% 
+  ggplot(aes(x = `MPS-IIIA`, y =`sgsh/+`)) +
+  geom_point(aes(colour = mid), 
+             alpha = 0.5, 
+             size = 4) +
+  geom_abline(slope = 1) +
+  geom_label_repel(aes(label = LLgeneAbbrev), nudge_y = 1,
+                   data = . %>% 
+                     dplyr::filter(LLgeneAbbrev == "sgsh")) +
+  scale_x_continuous(limits = c(-5, 5)) +
+  scale_y_continuous(limits = c(-5, 5)) +
+  theme(aspect.ratio = 1) +
+  scale_color_viridis_c(option = "turbo")
+```
+
+
+```{r}
+cpm(x, log = T) %>%
+  .[intersect(DEgenesIIIA, DEgeneshet),] %>% 
+  as.data.frame() %>% 
+  rownames_to_column("LLgeneAbbrev") %>% 
+  gather(key = "sample", value = "logCPM", starts_with("AB")) %>% 
+  left_join(x$samples) %>%
+  ggplot(aes(x = genotype, y = logCPM)) +
+  stat_summary(fun.data=mean_sdl, geom="bar", aes(fill = genotype)) +
+  scale_fill_brewer(type = "qual",palette = "Dark2") +
+  geom_jitter() +
+  facet_wrap(~LLgeneAbbrev) +
+  easy_rotate_x_labels(angle = -44)
+```
+
+
+
+## Gene set enrichment analysis
+
+I next want to see whether the DE genes in each mutant have some sort of functional relevance. To do this, I will perform over-repressentaion analusis of the DE genes of GO terms and/or KEGG gene sets. These were obtained from msigdb using `msigdbr.` 
+### Gene sets
+
+```{r}
+KEGG <- msigdbr("Danio rerio", category = "C2", subcategory = "CP:KEGG") %>% 
+  left_join(x$genes, by = c("gene_symbol" = "LLgeneAbbrev")) %>% 
+  dplyr::filter(gene_symbol %in% x$genes$LLgeneAbbrev) %>% 
+  distinct(gs_name, gene_symbol, .keep_all = TRUE) %>% 
+  split(f = .$gs_name) %>%
+  lapply(extract2, "gene_symbol") 
+
+sizes <- KEGG %>% 
+  lapply(length) %>% 
+  unlist %>% 
+  as.data.frame() %>% 
+  set_colnames( "n_genes") %>% 
+  rownames_to_column("gs")
+
+
+# retain gene sets with at least 10 genes in it
+KEGG <- KEGG[sizes %>% dplyr::filter(n_genes > 10) %>% .$gs]
+
+# GO Terms
+goSummaries <- url("https://uofabioinformaticshub.github.io/summaries2GO/data/goSummaries.RDS") %>%
+  readRDS() %>%
+  mutate(
+    Term = Term(id),
+    gs_name = Term %>% str_to_upper() %>% str_replace_all("[ -]", "_"),
+    gs_name = paste0("GO_", gs_name)
+    )
+
+minPath <- 3
+
+GO <- 
+  msigdbr("Danio rerio", category = "C5") %>% 
+  left_join(x$genes, by = c("gene_symbol" = "LLgeneAbbrev")) %>% 
+  dplyr::filter(gene_symbol %in% x$genes$LLgeneAbbrev) %>% 
+  distinct(gs_name, gene_symbol, .keep_all = TRUE) %>% 
+  dplyr::filter(grepl(gs_name, pattern = "^GO")) %>% 
+  mutate(gs_name = str_replace(gs_name, pattern = "GOBP_", replacement = "GO_")) %>% 
+  mutate(gs_name = str_replace(gs_name, pattern = "GOMF_", replacement = "GO_")) %>%     
+  mutate(gs_name = str_replace(gs_name, pattern = "GOCC_", replacement = "GO_")) %>%     
+  left_join(goSummaries) %>% 
+  dplyr::filter(shortest_path >= minPath) %>%
+  distinct(gs_name, gene_id, .keep_all = TRUE) %>% 
+  split(f = .$gs_name) %>%
+  lapply(extract2, "gene_symbol")
+ 
+# GOdf <-  msigdbr("Danio rerio", category = "C5") %>% 
+#   dplyr::filter(grepl(gs_name, pattern = "^GO")) %>% 
+#   left_join(x$genes, by = c("gene_symbol" = "gene_name")) %>% 
+#   dplyr::filter(gene_id %in% rownames(x)) %>% 
+#   mutate(gs_name = str_replace(gs_name, pattern = "GOBP_", replacement = "GO_")) %>% 
+#   mutate(gs_name = str_replace(gs_name, pattern = "GOMF_", replacement = "GO_")) %>%     
+#   mutate(gs_name = str_replace(gs_name, pattern = "GOCC_", replacement = "GO_")) %>%     
+#   left_join(goSummaries) %>% 
+#   dplyr::filter(shortest_path >= minPath) %>%
+#   distinct(gs_name, gene_id, .keep_all = TRUE) %>% 
+#   dplyr::select(gs_name, gene_id)
+
+sizes_GO <- GO %>%
+  lapply(length) %>%
+  unlist %>%
+  as.data.frame() %>%
+  set_colnames( "n_genes") %>%
+  rownames_to_column("gs")
+
+
+# retain gene sets with at least 5 genes in it
+GO <- GO[sizes_GO %>% dplyr::filter(n_genes > 5) %>% .$gs]
+
+ireGenes <-
+read_xlsx("data/gene_sets/ireGenes.xlsx", sheet = 3) %>%
+  gather(key = "ire", value = "gene_id") %>% 
+  left_join(genes(ensDb) %>% as_tibble()) %>% 
+  dplyr::filter(gene_name %in% rownames(x)) %>%
+  split(f = .$ire) %>%
+  lapply(magrittr::extract2,"gene_name")
+# 
+# chr <- x$genes %>% 
+#   dplyr::select(gene_id, chromosome) %>% 
+#   split(f = .$chromosome) %>%
+#   lapply(extract2, "gene_id") %>% 
+#   .[c("MT", seq(1:25))] # omit the ALT chromosmes and scaffolds
+# 
+# # Cell type markers for zerbafish 
+# cell_type_markers <- read_excel("data/gene_sets/1-s2.0-S0012160619304919-mmc7.xlsx") %>% 
+#   dplyr::filter(grepl(`Day of Origin`, pattern = 5 )) %>%  # restrict to only 5dpf
+#   dplyr::select(Tissue, 9:24) %>% 
+#   split(f = .$Tissue) %>% 
+#   lapply(function(y) {
+#     y %>% 
+#       dplyr::select(-Tissue) %>% 
+#       gather %>% 
+#       dplyr::select(value) %>% 
+#       set_colnames("gene_name") %>% 
+#       left_join(x$genes) %>% 
+#       na.omit %>% 
+#       .$gene_id
+#   }) 
+# 
+# # get length of gene sets
+# sizes <- cell_type_markers %>% 
+#   lapply(length) %>% 
+#   unlist %>% 
+#   as.data.frame() %>% 
+#   set_colnames( "n_genes") %>% 
+#   rownames_to_column("gs")
+# 
+# # retain gene sets with at least 10 genes in it
+# cell_type_markers <- cell_type_markers[sizes %>% dplyr::filter(n_genes > 10) %>% .$gs]
+```
+
+## GOSEQ 
+
+```{r}
+pwfs <- toptable_1$`MPS-IIIB` %>%
+      with(
+        nullp(
+          DEgenes = structure(DE, names = LLgeneAbbrev), 
+          bias.data = logCPM
+        )
+      )
+
+goseq(pwfs, gene2cat = GO) %>% 
+  as_tibble() %>% 
+  dplyr::filter(numDEInCat > 0) %>% 
+  mutate(FDR = p.adjust(over_represented_pvalue, method = "fdr")) %>% 
+  dplyr::select(-under_represented_pvalue) %>% 
+  dplyr::slice(1:10)
+
+  
+```
+
+
+
+### KEGG 
+```{r}
+fryKEGG <- 
+  design %>% colnames() %>% .[2:4] %>% 
+  sapply(function(y) {
+    cpm(x$counts, log = TRUE) %>% 
+      fry(
+        index = KEGG,
+        design = design, 
+        contrast = y, 
+        sort = "mixed"
+      ) %>% 
+      rownames_to_column("pathway") %>% 
+      as_tibble() %>% 
+      mutate(coef = y)
+  }, simplify = FALSE)
+
+fryKEGG$`sgsh/+` %>% 
+  dplyr::slice(1:10) %>% 
+  mutate(pathway = str_remove(pathway, pattern = "KEGG_")) %>% 
+  ggplot(aes(x = -log10(PValue.Mixed), y = reorder(pathway, -PValue.Mixed))) +
+  geom_col(aes(fill = FDR.Mixed < 0.05)) +
+  scale_fill_manual(values = c("grey50", 'red')) +
+  theme_pubr() +
+  labs(fill = "FDR < 0.05", 
+       x = "-log10(PValue)", 
+       y = "")
+  
+```
+
+## GO
+```{r}
+fry_GO <-  
+  design %>% colnames() %>% .[2:4] %>% 
+  sapply(function(y) {
+    cpm(x$counts, log = TRUE) %>% 
+      fry(
+        index = GO,
+        design = design, 
+        contrast = y, 
+        sort = "mixed"
+      ) %>% 
+      rownames_to_column("pathway") %>% 
+      as_tibble() %>% 
+      mutate(coef = y)
+  }, simplify = FALSE)
+
+fry_GO$`MPS-IIIA` %>% 
+  dplyr::slice(1:40) %>% 
+  mutate(pathway = str_remove(pathway, pattern = "KEGG_")) %>% 
+  ggplot(aes(x = -log10(PValue.Mixed), y = reorder(pathway, -PValue.Mixed))) +
+  geom_col(aes(fill = FDR.Mixed < 0.05)) +
+  scale_fill_manual(values = c("grey50", 'red')) +
+  theme_pubr() +
+  labs(fill = "FDR < 0.05", 
+       x = "-log10(PValue)", 
+       y = "")
+
+fry_GO$`MPS-IIIB` %>% 
+  dplyr::slice(1:10) %>% 
+  mutate(pathway = str_remove(pathway, pattern = "KEGG_")) %>% 
+  ggplot(aes(x = -log10(PValue.Mixed), y = reorder(pathway, -PValue.Mixed))) +
+  geom_col(aes(fill = FDR.Mixed < 0.05)) +
+  scale_fill_manual(values = c("grey50", 'red')) +
+  theme_pubr() +
+  labs(fill = "FDR < 0.05", 
+       x = "-log10(PValue)", 
+       y = "")
+
+fry_GO$`sgsh/+` %>% 
+  dplyr::slice(1:10) %>% 
+  mutate(pathway = str_remove(pathway, pattern = "KEGG_")) %>% 
+  ggplot(aes(x = -log10(PValue.Mixed), y = reorder(pathway, -PValue.Mixed))) +
+  geom_col(aes(fill = FDR.Mixed < 0.05)) +
+  scale_fill_manual(values = c("grey50", 'red')) +
+  theme_pubr() +
+  labs(fill = "FDR < 0.05", 
+       x = "-log10(PValue)", 
+       y = "")
+```
+
+
+
+```{r}
+toptable_1 %>% 
+  bind_rows() %>% 
+  dplyr::filter(gene_name %in% KEGG$KEGG_GLYCOSAMINOGLYCAN_DEGRADATION) %>% 
+  dplyr::select(gene_name, logFC, coef) %>% 
+  spread(key = "coef", value = "logFC") %>% 
+  column_to_rownames("gene_name") %>% 
+  pheatmap(color = colorRampPalette(brewer.pal(n = 7,
+                                               name = "OrRd"))(50), 
+           main = "KEGG_GLYCOSAMINOGLYCAN_DEGRADATION")
+
+toptable_1 %>% 
+  bind_rows() %>% 
+  dplyr::filter(gene_id %in% GO$GO_PH_REDUCTION) %>% 
+  dplyr::select(gene_name, logFC, coef) %>% 
+  spread(key = "coef", value = "logFC") %>% 
+  dplyr::select(-`EOfAD-like`) %>% 
+  column_to_rownames("gene_name") %>% 
+  pheatmap(color = colorRampPalette(brewer.pal(n = 7,
+                                               name = "RdBu"))(50), 
+           main = "GO_PH_REDUCTION", 
+           cluster_cols = F
+           )
+
+
+toptable_1 %>% 
+  bind_rows() %>% 
+  dplyr::filter(gene_id %in% C2$APPEL_IMATINIB_RESPONSE) %>% 
+  dplyr::select(gene_name, logFC, coef) %>% 
+  spread(key = "coef", value = "logFC") %>% 
+  dplyr::select(-`EOfAD-like`) %>% 
+  column_to_rownames("gene_name") %>% 
+  pheatmap(color = colorRampPalette(brewer.pal(n = 7,
+                                               name = "RdBu"))(50), 
+           breaks = seq(-0.5,0.5, by = 1/50),
+           
+           main = "APPEL_IMATINIB_RESPONSE", 
+           cluster_cols = F
+           )
+```
+
+```{r}
+x %>% 
+  cpm(log=TRUE) %>% 
+  as.data.frame() %>% 
+  .[GO$GO_PH_REDUCTION,] %>% 
+  t %>% 
+  prcomp() %>% 
+  autoplot(data = tibble(sample = rownames(.$x)) %>%
+      left_join(x$samples),
+    colour = "Genotype", 
+    size = 6
+  ) +
+  theme_bw() + 
+  theme(aspect.ratio = 1) +
+  labs(colour = "Genotype")
+
+toptable_1 %>% 
+  bind_rows() %>% 
+  dplyr::filter(gene_id %in% GO$GO_REGULATION_OF_PH) %>% 
+  dplyr::select(gene_name, logFC, coef) %>% 
+  spread(key = "coef", value = "logFC") %>% 
+  column_to_rownames("gene_name") %>% 
+  pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
+                                               name = "RdBu")))(100), 
+           main = "GO_PH_REDUCTION, FDR = 0.06", 
+           breaks = c(seq(min(.), 0, length.out=ceiling(100/2) + 1), 
+              seq(max(.)/100, max(.), length.out=50)), 
+           cellwidth  = 30,
+           treeheight_row = 0, treeheight_col = 0
+           )
+
+cpm(x,log=T) %>% 
+  as.data.frame() %>% 
+.[GO$GO_REGULATION_OF_PH, grepl(colnames(x), pattern = "[MPS|wt]")] %>% 
+  t %>% 
+  prcomp %>% 
+   autoplot(data = tibble(sample = rownames(.$x)) %>%
+      left_join(x$samples),
+    colour = "Genotype", 
+    size = 6
+  ) +
+  theme_bw() + 
+  theme(aspect.ratio = 1) +
+  labs(colour = "Genotype")
+  
+
+annoCol <- x$samples %>% 
+  dplyr::select(Genotype)
+
+
+cpm(x,log=T) %>% 
+  as.data.frame() %>% 
+  .[GO$GO_PHAGOSOME_ACIDIFICATION, grepl(colnames(x), pattern = "[MPS|wt]")] %>% 
+  rownames_to_column("gene_id") %>% 
+  left_join(x$genes %>% dplyr::select(gene_id, gene_name)) %>% 
+  column_to_rownames("gene_name") %>% 
+  dplyr::select(-gene_id) %>% 
+  pheatmap(scale = "row", 
+           color = colorRampPalette(rev(brewer.pal(n = 5,
+                                               name = "RdBu")))(100), 
+           annotation_col = annoCol
+                                    )
+
+cpm(x,log=T) %>% 
+  as.data.frame() %>% 
+  .[ireGenes$ire3_all, grepl(colnames(x), pattern = "[MPS|wt]")] %>% 
+  rownames_to_column("gene_id") %>% 
+  left_join(x$genes %>% dplyr::select(gene_id, gene_name)) %>% 
+  dplyr::distinct(gene_name, .keep_all =T) %>% 
+  column_to_rownames("gene_name") %>% 
+  dplyr::select(-gene_id) %>% 
+  pheatmap(scale = "row", 
+           color = viridis_pal()(256), 
+           annotation_col = annoCol
+                                    )
+```
+
+
+
+### IRE
+
+```{r}
+fryIRE <- design %>% colnames() %>% .[2:4] %>% 
+  sapply(function(y) {
+    cpm(x$counts, log = TRUE) %>% 
+      fry(
+        index = ireGenes,
+        design = design, 
+        contrast = y, 
+        sort = "mixed"
+      ) %>% 
+      rownames_to_column("pathway") %>% 
+      as_tibble() %>% 
+      mutate(coef = y)
+  }, simplify = FALSE)
+
+fryIRE %>% 
+  bind_rows() %>% 
+  dplyr::select(pathway, coef, pvalue = PValue.Mixed, FDR = FDR.Mixed) %>% 
+  ggplot(aes(y = pathway, x = -log10(pvalue))) + 
+  geom_col(aes(fill = coef), 
+           position = "dodge") +
+  geom_vline(xintercept = -log10(0.05)) +
+  scale_fill_viridis_d(end = 0.75) +
+  theme_pubr()
+
+annoCol <- x$samples %>% 
+  dplyr::select(genotype)
+
+cpm(x, log = T)  %>% 
+  .[ireGenes$`HQ 5' IREs`,] %>% 
+  pheatmap(show_rownames = F, 
+           scale = "row",
+           treeheight_row = 0, 
+           color = colorRampPalette(brewer.pal(n = 7,
+                                               name = "RdBu"))(50), 
+           annotation_col = annoCol
+           )
+
+```
+
+### Cell type prop check
+
+Since this experiment was performed on whole larvae, we need to have a look at whether changes to cell type proportions could explain cause some artefactual changes to gene expression. We have done this previously by assessing the expression of marker genes of specific cell types. So this is what I will do here. I have taken the lists of genes frmo day 5 only from the zebrafish single cell atlas (Farnsworth et al. 2020) which contain at least 10 genes. This leaves  `r length(cell_type_markers)` gene sets (cell types) to test.
+
+```{r}
+design %>% colnames() %>% .[2:4] %>% 
+  sapply(function(y) {
+    cpm(x$counts, log = TRUE) %>% 
+      fry(
+        index = cell_type_markers,
+        design = design, 
+        contrast = y, 
+        sort = "directional"
+      ) %>% 
+      rownames_to_column("pathway") %>% 
+      as_tibble() %>% 
+      mutate(coef = y)
+  }, simplify = FALSE)
+
+```
+
+
+### Chrosomosomes gene sets
+
+```{r}
+design %>% colnames() %>% .[2:4] %>% 
+  sapply(function(y) {
+    cpm(x$counts, log = TRUE) %>% 
+      fry(
+        index = c(chr),
+        design = design, 
+        contrast = y, 
+        sort = "mixed"
+      ) %>% 
+      rownames_to_column("pathway") %>% 
+      as_tibble() %>% 
+      mutate(coef = y)
+  }, simplify = FALSE)
+```
+
+
+## Data export
+```{r}
+x %>% saveRDS("data/R_objects/dge.rds")
+```
+
+

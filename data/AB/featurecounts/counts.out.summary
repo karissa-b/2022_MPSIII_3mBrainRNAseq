@@ -1,0 +1,15 @@
+Status	04_dedup/bam/22-00160_S16_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00147_S4_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00158_S14_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00153_S9_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00159_S15_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00136_S1_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00150_S6_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00145_S3_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00138_S2_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00155_S11_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00157_S13_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00201_S17_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00156_S12_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00154_S10_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00152_S8_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00151_S7_merged.Aligned.sortedByCoord.dedup.out.bam	04_dedup/bam/22-00148_S5_merged.Aligned.sortedByCoord.dedup.out.bam
+Assigned	25909894	26820093	26089187	23229850	36095193	21425625	22306656	38929909	29260399	30951004	32239303	127622	23159585	26175156	31927047	26929298	45675646
+Unassigned_Unmapped	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Read_Type	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Singleton	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_MultiMapping	3824064	3658081	4109472	3352341	4023767	3375197	3126415	4273011	4348843	4270422	4352874	14106	4127053	3483136	3782790	3708835	4728185
+Unassigned_Secondary	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_NonSplit	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_NoFeatures	14157054	13259058	16735924	12324811	13764507	11501864	11613048	13152263	16365012	14871269	16357592	51867	16494306	12780410	13262879	13220423	13129056
+Unassigned_Overlapping_Length	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Ambiguity	444573	463577	469180	423458	631702	392695	390727	676563	534144	555975	583879	2270	429615	466780	551116	485971	825808

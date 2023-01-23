@@ -1,0 +1,1440 @@
+STAR version=STAR_2.5.2a
+STAR compilation time,server,dir=Tue May 10 17:35:33 EDT 2016 florence.cshl.edu:/sonas-hs/gingeras/nlsas_norepl/user/dobin/STAR/STAR.sandbox/source
+##### DEFAULT parameters:
+versionSTAR                       20201
+versionGenome                     20101   20200   
+parametersFiles                   -   
+sysShell                          -
+runMode                           alignReads
+runThreadN                        1
+runDirPerm                        User_RWX
+runRNGseed                        777
+genomeDir                         ./GenomeDir/
+genomeLoad                        NoSharedMemory
+genomeFastaFiles                  -   
+genomeSAindexNbases               14
+genomeChrBinNbits                 18
+genomeSAsparseD                   1
+genomeSuffixLengthMax             18446744073709551615
+readFilesIn                       Read1   Read2   
+readFilesCommand                  -   
+readMatesLengthsIn                NotEqual
+readMapNumber                     18446744073709551615
+readNameSeparator                 /   
+inputBAMfile                      -
+bamRemoveDuplicatesType           -
+bamRemoveDuplicatesMate2basesN    0
+limitGenomeGenerateRAM            31000000000
+limitIObufferSize                 150000000
+limitOutSAMoneReadBytes           100000
+limitOutSJcollapsed               1000000
+limitOutSJoneRead                 1000
+limitBAMsortRAM                   0
+limitSjdbInsertNsj                1000000
+outTmpDir                         -
+outTmpKeep                        None
+outStd                            Log
+outReadsUnmapped                  None
+outQSconversionAdd                0
+outMultimapperOrder               Old_2.4
+outSAMtype                        SAM   
+outSAMmode                        Full
+outSAMstrandField                 None
+outSAMattributes                  Standard   
+outSAMunmapped                    None   
+outSAMorder                       Paired
+outSAMprimaryFlag                 OneBestScore
+outSAMreadID                      Standard
+outSAMmapqUnique                  255
+outSAMflagOR                      0
+outSAMflagAND                     65535
+outSAMattrRGline                  -   
+outSAMheaderHD                    -   
+outSAMheaderPG                    -   
+outSAMheaderCommentFile           -
+outBAMcompression                 1
+outBAMsortingThreadN              0
+outSAMfilter                      None   
+outSAMmultNmax                    18446744073709551615
+outSAMattrIHstart                 1
+outSJfilterReads                  All
+outSJfilterCountUniqueMin         3   1   1   1   
+outSJfilterCountTotalMin          3   1   1   1   
+outSJfilterOverhangMin            30   12   12   12   
+outSJfilterDistToOtherSJmin       10   0   5   10   
+outSJfilterIntronMaxVsReadN       50000   100000   200000   
+outWigType                        None   
+outWigStrand                      Stranded   
+outWigReferencesPrefix            -
+outWigNorm                        RPM   
+outFilterType                     Normal
+outFilterMultimapNmax             10
+outFilterMultimapScoreRange       1
+outFilterScoreMin                 0
+outFilterScoreMinOverLread        0.66
+outFilterMatchNmin                0
+outFilterMatchNminOverLread       0.66
+outFilterMismatchNmax             10
+outFilterMismatchNoverLmax        0.3
+outFilterMismatchNoverReadLmax    1
+outFilterIntronMotifs             None
+clip5pNbases                      0   
+clip3pNbases                      0   
+clip3pAfterAdapterNbases          0   
+clip3pAdapterSeq                  -   
+clip3pAdapterMMp                  0.1   
+winBinNbits                       16
+winAnchorDistNbins                9
+winFlankNbins                     4
+winAnchorMultimapNmax             50
+winReadCoverageRelativeMin        0.5
+winReadCoverageBasesMin           0
+scoreGap                          0
+scoreGapNoncan                    -8
+scoreGapGCAG                      -4
+scoreGapATAC                      -8
+scoreStitchSJshift                1
+scoreGenomicLengthLog2scale       -0.25
+scoreDelBase                      -2
+scoreDelOpen                      -2
+scoreInsOpen                      -2
+scoreInsBase                      -2
+seedSearchLmax                    0
+seedSearchStartLmax               50
+seedSearchStartLmaxOverLread      1
+seedPerReadNmax                   1000
+seedPerWindowNmax                 50
+seedNoneLociPerWindow             10
+seedMultimapNmax                  10000
+alignIntronMin                    21
+alignIntronMax                    0
+alignMatesGapMax                  0
+alignTranscriptsPerReadNmax       10000
+alignSJoverhangMin                5
+alignSJDBoverhangMin              3
+alignSJstitchMismatchNmax         0   -1   0   0   
+alignSplicedMateMapLmin           0
+alignSplicedMateMapLminOverLmate    0.66
+alignWindowsPerReadNmax           10000
+alignTranscriptsPerWindowNmax     100
+alignEndsType                     Local
+alignSoftClipAtReferenceEnds      Yes
+alignEndsProtrude                 0   ConcordantPair   
+chimSegmentMin                    0
+chimScoreMin                      0
+chimScoreDropMax                  20
+chimScoreSeparation               10
+chimScoreJunctionNonGTAG          -1
+chimJunctionOverhangMin           20
+chimOutType                       SeparateSAMold
+chimFilter                        banGenomicN   
+chimSegmentReadGapMax             0
+sjdbFileChrStartEnd               -   
+sjdbGTFfile                       -
+sjdbGTFchrPrefix                  -
+sjdbGTFfeatureExon                exon
+sjdbGTFtagExonParentTranscript    transcript_id
+sjdbGTFtagExonParentGene          gene_id
+sjdbOverhang                      100
+sjdbScore                         2
+sjdbInsertSave                    Basic
+quantMode                         -   
+quantTranscriptomeBAMcompression    1
+quantTranscriptomeBan             IndelSoftclipSingleend
+twopass1readsN                    18446744073709551615
+twopassMode                       None
+##### Command Line:
+STAR --genomeDir starIndexLL --runThreadN 16 --readFilesIn 02_trimdata/fastq/22-00148_S5_merged_R1_001.fastq.gz 02_trimdata/fastq/22-00148_S5_merged_R2_001.fastq.gz --readFilesCommand "gunzip -c" --outSAMtype BAM SortedByCoordinate --outFileNamePrefix 03_alignstarLL/bam/22-00148_S5_merged.
+##### Initial USER parameters from Command Line:
+outFileNamePrefix                 03_alignstarLL/bam/22-00148_S5_merged.
+###### All USER parameters from Command Line:
+genomeDir                     starIndexLL     ~RE-DEFINED
+runThreadN                    16     ~RE-DEFINED
+readFilesIn                   02_trimdata/fastq/22-00148_S5_merged_R1_001.fastq.gz   02_trimdata/fastq/22-00148_S5_merged_R2_001.fastq.gz        ~RE-DEFINED
+readFilesCommand              "gunzip -c"        ~RE-DEFINED
+outSAMtype                    BAM   SortedByCoordinate        ~RE-DEFINED
+outFileNamePrefix             03_alignstarLL/bam/22-00148_S5_merged.     ~RE-DEFINED
+##### Finished reading parameters from all sources
+
+##### Final user re-defined parameters-----------------:
+runThreadN                        16
+genomeDir                         starIndexLL
+readFilesIn                       02_trimdata/fastq/22-00148_S5_merged_R1_001.fastq.gz   02_trimdata/fastq/22-00148_S5_merged_R2_001.fastq.gz   
+readFilesCommand                  "gunzip -c"   
+outFileNamePrefix                 03_alignstarLL/bam/22-00148_S5_merged.
+outSAMtype                        BAM   SortedByCoordinate   
+
+-------------------------------
+##### Final effective command line:
+STAR   --runThreadN 16   --genomeDir starIndexLL   --readFilesIn 02_trimdata/fastq/22-00148_S5_merged_R1_001.fastq.gz   02_trimdata/fastq/22-00148_S5_merged_R2_001.fastq.gz      --readFilesCommand "gunzip -c"      --outFileNamePrefix 03_alignstarLL/bam/22-00148_S5_merged.   --outSAMtype BAM   SortedByCoordinate   
+
+##### Final parameters after user input--------------------------------:
+versionSTAR                       20201
+versionGenome                     20101   20200   
+parametersFiles                   -   
+sysShell                          -
+runMode                           alignReads
+runThreadN                        16
+runDirPerm                        User_RWX
+runRNGseed                        777
+genomeDir                         starIndexLL
+genomeLoad                        NoSharedMemory
+genomeFastaFiles                  -   
+genomeSAindexNbases               14
+genomeChrBinNbits                 18
+genomeSAsparseD                   1
+genomeSuffixLengthMax             18446744073709551615
+readFilesIn                       02_trimdata/fastq/22-00148_S5_merged_R1_001.fastq.gz   02_trimdata/fastq/22-00148_S5_merged_R2_001.fastq.gz   
+readFilesCommand                  "gunzip -c"   
+readMatesLengthsIn                NotEqual
+readMapNumber                     18446744073709551615
+readNameSeparator                 /   
+inputBAMfile                      -
+bamRemoveDuplicatesType           -
+bamRemoveDuplicatesMate2basesN    0
+limitGenomeGenerateRAM            31000000000
+limitIObufferSize                 150000000
+limitOutSAMoneReadBytes           100000
+limitOutSJcollapsed               1000000
+limitOutSJoneRead                 1000
+limitBAMsortRAM                   0
+limitSjdbInsertNsj                1000000
+outFileNamePrefix                 03_alignstarLL/bam/22-00148_S5_merged.
+outTmpDir                         -
+outTmpKeep                        None
+outStd                            Log
+outReadsUnmapped                  None
+outQSconversionAdd                0
+outMultimapperOrder               Old_2.4
+outSAMtype                        BAM   SortedByCoordinate   
+outSAMmode                        Full
+outSAMstrandField                 None
+outSAMattributes                  Standard   
+outSAMunmapped                    None   
+outSAMorder                       Paired
+outSAMprimaryFlag                 OneBestScore
+outSAMreadID                      Standard
+outSAMmapqUnique                  255
+outSAMflagOR                      0
+outSAMflagAND                     65535
+outSAMattrRGline                  -   
+outSAMheaderHD                    -   
+outSAMheaderPG                    -   
+outSAMheaderCommentFile           -
+outBAMcompression                 1
+outBAMsortingThreadN              0
+outSAMfilter                      None   
+outSAMmultNmax                    18446744073709551615
+outSAMattrIHstart                 1
+outSJfilterReads                  All
+outSJfilterCountUniqueMin         3   1   1   1   
+outSJfilterCountTotalMin          3   1   1   1   
+outSJfilterOverhangMin            30   12   12   12   
+outSJfilterDistToOtherSJmin       10   0   5   10   
+outSJfilterIntronMaxVsReadN       50000   100000   200000   
+outWigType                        None   
+outWigStrand                      Stranded   
+outWigReferencesPrefix            -
+outWigNorm                        RPM   
+outFilterType                     Normal
+outFilterMultimapNmax             10
+outFilterMultimapScoreRange       1
+outFilterScoreMin                 0
+outFilterScoreMinOverLread        0.66
+outFilterMatchNmin                0
+outFilterMatchNminOverLread       0.66
+outFilterMismatchNmax             10
+outFilterMismatchNoverLmax        0.3
+outFilterMismatchNoverReadLmax    1
+outFilterIntronMotifs             None
+clip5pNbases                      0   
+clip3pNbases                      0   
+clip3pAfterAdapterNbases          0   
+clip3pAdapterSeq                  -   
+clip3pAdapterMMp                  0.1   
+winBinNbits                       16
+winAnchorDistNbins                9
+winFlankNbins                     4
+winAnchorMultimapNmax             50
+winReadCoverageRelativeMin        0.5
+winReadCoverageBasesMin           0
+scoreGap                          0
+scoreGapNoncan                    -8
+scoreGapGCAG                      -4
+scoreGapATAC                      -8
+scoreStitchSJshift                1
+scoreGenomicLengthLog2scale       -0.25
+scoreDelBase                      -2
+scoreDelOpen                      -2
+scoreInsOpen                      -2
+scoreInsBase                      -2
+seedSearchLmax                    0
+seedSearchStartLmax               50
+seedSearchStartLmaxOverLread      1
+seedPerReadNmax                   1000
+seedPerWindowNmax                 50
+seedNoneLociPerWindow             10
+seedMultimapNmax                  10000
+alignIntronMin                    21
+alignIntronMax                    0
+alignMatesGapMax                  0
+alignTranscriptsPerReadNmax       10000
+alignSJoverhangMin                5
+alignSJDBoverhangMin              3
+alignSJstitchMismatchNmax         0   -1   0   0   
+alignSplicedMateMapLmin           0
+alignSplicedMateMapLminOverLmate    0.66
+alignWindowsPerReadNmax           10000
+alignTranscriptsPerWindowNmax     100
+alignEndsType                     Local
+alignSoftClipAtReferenceEnds      Yes
+alignEndsProtrude                 0   ConcordantPair   
+chimSegmentMin                    0
+chimScoreMin                      0
+chimScoreDropMax                  20
+chimScoreSeparation               10
+chimScoreJunctionNonGTAG          -1
+chimJunctionOverhangMin           20
+chimOutType                       SeparateSAMold
+chimFilter                        banGenomicN   
+chimSegmentReadGapMax             0
+sjdbFileChrStartEnd               -   
+sjdbGTFfile                       -
+sjdbGTFchrPrefix                  -
+sjdbGTFfeatureExon                exon
+sjdbGTFtagExonParentTranscript    transcript_id
+sjdbGTFtagExonParentGene          gene_id
+sjdbOverhang                      100
+sjdbScore                         2
+sjdbInsertSave                    Basic
+quantMode                         -   
+quantTranscriptomeBAMcompression    1
+quantTranscriptomeBan             IndelSoftclipSingleend
+twopass1readsN                    18446744073709551615
+twopassMode                       None
+----------------------------------------
+
+
+   Input read files for mate 1, from input string 02_trimdata/fastq/22-00148_S5_merged_R1_001.fastq.gz
+-rw-rw-r-- 1 a1211024 a1211024 10773999185 Apr 23 16:39 02_trimdata/fastq/22-00148_S5_merged_R1_001.fastq.gz
+
+   readsCommandsFile:
+exec > "03_alignstarLL/bam/22-00148_S5_merged._STARtmp/tmp.fifo.read1"
+echo FILE 0
+gunzip -c      "02_trimdata/fastq/22-00148_S5_merged_R1_001.fastq.gz"
+
+
+   Input read files for mate 2, from input string 02_trimdata/fastq/22-00148_S5_merged_R2_001.fastq.gz
+-rw-rw-r-- 1 a1211024 a1211024 10430688756 Apr 23 16:39 02_trimdata/fastq/22-00148_S5_merged_R2_001.fastq.gz
+
+   readsCommandsFile:
+exec > "03_alignstarLL/bam/22-00148_S5_merged._STARtmp/tmp.fifo.read2"
+echo FILE 0
+gunzip -c      "02_trimdata/fastq/22-00148_S5_merged_R2_001.fastq.gz"
+
+WARNING: --limitBAMsortRAM=0, will use genome size as RAM limit for BAM sorting
+Finished loading and checking parameters
+Reading genome generation parameters:
+versionGenome                 20201        ~RE-DEFINED
+genomeFastaFiles              /share/data/umw_biocore/dnext_data/genome_data/zebrafish/GRCz11/main/genome.fa        ~RE-DEFINED
+genomeSAindexNbases           14     ~RE-DEFINED
+genomeChrBinNbits             18     ~RE-DEFINED
+genomeSAsparseD               1     ~RE-DEFINED
+sjdbOverhang                  100     ~RE-DEFINED
+sjdbFileChrStartEnd           -        ~RE-DEFINED
+sjdbGTFfile                   /share/data/umw_biocore/dnext_data/genome_data/zebrafish/GRCz11/refseq_v4.3.2_new/genes/genes.gtf     ~RE-DEFINED
+sjdbGTFchrPrefix              -     ~RE-DEFINED
+sjdbGTFfeatureExon            exon     ~RE-DEFINED
+sjdbGTFtagExonParentTranscripttranscript_id     ~RE-DEFINED
+sjdbGTFtagExonParentGene      gene_id     ~RE-DEFINED
+sjdbInsertSave                Basic     ~RE-DEFINED
+Genome version is compatible with current STAR version
+Number of real (reference) chromosomes= 998
+1	mCherry	711	0
+2	nEGFP	1010	262144
+3	dsRed2pA	903	524288
+4	EGFP	795	786432
+5	originalGFP	714	1048576
+6	chr1	59578282	1310720
+7	chr10	45420867	61079552
+8	chr11	45484837	106692608
+9	chr12	49182954	152305664
+10	chr13	52186027	201588736
+11	chr14	52660232	254017536
+12	chr15	48040578	306708480
+13	chr16	55266484	354942976
+14	chr17	53461100	410255360
+15	chr18	51023478	463732736
+16	chr19	48449771	514850816
+17	chr2	59640629	563347456
+18	chr20	55201332	623116288
+19	chr21	45934066	678428672
+20	chr22	39133080	724566016
+21	chr23	46223584	763887616
+22	chr24	42172926	810287104
+23	chr25	37502051	852492288
+24	chr3	62628489	890241024
+25	chr4	78093715	952893440
+26	chr5	72500376	1031012352
+27	chr6	60270059	1103626240
+28	chr7	74282399	1163919360
+29	chr8	54304671	1238368256
+30	chr9	56459846	1292894208
+31	chrUn_KN147552v2	24373	1349517312
+32	chrUn_KN147632v2	184438	1349779456
+33	chrUn_KN147636v1	203829	1350041600
+34	chrUn_KN147637v2	171924	1350303744
+35	chrUn_KN147642v2	204646	1350565888
+36	chrUn_KN147651v2	351968	1350828032
+37	chrUn_KN147652v2	252640	1351352320
+38	chrUn_KN148038v2	17585	1351614464
+39	chrUn_KN148828v2	13322	1351876608
+40	chrUn_KN148869v2	18523	1352138752
+41	chrUn_KN149680v1	38724	1352400896
+42	chrUn_KN149682v1	137468	1352663040
+43	chrUn_KN149683v1	152860	1352925184
+44	chrUn_KN149684v1	159057	1353187328
+45	chrUn_KN149685v1	164780	1353449472
+46	chrUn_KN149686v1	260365	1353711616
+47	chrUn_KN149687v1	165668	1353973760
+48	chrUn_KN149688v2	252035	1354235904
+49	chrUn_KN149689v2	201817	1354498048
+50	chrUn_KN149690v1	343018	1354760192
+51	chrUn_KN149691v1	233193	1355284480
+52	chrUn_KN149692v1	36911	1355546624
+53	chrUn_KN149693v1	49295	1355808768
+54	chrUn_KN149694v1	162759	1356070912
+55	chrUn_KN149695v1	190731	1356333056
+56	chrUn_KN149696v2	368252	1356595200
+57	chrUn_KN149697v1	40969	1357119488
+58	chrUn_KN149698v1	108577	1357381632
+59	chrUn_KN149700v1	40050	1357643776
+60	chrUn_KN149701v1	3760	1357905920
+61	chrUn_KN149702v1	100325	1358168064
+62	chrUn_KN149703v1	13902	1358430208
+63	chrUn_KN149705v1	27926	1358692352
+64	chrUn_KN149706v1	33279	1358954496
+65	chrUn_KN149707v2	7455	1359216640
+66	chrUn_KN149708v1	20567	1359478784
+67	chrUn_KN149709v1	27814	1359740928
+68	chrUn_KN149710v1	50974	1360003072
+69	chrUn_KN149711v1	11473	1360265216
+70	chrUn_KN149713v1	10094	1360527360
+71	chrUn_KN149714v1	74622	1360789504
+72	chrUn_KN149715v1	19020	1361051648
+73	chrUn_KN149716v1	42229	1361313792
+74	chrUn_KN149717v1	47589	1361575936
+75	chrUn_KN149718v1	65247	1361838080
+76	chrUn_KN149719v1	47531	1362100224
+77	chrUn_KN149720v1	10211	1362362368
+78	chrUn_KN149721v1	25462	1362624512
+79	chrUn_KN149722v1	13397	1362886656
+80	chrUn_KN149723v1	55784	1363148800
+81	chrUn_KN149724v1	11849	1363410944
+82	chrUn_KN149725v1	69829	1363673088
+83	chrUn_KN149727v1	24871	1363935232
+84	chrUn_KN149728v1	9442	1364197376
+85	chrUn_KN149729v1	5608	1364459520
+86	chrUn_KN149730v1	14804	1364721664
+87	chrUn_KN149732v1	16041	1364983808
+88	chrUn_KN149733v1	21637	1365245952
+89	chrUn_KN149735v1	5747	1365508096
+90	chrUn_KN149737v1	27700	1365770240
+91	chrUn_KN149738v1	10603	1366032384
+92	chrUn_KN149739v1	51610	1366294528
+93	chrUn_KN149740v1	1265	1366556672
+94	chrUn_KN149741v1	21941	1366818816
+95	chrUn_KN149742v1	2671	1367080960
+96	chrUn_KN149743v1	21023	1367343104
+97	chrUn_KN149745v1	8150	1367605248
+98	chrUn_KN149746v1	10900	1367867392
+99	chrUn_KN149747v1	16275	1368129536
+100	chrUn_KN149748v1	96570	1368391680
+101	chrUn_KN149749v1	40089	1368653824
+102	chrUn_KN149750v1	13928	1368915968
+103	chrUn_KN149751v1	15848	1369178112
+104	chrUn_KN149753v1	30249	1369440256
+105	chrUn_KN149754v1	40214	1369702400
+106	chrUn_KN149755v1	11941	1369964544
+107	chrUn_KN149756v1	11785	1370226688
+108	chrUn_KN149757v1	16145	1370488832
+109	chrUn_KN149758v1	9515	1370750976
+110	chrUn_KN149760v1	46605	1371013120
+111	chrUn_KN149761v1	14795	1371275264
+112	chrUn_KN149762v1	17936	1371537408
+113	chrUn_KN149763v1	19644	1371799552
+114	chrUn_KN149764v1	19831	1372061696
+115	chrUn_KN149765v1	29197	1372323840
+116	chrUn_KN149766v1	14664	1372585984
+117	chrUn_KN149767v1	30874	1372848128
+118	chrUn_KN149768v1	17671	1373110272
+119	chrUn_KN149769v1	53048	1373372416
+120	chrUn_KN149770v1	12046	1373634560
+121	chrUn_KN149771v1	14151	1373896704
+122	chrUn_KN149772v1	13273	1374158848
+123	chrUn_KN149774v1	12337	1374420992
+124	chrUn_KN149775v2	26074	1374683136
+125	chrUn_KN149777v1	1553	1374945280
+126	chrUn_KN149778v1	111598	1375207424
+127	chrUn_KN149779v1	21664	1375469568
+128	chrUn_KN149780v1	19718	1375731712
+129	chrUn_KN149782v1	36097	1375993856
+130	chrUn_KN149783v1	11892	1376256000
+131	chrUn_KN149784v1	73829	1376518144
+132	chrUn_KN149785v1	1577	1376780288
+133	chrUn_KN149786v1	1745	1377042432
+134	chrUn_KN149787v1	39794	1377304576
+135	chrUn_KN149788v1	8794	1377566720
+136	chrUn_KN149789v1	12990	1377828864
+137	chrUn_KN149790v1	115850	1378091008
+138	chrUn_KN149791v1	17273	1378353152
+139	chrUn_KN149792v1	11232	1378615296
+140	chrUn_KN149793v1	13298	1378877440
+141	chrUn_KN149794v1	25440	1379139584
+142	chrUn_KN149795v1	34615	1379401728
+143	chrUn_KN149796v1	25635	1379663872
+144	chrUn_KN149797v1	102101	1379926016
+145	chrUn_KN149798v1	1990	1380188160
+146	chrUn_KN149800v1	42049	1380450304
+147	chrUn_KN149801v1	4454	1380712448
+148	chrUn_KN149803v1	16018	1380974592
+149	chrUn_KN149804v1	10148	1381236736
+150	chrUn_KN149805v1	12432	1381498880
+151	chrUn_KN149806v1	15157	1381761024
+152	chrUn_KN149807v1	12512	1382023168
+153	chrUn_KN149809v1	2001	1382285312
+154	chrUn_KN149810v1	15043	1382547456
+155	chrUn_KN149811v1	8720	1382809600
+156	chrUn_KN149812v1	51419	1383071744
+157	chrUn_KN149813v1	59009	1383333888
+158	chrUn_KN149814v1	25878	1383596032
+159	chrUn_KN149815v1	33337	1383858176
+160	chrUn_KN149816v1	10128	1384120320
+161	chrUn_KN149817v1	11116	1384382464
+162	chrUn_KN149818v1	25942	1384644608
+163	chrUn_KN149819v1	10210	1384906752
+164	chrUn_KN149822v1	2460	1385168896
+165	chrUn_KN149823v1	14034	1385431040
+166	chrUn_KN149824v1	2357	1385693184
+167	chrUn_KN149825v1	22128	1385955328
+168	chrUn_KN149826v1	90482	1386217472
+169	chrUn_KN149827v1	13555	1386479616
+170	chrUn_KN149828v1	11414	1386741760
+171	chrUn_KN149829v1	27323	1387003904
+172	chrUn_KN149832v1	12483	1387266048
+173	chrUn_KN149834v1	17343	1387528192
+174	chrUn_KN149835v1	25861	1387790336
+175	chrUn_KN149836v1	34954	1388052480
+176	chrUn_KN149837v1	8007	1388314624
+177	chrUn_KN149838v1	29025	1388576768
+178	chrUn_KN149839v1	12998	1388838912
+179	chrUn_KN149840v1	46864	1389101056
+180	chrUn_KN149841v1	10085	1389363200
+181	chrUn_KN149843v1	33258	1389625344
+182	chrUn_KN149844v1	10201	1389887488
+183	chrUn_KN149846v1	28664	1390149632
+184	chrUn_KN149847v1	130903	1390411776
+185	chrUn_KN149848v1	10341	1390673920
+186	chrUn_KN149849v1	20421	1390936064
+187	chrUn_KN149850v1	33401	1391198208
+188	chrUn_KN149851v1	12094	1391460352
+189	chrUn_KN149852v1	30223	1391722496
+190	chrUn_KN149853v1	12817	1391984640
+191	chrUn_KN149854v1	6367	1392246784
+192	chrUn_KN149855v1	23165	1392508928
+193	chrUn_KN149856v1	35330	1392771072
+194	chrUn_KN149857v1	10132	1393033216
+195	chrUn_KN149859v1	53306	1393295360
+196	chrUn_KN149860v1	17408	1393557504
+197	chrUn_KN149861v1	14336	1393819648
+198	chrUn_KN149862v1	11987	1394081792
+199	chrUn_KN149863v1	11955	1394343936
+200	chrUn_KN149864v1	12929	1394606080
+201	chrUn_KN149865v1	49167	1394868224
+202	chrUn_KN149866v1	14752	1395130368
+203	chrUn_KN149867v1	1514	1395392512
+204	chrUn_KN149871v1	22553	1395654656
+205	chrUn_KN149872v1	12222	1395916800
+206	chrUn_KN149873v1	1146	1396178944
+207	chrUn_KN149874v1	5295	1396441088
+208	chrUn_KN149876v1	11298	1396703232
+209	chrUn_KN149878v1	7547	1396965376
+210	chrUn_KN149879v1	11893	1397227520
+211	chrUn_KN149880v1	64889	1397489664
+212	chrUn_KN149881v1	10736	1397751808
+213	chrUn_KN149882v1	7649	1398013952
+214	chrUn_KN149883v1	12434	1398276096
+215	chrUn_KN149884v1	51715	1398538240
+216	chrUn_KN149885v1	1347	1398800384
+217	chrUn_KN149887v1	11971	1399062528
+218	chrUn_KN149888v1	17117	1399324672
+219	chrUn_KN149889v1	10166	1399586816
+220	chrUn_KN149890v1	12029	1399848960
+221	chrUn_KN149892v1	24638	1400111104
+222	chrUn_KN149893v1	27995	1400373248
+223	chrUn_KN149895v1	92930	1400635392
+224	chrUn_KN149896v1	13102	1400897536
+225	chrUn_KN149897v1	14044	1401159680
+226	chrUn_KN149899v1	13632	1401421824
+227	chrUn_KN149900v1	11016	1401683968
+228	chrUn_KN149901v1	10512	1401946112
+229	chrUn_KN149903v1	11318	1402208256
+230	chrUn_KN149904v1	89156	1402470400
+231	chrUn_KN149905v1	14056	1402732544
+232	chrUn_KN149906v1	38987	1402994688
+233	chrUn_KN149907v1	9870	1403256832
+234	chrUn_KN149908v1	12800	1403518976
+235	chrUn_KN149909v1	40056	1403781120
+236	chrUn_KN149912v1	77979	1404043264
+237	chrUn_KN149913v1	16487	1404305408
+238	chrUn_KN149914v1	18241	1404567552
+239	chrUn_KN149915v1	10395	1404829696
+240	chrUn_KN149916v1	4293	1405091840
+241	chrUn_KN149917v1	3831	1405353984
+242	chrUn_KN149919v1	21073	1405616128
+243	chrUn_KN149921v1	28254	1405878272
+244	chrUn_KN149922v1	12529	1406140416
+245	chrUn_KN149923v1	36729	1406402560
+246	chrUn_KN149924v1	23395	1406664704
+247	chrUn_KN149925v1	29860	1406926848
+248	chrUn_KN149926v1	3688	1407188992
+249	chrUn_KN149927v1	11950	1407451136
+250	chrUn_KN149928v1	14297	1407713280
+251	chrUn_KN149931v1	6703	1407975424
+252	chrUn_KN149932v1	89521	1408237568
+253	chrUn_KN149933v1	13433	1408499712
+254	chrUn_KN149935v1	9230	1408761856
+255	chrUn_KN149936v1	16058	1409024000
+256	chrUn_KN149937v1	14110	1409286144
+257	chrUn_KN149938v1	12455	1409548288
+258	chrUn_KN149939v1	76611	1409810432
+259	chrUn_KN149940v1	11887	1410072576
+260	chrUn_KN149941v1	13607	1410334720
+261	chrUn_KN149943v1	29608	1410596864
+262	chrUn_KN149944v1	24909	1410859008
+263	chrUn_KN149946v1	33071	1411121152
+264	chrUn_KN149948v1	117499	1411383296
+265	chrUn_KN149949v1	64126	1411645440
+266	chrUn_KN149950v1	5952	1411907584
+267	chrUn_KN149951v1	5000	1412169728
+268	chrUn_KN149953v1	46218	1412431872
+269	chrUn_KN149955v1	19758	1412694016
+270	chrUn_KN149956v1	1889	1412956160
+271	chrUn_KN149957v1	1094	1413218304
+272	chrUn_KN149958v1	43073	1413480448
+273	chrUn_KN149959v1	59274	1413742592
+274	chrUn_KN149960v1	9235	1414004736
+275	chrUn_KN149961v1	20600	1414266880
+276	chrUn_KN149965v1	14790	1414529024
+277	chrUn_KN149967v1	8612	1414791168
+278	chrUn_KN149968v1	82990	1415053312
+279	chrUn_KN149969v1	13714	1415315456
+280	chrUn_KN149970v1	17511	1415577600
+281	chrUn_KN149971v1	11275	1415839744
+282	chrUn_KN149973v1	35555	1416101888
+283	chrUn_KN149974v1	19596	1416364032
+284	chrUn_KN149976v1	11858	1416626176
+285	chrUn_KN149977v2	11023	1416888320
+286	chrUn_KN149978v1	16801	1417150464
+287	chrUn_KN149979v1	22834	1417412608
+288	chrUn_KN149980v1	7980	1417674752
+289	chrUn_KN149981v1	12811	1417936896
+290	chrUn_KN149982v1	31814	1418199040
+291	chrUn_KN149983v1	17884	1418461184
+292	chrUn_KN149984v1	96477	1418723328
+293	chrUn_KN149988v1	9944	1418985472
+294	chrUn_KN149989v1	34480	1419247616
+295	chrUn_KN149990v1	57651	1419509760
+296	chrUn_KN149991v1	9871	1419771904
+297	chrUn_KN149992v1	57912	1420034048
+298	chrUn_KN149993v1	16921	1420296192
+299	chrUn_KN149995v1	12015	1420558336
+300	chrUn_KN149996v1	33528	1420820480
+301	chrUn_KN149997v1	6296	1421082624
+302	chrUn_KN149998v1	74724	1421344768
+303	chrUn_KN149999v1	14071	1421606912
+304	chrUn_KN150000v1	69737	1421869056
+305	chrUn_KN150002v1	17430	1422131200
+306	chrUn_KN150004v2	13059	1422393344
+307	chrUn_KN150005v1	34409	1422655488
+308	chrUn_KN150006v1	10518	1422917632
+309	chrUn_KN150007v1	13072	1423179776
+310	chrUn_KN150008v1	15572	1423441920
+311	chrUn_KN150009v1	17727	1423704064
+312	chrUn_KN150011v1	12995	1423966208
+313	chrUn_KN150012v1	11998	1424228352
+314	chrUn_KN150013v1	8488	1424490496
+315	chrUn_KN150014v1	13588	1424752640
+316	chrUn_KN150015v1	33441	1425014784
+317	chrUn_KN150016v1	21592	1425276928
+318	chrUn_KN150017v1	25636	1425539072
+319	chrUn_KN150018v1	1063	1425801216
+320	chrUn_KN150019v2	19834	1426063360
+321	chrUn_KN150020v1	11925	1426325504
+322	chrUn_KN150021v1	103967	1426587648
+323	chrUn_KN150022v1	76538	1426849792
+324	chrUn_KN150023v1	22153	1427111936
+325	chrUn_KN150024v1	1714	1427374080
+326	chrUn_KN150025v1	26343	1427636224
+327	chrUn_KN150028v1	19517	1427898368
+328	chrUn_KN150029v1	12415	1428160512
+329	chrUn_KN150030v1	57074	1428422656
+330	chrUn_KN150031v1	60899	1428684800
+331	chrUn_KN150032v1	29546	1428946944
+332	chrUn_KN150033v1	56448	1429209088
+333	chrUn_KN150034v1	1919	1429471232
+334	chrUn_KN150035v1	38086	1429733376
+335	chrUn_KN150037v1	2866	1429995520
+336	chrUn_KN150038v1	71326	1430257664
+337	chrUn_KN150039v1	3463	1430519808
+338	chrUn_KN150040v1	19896	1430781952
+339	chrUn_KN150041v2	66431	1431044096
+340	chrUn_KN150042v1	30789	1431306240
+341	chrUn_KN150043v1	31984	1431568384
+342	chrUn_KN150044v1	9097	1431830528
+343	chrUn_KN150045v2	10364	1432092672
+344	chrUn_KN150047v1	20749	1432354816
+345	chrUn_KN150048v1	128109	1432616960
+346	chrUn_KN150049v1	45008	1432879104
+347	chrUn_KN150051v1	1995	1433141248
+348	chrUn_KN150052v1	15943	1433403392
+349	chrUn_KN150054v1	16143	1433665536
+350	chrUn_KN150055v1	32561	1433927680
+351	chrUn_KN150056v1	29449	1434189824
+352	chrUn_KN150057v1	10736	1434451968
+353	chrUn_KN150058v1	21348	1434714112
+354	chrUn_KN150059v1	16588	1434976256
+355	chrUn_KN150060v1	80234	1435238400
+356	chrUn_KN150061v1	24048	1435500544
+357	chrUn_KN150062v1	35038	1435762688
+358	chrUn_KN150063v1	20846	1436024832
+359	chrUn_KN150064v1	14598	1436286976
+360	chrUn_KN150065v1	9859	1436549120
+361	chrUn_KN150066v1	29537	1436811264
+362	chrUn_KN150067v1	27325	1437073408
+363	chrUn_KN150068v1	62725	1437335552
+364	chrUn_KN150070v1	14070	1437597696
+365	chrUn_KN150071v1	14960	1437859840
+366	chrUn_KN150072v1	13309	1438121984
+367	chrUn_KN150073v1	14052	1438384128
+368	chrUn_KN150074v1	28653	1438646272
+369	chrUn_KN150076v1	14425	1438908416
+370	chrUn_KN150077v1	51360	1439170560
+371	chrUn_KN150078v1	12098	1439432704
+372	chrUn_KN150079v1	46800	1439694848
+373	chrUn_KN150080v1	37662	1439956992
+374	chrUn_KN150081v1	12836	1440219136
+375	chrUn_KN150082v1	8788	1440481280
+376	chrUn_KN150083v1	49514	1440743424
+377	chrUn_KN150084v1	24192	1441005568
+378	chrUn_KN150085v1	29177	1441267712
+379	chrUn_KN150086v1	1639	1441529856
+380	chrUn_KN150089v1	13104	1441792000
+381	chrUn_KN150090v1	12028	1442054144
+382	chrUn_KN150092v1	14544	1442316288
+383	chrUn_KN150093v1	14738	1442578432
+384	chrUn_KN150094v1	7824	1442840576
+385	chrUn_KN150095v1	9204	1443102720
+386	chrUn_KN150097v1	11690	1443364864
+387	chrUn_KN150098v1	68279	1443627008
+388	chrUn_KN150100v1	9237	1443889152
+389	chrUn_KN150102v1	34431	1444151296
+390	chrUn_KN150103v1	4090	1444413440
+391	chrUn_KN150104v1	53188	1444675584
+392	chrUn_KN150105v1	58062	1444937728
+393	chrUn_KN150106v1	56524	1445199872
+394	chrUn_KN150110v1	9804	1445462016
+395	chrUn_KN150111v1	29931	1445724160
+396	chrUn_KN150112v1	3423	1445986304
+397	chrUn_KN150113v1	19310	1446248448
+398	chrUn_KN150114v1	24178	1446510592
+399	chrUn_KN150115v1	18676	1446772736
+400	chrUn_KN150117v1	48543	1447034880
+401	chrUn_KN150118v1	54494	1447297024
+402	chrUn_KN150119v1	1143	1447559168
+403	chrUn_KN150120v1	27511	1447821312
+404	chrUn_KN150121v1	8447	1448083456
+405	chrUn_KN150122v1	67534	1448345600
+406	chrUn_KN150123v1	51978	1448607744
+407	chrUn_KN150125v1	83315	1448869888
+408	chrUn_KN150126v1	24847	1449132032
+409	chrUn_KN150127v1	33302	1449394176
+410	chrUn_KN150128v1	12262	1449656320
+411	chrUn_KN150130v1	9925	1449918464
+412	chrUn_KN150131v1	70868	1450180608
+413	chrUn_KN150132v1	13999	1450442752
+414	chrUn_KN150133v2	53456	1450704896
+415	chrUn_KN150134v1	29067	1450967040
+416	chrUn_KN150136v1	49373	1451229184
+417	chrUn_KN150137v1	36779	1451491328
+418	chrUn_KN150140v2	19733	1451753472
+419	chrUn_KN150141v1	17117	1452015616
+420	chrUn_KN150144v1	14974	1452277760
+421	chrUn_KN150145v1	9970	1452539904
+422	chrUn_KN150146v1	9714	1452802048
+423	chrUn_KN150147v1	7977	1453064192
+424	chrUn_KN150148v1	44589	1453326336
+425	chrUn_KN150150v1	9780	1453588480
+426	chrUn_KN150152v1	9348	1453850624
+427	chrUn_KN150154v1	21695	1454112768
+428	chrUn_KN150155v1	10282	1454374912
+429	chrUn_KN150156v1	33247	1454637056
+430	chrUn_KN150157v1	18756	1454899200
+431	chrUn_KN150158v1	106536	1455161344
+432	chrUn_KN150159v1	35229	1455423488
+433	chrUn_KN150160v1	17824	1455685632
+434	chrUn_KN150161v1	12647	1455947776
+435	chrUn_KN150162v1	10930	1456209920
+436	chrUn_KN150164v1	11300	1456472064
+437	chrUn_KN150165v1	32739	1456734208
+438	chrUn_KN150166v1	49457	1456996352
+439	chrUn_KN150167v1	13466	1457258496
+440	chrUn_KN150168v1	28382	1457520640
+441	chrUn_KN150170v1	55716	1457782784
+442	chrUn_KN150171v1	140649	1458044928
+443	chrUn_KN150172v1	40634	1458307072
+444	chrUn_KN150173v1	50946	1458569216
+445	chrUn_KN150174v1	13450	1458831360
+446	chrUn_KN150175v1	24612	1459093504
+447	chrUn_KN150176v1	69061	1459355648
+448	chrUn_KN150177v1	21670	1459617792
+449	chrUn_KN150179v1	47473	1459879936
+450	chrUn_KN150180v1	1872	1460142080
+451	chrUn_KN150181v1	32761	1460404224
+452	chrUn_KN150182v1	11735	1460666368
+453	chrUn_KN150183v1	22266	1460928512
+454	chrUn_KN150184v1	16312	1461190656
+455	chrUn_KN150185v1	8651	1461452800
+456	chrUn_KN150186v1	23923	1461714944
+457	chrUn_KN150187v1	19179	1461977088
+458	chrUn_KN150189v1	38868	1462239232
+459	chrUn_KN150190v1	11399	1462501376
+460	chrUn_KN150191v1	42303	1462763520
+461	chrUn_KN150193v1	12580	1463025664
+462	chrUn_KN150194v1	13629	1463287808
+463	chrUn_KN150195v1	18921	1463549952
+464	chrUn_KN150196v1	89077	1463812096
+465	chrUn_KN150197v1	14532	1464074240
+466	chrUn_KN150199v1	16564	1464336384
+467	chrUn_KN150200v1	31861	1464598528
+468	chrUn_KN150201v1	9480	1464860672
+469	chrUn_KN150202v1	15451	1465122816
+470	chrUn_KN150203v1	24004	1465384960
+471	chrUn_KN150204v1	95149	1465647104
+472	chrUn_KN150205v1	2620	1465909248
+473	chrUn_KN150206v1	2052	1466171392
+474	chrUn_KN150210v1	12550	1466433536
+475	chrUn_KN150211v1	16386	1466695680
+476	chrUn_KN150212v1	18932	1466957824
+477	chrUn_KN150213v1	16101	1467219968
+478	chrUn_KN150214v1	162877	1467482112
+479	chrUn_KN150215v1	1237	1467744256
+480	chrUn_KN150216v1	1020	1468006400
+481	chrUn_KN150217v1	13840	1468268544
+482	chrUn_KN150218v1	15354	1468530688
+483	chrUn_KN150219v1	16672	1468792832
+484	chrUn_KN150220v1	29625	1469054976
+485	chrUn_KN150221v1	28122	1469317120
+486	chrUn_KN150222v1	110669	1469579264
+487	chrUn_KN150224v1	24154	1469841408
+488	chrUn_KN150225v1	20429	1470103552
+489	chrUn_KN150226v1	25293	1470365696
+490	chrUn_KN150227v1	31979	1470627840
+491	chrUn_KN150228v1	17061	1470889984
+492	chrUn_KN150229v1	1251	1471152128
+493	chrUn_KN150230v1	149710	1471414272
+494	chrUn_KN150231v1	2322	1471676416
+495	chrUn_KN150232v1	53540	1471938560
+496	chrUn_KN150233v1	2246	1472200704
+497	chrUn_KN150234v1	18511	1472462848
+498	chrUn_KN150236v1	19315	1472724992
+499	chrUn_KN150237v1	1732	1472987136
+500	chrUn_KN150238v1	9450	1473249280
+501	chrUn_KN150240v1	31723	1473511424
+502	chrUn_KN150241v1	60821	1473773568
+503	chrUn_KN150242v1	20063	1474035712
+504	chrUn_KN150243v2	45964	1474297856
+505	chrUn_KN150244v1	42860	1474560000
+506	chrUn_KN150246v1	15365	1474822144
+507	chrUn_KN150248v1	18273	1475084288
+508	chrUn_KN150249v1	12261	1475346432
+509	chrUn_KN150250v1	13560	1475608576
+510	chrUn_KN150251v1	26988	1475870720
+511	chrUn_KN150252v1	43133	1476132864
+512	chrUn_KN150253v1	3149	1476395008
+513	chrUn_KN150254v1	12144	1476657152
+514	chrUn_KN150255v2	29368	1476919296
+515	chrUn_KN150257v1	12735	1477181440
+516	chrUn_KN150258v1	95885	1477443584
+517	chrUn_KN150259v1	50098	1477705728
+518	chrUn_KN150260v1	12318	1477967872
+519	chrUn_KN150263v1	31336	1478230016
+520	chrUn_KN150264v1	16955	1478492160
+521	chrUn_KN150265v1	51555	1478754304
+522	chrUn_KN150267v1	77778	1479016448
+523	chrUn_KN150268v1	15280	1479278592
+524	chrUn_KN150269v1	48062	1479540736
+525	chrUn_KN150270v1	22285	1479802880
+526	chrUn_KN150271v1	12637	1480065024
+527	chrUn_KN150272v1	34295	1480327168
+528	chrUn_KN150274v1	12247	1480589312
+529	chrUn_KN150275v1	13800	1480851456
+530	chrUn_KN150276v1	12942	1481113600
+531	chrUn_KN150278v1	30978	1481375744
+532	chrUn_KN150279v1	11402	1481637888
+533	chrUn_KN150280v1	10487	1481900032
+534	chrUn_KN150282v1	23758	1482162176
+535	chrUn_KN150283v1	13933	1482424320
+536	chrUn_KN150284v1	18131	1482686464
+537	chrUn_KN150285v1	25361	1482948608
+538	chrUn_KN150286v1	9068	1483210752
+539	chrUn_KN150287v1	11856	1483472896
+540	chrUn_KN150289v1	22206	1483735040
+541	chrUn_KN150290v1	18248	1483997184
+542	chrUn_KN150291v1	25796	1484259328
+543	chrUn_KN150292v1	9984	1484521472
+544	chrUn_KN150293v1	40764	1484783616
+545	chrUn_KN150296v1	10238	1485045760
+546	chrUn_KN150297v1	23472	1485307904
+547	chrUn_KN150299v1	23511	1485570048
+548	chrUn_KN150300v1	9489	1485832192
+549	chrUn_KN150301v1	18664	1486094336
+550	chrUn_KN150302v1	13538	1486356480
+551	chrUn_KN150303v1	39288	1486618624
+552	chrUn_KN150306v1	36728	1486880768
+553	chrUn_KN150307v1	9167	1487142912
+554	chrUn_KN150308v1	18907	1487405056
+555	chrUn_KN150309v1	20999	1487667200
+556	chrUn_KN150310v1	20509	1487929344
+557	chrUn_KN150311v1	15747	1488191488
+558	chrUn_KN150312v1	17282	1488453632
+559	chrUn_KN150313v1	20655	1488715776
+560	chrUn_KN150314v1	12455	1488977920
+561	chrUn_KN150315v1	20424	1489240064
+562	chrUn_KN150317v1	14866	1489502208
+563	chrUn_KN150318v1	2580	1489764352
+564	chrUn_KN150319v1	15807	1490026496
+565	chrUn_KN150320v1	1241	1490288640
+566	chrUn_KN150322v1	19644	1490550784
+567	chrUn_KN150323v1	18137	1490812928
+568	chrUn_KN150324v1	24032	1491075072
+569	chrUn_KN150325v1	19525	1491337216
+570	chrUn_KN150326v1	109565	1491599360
+571	chrUn_KN150327v1	19949	1491861504
+572	chrUn_KN150328v1	17410	1492123648
+573	chrUn_KN150329v1	13297	1492385792
+574	chrUn_KN150330v1	28440	1492647936
+575	chrUn_KN150331v1	44968	1492910080
+576	chrUn_KN150332v1	22862	1493172224
+577	chrUn_KN150333v1	12275	1493434368
+578	chrUn_KN150334v1	22542	1493696512
+579	chrUn_KN150335v1	44504	1493958656
+580	chrUn_KN150336v1	48672	1494220800
+581	chrUn_KN150337v1	20260	1494482944
+582	chrUn_KN150338v1	1142	1494745088
+583	chrUn_KN150340v1	28741	1495007232
+584	chrUn_KN150341v1	31147	1495269376
+585	chrUn_KN150342v1	82590	1495531520
+586	chrUn_KN150343v1	26928	1495793664
+587	chrUn_KN150344v1	19681	1496055808
+588	chrUn_KN150345v1	17012	1496317952
+589	chrUn_KN150347v1	51528	1496580096
+590	chrUn_KN150349v1	29114	1496842240
+591	chrUn_KN150350v1	9245	1497104384
+592	chrUn_KN150351v1	49608	1497366528
+593	chrUn_KN150352v2	25352	1497628672
+594	chrUn_KN150353v1	19631	1497890816
+595	chrUn_KN150354v1	1452	1498152960
+596	chrUn_KN150355v1	6731	1498415104
+597	chrUn_KN150357v1	27326	1498677248
+598	chrUn_KN150358v1	9951	1498939392
+599	chrUn_KN150360v1	15639	1499201536
+600	chrUn_KN150361v1	53624	1499463680
+601	chrUn_KN150362v1	17145	1499725824
+602	chrUn_KN150363v1	22766	1499987968
+603	chrUn_KN150364v1	15084	1500250112
+604	chrUn_KN150365v1	10769	1500512256
+605	chrUn_KN150366v1	10057	1500774400
+606	chrUn_KN150368v1	18491	1501036544
+607	chrUn_KN150369v1	11460	1501298688
+608	chrUn_KN150371v1	13836	1501560832
+609	chrUn_KN150372v1	29560	1501822976
+610	chrUn_KN150374v1	9775	1502085120
+611	chrUn_KN150375v1	111208	1502347264
+612	chrUn_KN150379v1	29907	1502609408
+613	chrUn_KN150380v1	12144	1502871552
+614	chrUn_KN150382v1	14074	1503133696
+615	chrUn_KN150383v1	7777	1503395840
+616	chrUn_KN150384v1	22969	1503657984
+617	chrUn_KN150385v1	37055	1503920128
+618	chrUn_KN150386v1	35900	1504182272
+619	chrUn_KN150387v1	15215	1504444416
+620	chrUn_KN150388v1	22284	1504706560
+621	chrUn_KN150389v1	10334	1504968704
+622	chrUn_KN150390v1	19066	1505230848
+623	chrUn_KN150392v1	12069	1505492992
+624	chrUn_KN150393v1	12073	1505755136
+625	chrUn_KN150394v1	17139	1506017280
+626	chrUn_KN150395v1	9792	1506279424
+627	chrUn_KN150396v1	8176	1506541568
+628	chrUn_KN150397v1	17295	1506803712
+629	chrUn_KN150398v1	39557	1507065856
+630	chrUn_KN150399v1	19362	1507328000
+631	chrUn_KN150400v1	34930	1507590144
+632	chrUn_KN150401v1	10081	1507852288
+633	chrUn_KN150403v1	34697	1508114432
+634	chrUn_KN150404v1	18160	1508376576
+635	chrUn_KN150405v1	76919	1508638720
+636	chrUn_KN150406v1	17215	1508900864
+637	chrUn_KN150407v1	31814	1509163008
+638	chrUn_KN150408v1	37191	1509425152
+639	chrUn_KN150411v1	20886	1509687296
+640	chrUn_KN150412v1	9605	1509949440
+641	chrUn_KN150413v1	15078	1510211584
+642	chrUn_KN150414v1	35871	1510473728
+643	chrUn_KN150416v1	33835	1510735872
+644	chrUn_KN150418v1	14930	1510998016
+645	chrUn_KN150419v1	14114	1511260160
+646	chrUn_KN150420v1	14290	1511522304
+647	chrUn_KN150421v1	14951	1511784448
+648	chrUn_KN150422v1	15053	1512046592
+649	chrUn_KN150425v1	110593	1512308736
+650	chrUn_KN150426v1	21499	1512570880
+651	chrUn_KN150428v1	29216	1512833024
+652	chrUn_KN150429v1	17683	1513095168
+653	chrUn_KN150430v1	16452	1513357312
+654	chrUn_KN150431v1	89659	1513619456
+655	chrUn_KN150432v1	91010	1513881600
+656	chrUn_KN150434v1	12053	1514143744
+657	chrUn_KN150436v1	17739	1514405888
+658	chrUn_KN150437v1	1262	1514668032
+659	chrUn_KN150439v1	10343	1514930176
+660	chrUn_KN150440v1	1193	1515192320
+661	chrUn_KN150441v1	12439	1515454464
+662	chrUn_KN150443v1	11834	1515716608
+663	chrUn_KN150444v1	11830	1515978752
+664	chrUn_KN150445v1	12072	1516240896
+665	chrUn_KN150446v1	12446	1516503040
+666	chrUn_KN150449v1	62607	1516765184
+667	chrUn_KN150450v1	25362	1517027328
+668	chrUn_KN150451v1	14920	1517289472
+669	chrUn_KN150452v1	8345	1517551616
+670	chrUn_KN150453v1	13591	1517813760
+671	chrUn_KN150454v1	18479	1518075904
+672	chrUn_KN150455v1	73536	1518338048
+673	chrUn_KN150458v1	17481	1518600192
+674	chrUn_KN150459v1	45603	1518862336
+675	chrUn_KN150462v1	24623	1519124480
+676	chrUn_KN150464v1	24865	1519386624
+677	chrUn_KN150465v1	1765	1519648768
+678	chrUn_KN150466v1	41319	1519910912
+679	chrUn_KN150467v1	11202	1520173056
+680	chrUn_KN150468v1	25381	1520435200
+681	chrUn_KN150469v1	14614	1520697344
+682	chrUn_KN150470v1	2027	1520959488
+683	chrUn_KN150471v1	76663	1521221632
+684	chrUn_KN150472v1	14586	1521483776
+685	chrUn_KN150473v1	1285	1521745920
+686	chrUn_KN150475v1	17517	1522008064
+687	chrUn_KN150476v1	59211	1522270208
+688	chrUn_KN150477v1	61693	1522532352
+689	chrUn_KN150478v1	25813	1522794496
+690	chrUn_KN150479v1	48186	1523056640
+691	chrUn_KN150481v1	1008	1523318784
+692	chrUn_KN150483v1	17332	1523580928
+693	chrUn_KN150484v1	14965	1523843072
+694	chrUn_KN150485v1	7348	1524105216
+695	chrUn_KN150486v1	8572	1524367360
+696	chrUn_KN150487v1	123701	1524629504
+697	chrUn_KN150488v1	17582	1524891648
+698	chrUn_KN150489v1	26739	1525153792
+699	chrUn_KN150490v1	23057	1525415936
+700	chrUn_KN150491v1	13001	1525678080
+701	chrUn_KN150492v2	30275	1525940224
+702	chrUn_KN150493v1	35575	1526202368
+703	chrUn_KN150494v1	10108	1526464512
+704	chrUn_KN150495v1	28160	1526726656
+705	chrUn_KN150499v1	11840	1526988800
+706	chrUn_KN150500v1	19866	1527250944
+707	chrUn_KN150501v1	22392	1527513088
+708	chrUn_KN150502v1	13027	1527775232
+709	chrUn_KN150503v1	1834	1528037376
+710	chrUn_KN150504v1	12094	1528299520
+711	chrUn_KN150505v1	39265	1528561664
+712	chrUn_KN150506v1	14319	1528823808
+713	chrUn_KN150508v1	26814	1529085952
+714	chrUn_KN150509v1	11846	1529348096
+715	chrUn_KN150510v1	13237	1529610240
+716	chrUn_KN150511v1	38183	1529872384
+717	chrUn_KN150513v1	10220	1530134528
+718	chrUn_KN150514v1	19391	1530396672
+719	chrUn_KN150515v1	1813	1530658816
+720	chrUn_KN150516v1	49339	1530920960
+721	chrUn_KN150517v1	16171	1531183104
+722	chrUn_KN150518v1	40394	1531445248
+723	chrUn_KN150519v1	11974	1531707392
+724	chrUn_KN150520v1	103159	1531969536
+725	chrUn_KN150521v1	20896	1532231680
+726	chrUn_KN150522v1	12046	1532493824
+727	chrUn_KN150523v1	19004	1532755968
+728	chrUn_KN150525v1	650	1533018112
+729	chrUn_KN150526v1	15513	1533280256
+730	chrUn_KN150527v1	20880	1533542400
+731	chrUn_KN150528v1	13138	1533804544
+732	chrUn_KN150529v1	81946	1534066688
+733	chrUn_KN150530v1	7299	1534328832
+734	chrUn_KN150532v1	21602	1534590976
+735	chrUn_KN150534v1	17661	1534853120
+736	chrUn_KN150535v1	2315	1535115264
+737	chrUn_KN150536v1	17908	1535377408
+738	chrUn_KN150537v1	27568	1535639552
+739	chrUn_KN150538v1	12119	1535901696
+740	chrUn_KN150540v1	15288	1536163840
+741	chrUn_KN150541v1	12323	1536425984
+742	chrUn_KN150542v1	12167	1536688128
+743	chrUn_KN150543v1	2343	1536950272
+744	chrUn_KN150544v1	1198	1537212416
+745	chrUn_KN150545v1	17546	1537474560
+746	chrUn_KN150546v1	10851	1537736704
+747	chrUn_KN150547v1	37420	1537998848
+748	chrUn_KN150548v1	46061	1538260992
+749	chrUn_KN150549v1	17599	1538523136
+750	chrUn_KN150550v1	14915	1538785280
+751	chrUn_KN150551v1	9435	1539047424
+752	chrUn_KN150552v1	74050	1539309568
+753	chrUn_KN150553v1	14032	1539571712
+754	chrUn_KN150554v1	9251	1539833856
+755	chrUn_KN150555v1	9941	1540096000
+756	chrUn_KN150556v1	9286	1540358144
+757	chrUn_KN150557v1	41459	1540620288
+758	chrUn_KN150558v1	12115	1540882432
+759	chrUn_KN150559v1	26580	1541144576
+760	chrUn_KN150560v1	2301	1541406720
+761	chrUn_KN150561v1	22238	1541668864
+762	chrUn_KN150562v1	22875	1541931008
+763	chrUn_KN150564v1	17709	1542193152
+764	chrUn_KN150565v1	20464	1542455296
+765	chrUn_KN150567v1	49566	1542717440
+766	chrUn_KN150568v1	108195	1542979584
+767	chrUn_KN150570v1	42279	1543241728
+768	chrUn_KN150571v1	16505	1543503872
+769	chrUn_KN150572v1	28871	1543766016
+770	chrUn_KN150573v1	26604	1544028160
+771	chrUn_KN150574v1	18499	1544290304
+772	chrUn_KN150575v1	11084	1544552448
+773	chrUn_KN150576v1	36129	1544814592
+774	chrUn_KN150577v1	13719	1545076736
+775	chrUn_KN150578v1	103698	1545338880
+776	chrUn_KN150579v1	23586	1545601024
+777	chrUn_KN150580v1	32349	1545863168
+778	chrUn_KN150581v1	12355	1546125312
+779	chrUn_KN150582v1	12396	1546387456
+780	chrUn_KN150583v1	1918	1546649600
+781	chrUn_KN150585v1	12430	1546911744
+782	chrUn_KN150586v1	17388	1547173888
+783	chrUn_KN150587v1	8461	1547436032
+784	chrUn_KN150588v1	14103	1547698176
+785	chrUn_KN150589v1	18957	1547960320
+786	chrUn_KN150591v1	8817	1548222464
+787	chrUn_KN150592v1	50000	1548484608
+788	chrUn_KN150593v1	14353	1548746752
+789	chrUn_KN150594v1	19382	1549008896
+790	chrUn_KN150595v1	12507	1549271040
+791	chrUn_KN150596v1	60847	1549533184
+792	chrUn_KN150598v1	12499	1549795328
+793	chrUn_KN150599v1	19019	1550057472
+794	chrUn_KN150601v1	11167	1550319616
+795	chrUn_KN150602v1	22730	1550581760
+796	chrUn_KN150603v1	98280	1550843904
+797	chrUn_KN150605v1	102574	1551106048
+798	chrUn_KN150606v1	51696	1551368192
+799	chrUn_KN150607v1	9531	1551630336
+800	chrUn_KN150608v1	149650	1551892480
+801	chrUn_KN150609v1	37413	1552154624
+802	chrUn_KN150610v1	10565	1552416768
+803	chrUn_KN150613v1	15739	1552678912
+804	chrUn_KN150614v1	9019	1552941056
+805	chrUn_KN150615v1	9878	1553203200
+806	chrUn_KN150616v1	88699	1553465344
+807	chrUn_KN150617v1	90208	1553727488
+808	chrUn_KN150619v1	41925	1553989632
+809	chrUn_KN150620v1	30729	1554251776
+810	chrUn_KN150621v1	1204	1554513920
+811	chrUn_KN150622v1	15811	1554776064
+812	chrUn_KN150623v1	1126	1555038208
+813	chrUn_KN150625v1	22486	1555300352
+814	chrUn_KN150626v1	32850	1555562496
+815	chrUn_KN150628v1	33906	1555824640
+816	chrUn_KN150629v1	19604	1556086784
+817	chrUn_KN150630v1	86421	1556348928
+818	chrUn_KN150631v1	36324	1556611072
+819	chrUn_KN150632v1	11627	1556873216
+820	chrUn_KN150633v1	19558	1557135360
+821	chrUn_KN150634v1	16020	1557397504
+822	chrUn_KN150635v1	27947	1557659648
+823	chrUn_KN150636v1	20513	1557921792
+824	chrUn_KN150639v1	27620	1558183936
+825	chrUn_KN150640v1	20890	1558446080
+826	chrUn_KN150641v1	14778	1558708224
+827	chrUn_KN150642v1	55536	1558970368
+828	chrUn_KN150643v1	28088	1559232512
+829	chrUn_KN150644v1	20534	1559494656
+830	chrUn_KN150645v1	22839	1559756800
+831	chrUn_KN150646v1	78076	1560018944
+832	chrUn_KN150647v1	14938	1560281088
+833	chrUn_KN150649v1	81249	1560543232
+834	chrUn_KN150650v1	3012	1560805376
+835	chrUn_KN150651v1	28018	1561067520
+836	chrUn_KN150652v1	18075	1561329664
+837	chrUn_KN150653v1	55997	1561591808
+838	chrUn_KN150654v1	18414	1561853952
+839	chrUn_KN150655v1	8089	1562116096
+840	chrUn_KN150656v2	29322	1562378240
+841	chrUn_KN150659v1	11827	1562640384
+842	chrUn_KN150661v1	26250	1562902528
+843	chrUn_KN150662v1	17820	1563164672
+844	chrUn_KN150663v1	88608	1563426816
+845	chrUn_KN150664v1	9590	1563688960
+846	chrUn_KN150665v1	11944	1563951104
+847	chrUn_KN150666v1	63484	1564213248
+848	chrUn_KN150667v1	54201	1564475392
+849	chrUn_KN150668v1	21856	1564737536
+850	chrUn_KN150669v1	15325	1564999680
+851	chrUn_KN150670v1	77993	1565261824
+852	chrUn_KN150671v1	13526	1565523968
+853	chrUn_KN150675v1	41858	1565786112
+854	chrUn_KN150676v1	51674	1566048256
+855	chrUn_KN150677v1	66956	1566310400
+856	chrUn_KN150678v1	7552	1566572544
+857	chrUn_KN150679v1	14065	1566834688
+858	chrUn_KN150680v1	13379	1567096832
+859	chrUn_KN150682v1	15190	1567358976
+860	chrUn_KN150683v1	16822	1567621120
+861	chrUn_KN150684v1	24053	1567883264
+862	chrUn_KN150685v1	13309	1568145408
+863	chrUn_KN150687v1	13294	1568407552
+864	chrUn_KN150689v1	19550	1568669696
+865	chrUn_KN150690v1	26145	1568931840
+866	chrUn_KN150691v1	184625	1569193984
+867	chrUn_KN150697v1	12709	1569456128
+868	chrUn_KN150698v1	31983	1569718272
+869	chrUn_KN150699v1	26100	1569980416
+870	chrUn_KN150700v2	71715	1570242560
+871	chrUn_KN150701v1	1133	1570504704
+872	chrUn_KN150703v1	48009	1570766848
+873	chrUn_KN150708v1	42677	1571028992
+874	chrUn_KN150709v1	65370	1571291136
+875	chrUn_KN150710v1	19629	1571553280
+876	chrUn_KN150711v1	11940	1571815424
+877	chrUn_KN150713v1	14579	1572077568
+878	chrUn_KZ115948v1	7895	1572339712
+879	chrUn_KZ115949v1	19487	1572601856
+880	chrUn_KZ115950v1	11151	1572864000
+881	chrUn_KZ115951v1	1460	1573126144
+882	chrUn_KZ115952v1	6745	1573388288
+883	chrUn_KZ115953v1	1282	1573650432
+884	chrUn_KZ115954v1	7681	1573912576
+885	chrUn_KZ115955v1	2649	1574174720
+886	chrUn_KZ115956v1	11017	1574436864
+887	chrUn_KZ115957v1	3033	1574699008
+888	chrUn_KZ115958v1	16150	1574961152
+889	chrUn_KZ115959v1	2076	1575223296
+890	chrUn_KZ115960v1	10408	1575485440
+891	chrUn_KZ115961v1	1814	1575747584
+892	chrUn_KZ115962v1	9328	1576009728
+893	chrUn_KZ115963v1	5511	1576271872
+894	chrUn_KZ115964v1	21985	1576534016
+895	chrUn_KZ115965v1	8631	1576796160
+896	chrUn_KZ115966v1	10700	1577058304
+897	chrUn_KZ115967v1	2223	1577320448
+898	chrUn_KZ115968v1	7463	1577582592
+899	chrUn_KZ115969v1	11096	1577844736
+900	chrUn_KZ115970v1	4964	1578106880
+901	chrUn_KZ115971v1	10999	1578369024
+902	chrUn_KZ115972v1	18193	1578631168
+903	chrUn_KZ115973v1	7329	1578893312
+904	chrUn_KZ115974v1	33679	1579155456
+905	chrUn_KZ115975v1	1668	1579417600
+906	chrUn_KZ115976v1	3381	1579679744
+907	chrUn_KZ115977v1	1917	1579941888
+908	chrUn_KZ115978v1	4867	1580204032
+909	chrUn_KZ115979v1	12653	1580466176
+910	chrUn_KZ115980v1	11444	1580728320
+911	chrUn_KZ115981v1	12102	1580990464
+912	chrUn_KZ115982v1	21678	1581252608
+913	chrUn_KZ115983v1	10690	1581514752
+914	chrUn_KZ115984v1	2298	1581776896
+915	chrUn_KZ115985v1	14091	1582039040
+916	chrUn_KZ115986v1	14146	1582301184
+917	chrUn_KZ115987v1	34728	1582563328
+918	chrUn_KZ115988v1	2311	1582825472
+919	chrUn_KZ115989v1	11382	1583087616
+920	chrUn_KZ115990v1	8014	1583349760
+921	chrUn_KZ115991v1	3745	1583611904
+922	chrUn_KZ115992v1	1250	1583874048
+923	chrUn_KZ115993v1	17707	1584136192
+924	chrUn_KZ115994v1	17825	1584398336
+925	chrUn_KZ115995v1	5114	1584660480
+926	chrUn_KZ115996v1	5023	1584922624
+927	chrUn_KZ115997v1	3918	1585184768
+928	chrUn_KZ115998v1	9069	1585446912
+929	chrUn_KZ115999v1	8942	1585709056
+930	chrUn_KZ116000v1	15093	1585971200
+931	chrUn_KZ116001v1	13723	1586233344
+932	chrUn_KZ116002v1	9522	1586495488
+933	chrUn_KZ116003v1	15105	1586757632
+934	chrUn_KZ116004v1	19050	1587019776
+935	chrUn_KZ116005v1	1920	1587281920
+936	chrUn_KZ116006v1	13138	1587544064
+937	chrUn_KZ116007v1	11049	1587806208
+938	chrUn_KZ116008v1	17226	1588068352
+939	chrUn_KZ116009v1	1395	1588330496
+940	chrUn_KZ116010v1	6942	1588592640
+941	chrUn_KZ116011v1	51615	1588854784
+942	chrUn_KZ116012v1	9499	1589116928
+943	chrUn_KZ116013v1	7022	1589379072
+944	chrUn_KZ116014v1	1536	1589641216
+945	chrUn_KZ116015v1	9998	1589903360
+946	chrUn_KZ116016v1	5168	1590165504
+947	chrUn_KZ116017v1	2865	1590427648
+948	chrUn_KZ116018v1	11006	1590689792
+949	chrUn_KZ116019v1	34606	1590951936
+950	chrUn_KZ116020v1	14934	1591214080
+951	chrUn_KZ116021v1	17216	1591476224
+952	chrUn_KZ116022v1	1919	1591738368
+953	chrUn_KZ116023v1	7875	1592000512
+954	chrUn_KZ116024v1	31767	1592262656
+955	chrUn_KZ116025v1	3864	1592524800
+956	chrUn_KZ116026v1	14318	1592786944
+957	chrUn_KZ116027v1	4074	1593049088
+958	chrUn_KZ116028v1	3289	1593311232
+959	chrUn_KZ116029v1	32560	1593573376
+960	chrUn_KZ116030v1	3552	1593835520
+961	chrUn_KZ116031v1	19707	1594097664
+962	chrUn_KZ116032v1	5873	1594359808
+963	chrUn_KZ116033v1	27103	1594621952
+964	chrUn_KZ116034v1	33615	1594884096
+965	chrUn_KZ116035v1	1766	1595146240
+966	chrUn_KZ116036v1	1919	1595408384
+967	chrUn_KZ116037v1	13248	1595670528
+968	chrUn_KZ116038v1	1428	1595932672
+969	chrUn_KZ116039v1	12461	1596194816
+970	chrUn_KZ116040v1	3054	1596456960
+971	chrUn_KZ116041v1	12997	1596719104
+972	chrUn_KZ116042v1	13126	1596981248
+973	chrUn_KZ116043v1	19339	1597243392
+974	chrUn_KZ116044v1	37221	1597505536
+975	chrUn_KZ116045v1	2029	1597767680
+976	chrUn_KZ116046v1	5807	1598029824
+977	chrUn_KZ116047v1	14251	1598291968
+978	chrUn_KZ116048v1	1356	1598554112
+979	chrUn_KZ116049v1	8498	1598816256
+980	chrUn_KZ116050v1	6653	1599078400
+981	chrUn_KZ116051v1	2418	1599340544
+982	chrUn_KZ116052v1	2026	1599602688
+983	chrUn_KZ116053v1	16466	1599864832
+984	chrUn_KZ116054v1	14656	1600126976
+985	chrUn_KZ116055v1	7229	1600389120
+986	chrUn_KZ116056v1	10581	1600651264
+987	chrUn_KZ116057v1	4882	1600913408
+988	chrUn_KZ116058v1	4138	1601175552
+989	chrUn_KZ116059v1	34033	1601437696
+990	chrUn_KZ116060v1	7854	1601699840
+991	chrUn_KZ116061v1	1669	1601961984
+992	chrUn_KZ116062v1	6923	1602224128
+993	chrUn_KZ116063v1	2601	1602486272
+994	chrUn_KZ116064v1	153879	1602748416
+995	chrUn_KZ116065v1	37354	1603010560
+996	chrUn_KZ116066v1	161442	1603272704
+997	chrUn_KZ116067v1	159186	1603534848
+998	chrM	16596	1603796992
+--sjdbOverhang = 100 taken from the generated genome
+Started loading the genome: Mon Apr 25 11:38:25 2022
+
+checking Genome sizefile size: 1665379010 bytes; state: good=1 eof=0 fail=0 bad=0
+checking SA sizefile size: 11795662629 bytes; state: good=1 eof=0 fail=0 bad=0
+checking /SAindex sizefile size: 1565873619 bytes; state: good=1 eof=0 fail=0 bad=0
+Read from SAindex: genomeSAindexNbases=14  nSAi=357913940
+nGenome=1665379010;  nSAbyte=11795662629
+GstrandBit=32   SA number of indices=2859554576
+Shared memory is not used for genomes. Allocated a private copy of the genome.
+Genome file size: 1665379010 bytes; state: good=1 eof=0 fail=0 bad=0
+Loading Genome ... done! state: good=1 eof=0 fail=0 bad=0; loaded 1665379010 bytes
+SA file size: 11795662629 bytes; state: good=1 eof=0 fail=0 bad=0
+Loading SA ... done! state: good=1 eof=0 fail=0 bad=0; loaded 11795662629 bytes
+Loading SAindex ... done: 1565873619 bytes
+Finished loading the genome: Mon Apr 25 11:38:53 2022
+
+Processing splice junctions database sjdbN=305074,   sjdbOverhang=100 
+alignIntronMax=alignMatesGapMax=0, the max intron size will be approximately determined by (2^winBinNbits)*winAnchorDistNbins=589824
+Created thread # 1
+Created thread # 2
+Created thread # 3
+Created thread # 4
+Created thread # 5
+Created thread # 6
+Created thread # 7
+Starting to map file # 0
+mate 1:   02_trimdata/fastq/22-00148_S5_merged_R1_001.fastq.gz
+mate 2:   02_trimdata/fastq/22-00148_S5_merged_R2_001.fastq.gz
+Created thread # 8
+Created thread # 9
+Created thread # 10
+Created thread # 11
+Created thread # 12
+Created thread # 13
+Created thread # 14
+Created thread # 15
+BAM sorting: 204956 mapped reads
+BAM sorting bins genomic start loci:
+1	6	21782196
+2	8	7237891
+3	10	2123654
+4	11	28698621
+5	13	6389792
+6	15	1853853
+7	16	13019644
+8	17	34063362
+9	18	45414907
+10	20	39815258
+11	23	6485381
+12	24	5292735
+13	25	37838603
+14	26	55431944
+15	28	11746230
+16	29	56251126
+Thread #4 end of input stream, nextChar=-1
+Completed: thread #11
+Completed: thread #6
+Completed: thread #13
+Completed: thread #14
+Completed: thread #5
+Completed: thread #4
+Completed: thread #12
+Completed: thread #2
+Completed: thread #1
+Completed: thread #9
+Completed: thread #15
+Completed: thread #0
+Joined thread # 1
+Joined thread # 2
+Completed: thread #10
+Completed: thread #7
+Completed: thread #3
+Joined thread # 3
+Joined thread # 4
+Joined thread # 5
+Joined thread # 6
+Joined thread # 7
+Completed: thread #8
+Joined thread # 8
+Joined thread # 9
+Joined thread # 10
+Joined thread # 11
+Joined thread # 12
+Joined thread # 13
+Joined thread # 14
+Joined thread # 15
+Apr 25 11:53:21 ..... started sorting BAM
+Max memory needed for sorting = 4197309819
+ALL DONE!

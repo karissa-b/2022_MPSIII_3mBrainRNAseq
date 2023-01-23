@@ -8,4 +8,167 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  autodep = TRUE,
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center", 
+  out.width ="100%", 
+  out.height = "75%"
+)
+```
+```{r}
+library(tidyverse)
+library(tidygraph)
+library(ggraph)
+library(ggpubr)
+```
+
+# Similarities and differences in brain transcriptomes in Sanfilippo syndrome type A, B and C model zebrafish. 
+
+In this analysis, I will be analysing RNA-seq data derived from 3 month old zebrafish brains derived from the following genotypes:
+
+- Wild type
+- heterozygous for the *sgsh* I388* mutation
+- homozygous for the *sgsh* I388* mutation (MPS-IIIA)
+- homozygous for the *naglu* A603fs mutation (MPS-IIIB)
+- homozygous for the *hgsnat* G577fs mutation (MPS-IIIC)
+
+We are comparing the wildtype to two homozygous genotypes in a single family, 
+
+# A vs B family
+
+```{r, fig.retina=600}
+ab <- create_complete(4) %>% 
+  mutate(
+    name = c("wt", "sgsh het", "MPS-IIIA", "MPS-IIIB"),
+    name = factor(name, levels = c("wt", "sgsh het",  "MPS-IIIA", "MPS-IIIB"))
+  ) %>% 
+  activate(edges) %>% 
+  mutate(comparison = c("het", "A", "B", 1,2,3)) %>% 
+  dplyr::filter(comparison %in% c("het", "A", "B")) %>% 
+  ggraph(layout = "kk") + 
+  geom_edge_link2(
+    angle_calc = "along",
+    label_dodge = unit(0.02, "npc"),
+    start_cap = circle(0.09, "npc"),
+    end_cap = circle(0.09, "npc"),
+    label_size = 5,
+    arrow = arrow(
+      length = unit(0.06, "npc"),
+      ends = "both", 
+      type = "closed"
+    )
+  ) +
+  geom_node_label(
+    aes(label = name, colour = name),
+    size = 5,
+    fill = rgb(1,1,1,0.7),
+    label.padding = unit(0.4, "lines")
+  ) + 
+  scale_y_continuous(expand = expand_scale(0.1)) +
+  scale_x_continuous(expand = expand_scale(0.1)) +
+  theme_void() +
+  theme(
+    legend.position = "none"
+  ) +
+  ggtitle("A vs B")
+
+ac <- create_ring(3) %>% 
+  mutate(
+    name = c("wt", "MPS-IIIA", "MPS-IIIC"),
+    name = factor(name, levels = c("wt",  "MPS-IIIA", "MPS-IIIC"))
+  ) %>% 
+  activate(edges) %>% 
+  mutate(comparison = c("1", "2", "3")) %>% 
+  dplyr::filter(comparison %in% c("1", "2", "3")) %>% 
+  dplyr::filter(comparison != "2") %>% 
+  ggraph(layout = "kk") + 
+  geom_edge_link2(
+    angle_calc = "along",
+    label_dodge = unit(0.02, "npc"),
+    start_cap = circle(0.09, "npc"),
+    end_cap = circle(0.09, "npc"),
+    label_size = 5,
+    arrow = arrow(
+      length = unit(0.06, "npc"),
+      ends = "both", 
+      type = "closed"
+    )
+  ) +
+  geom_node_label(
+    aes(label = name, colour = name),
+    size = 5,
+    fill = rgb(1,1,1,0.7),
+    label.padding = unit(0.4, "lines")
+  ) + 
+  scale_y_continuous(expand = expand_scale(0.1)) +
+  scale_x_continuous(expand = expand_scale(0.1)) +
+  theme_void() +
+  theme(
+    legend.position = "none"
+  )+ 
+  ggtitle("A vs C")
+
+bc <- create_ring(3) %>% 
+  mutate(
+    name = c("wt", "MPS-IIIB", "MPS-IIIC"),
+    name = factor(name, levels = c("wt",  "MPS-IIIB", "MPS-IIIC"))
+  ) %>% 
+  activate(edges) %>% 
+  mutate(comparison = c("1", "2", "3")) %>% 
+  dplyr::filter(comparison %in% c("1", "2", "3")) %>% 
+  dplyr::filter(comparison != "2") %>% 
+  ggraph(layout = "kk") + 
+  geom_edge_link2(
+    angle_calc = "along",
+    label_dodge = unit(0.02, "npc"),
+    start_cap = circle(0.09, "npc"),
+    end_cap = circle(0.09, "npc"),
+    label_size = 5,
+    arrow = arrow(
+      length = unit(0.06, "npc"),
+      ends = "both", 
+      type = "closed"
+    )
+  ) +
+  geom_node_label(
+    aes(label = name, colour = name),
+    size = 5,
+    fill = rgb(1,1,1,0.7),
+    label.padding = unit(0.4, "lines")
+  ) + 
+  scale_y_continuous(expand = expand_scale(0.1)) +
+  scale_x_continuous(expand = expand_scale(0.1)) +
+  theme_void() +
+  theme(
+    legend.position = "none"
+  )  +
+  ggtitle("B vs C")
+
+ggarrange(ab, ac, bc, nrow =1 )
+```
+
+Each of the analyses were generated from 3 parents of zebrafish:
+
+```{r}
+
+```
+
+
+The analysis is broken up into the following sections:
+
+Quality control:
+
+- A vs B 
+- B vs C & A vs C run 1
+- B vs C & A vs C run 2
+- B vs C & A vs C combined
+
+Analysis:
+
+
+
+

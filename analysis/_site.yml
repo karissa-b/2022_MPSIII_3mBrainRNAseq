@@ -5,13 +5,14 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: About
-    href: about.html
-  - text: License
-    href: license.html
+  - text: QC
+    href: QC.html
+  - text: Analysis
+    href: analysis.html
 output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
+    code folding: hide
     theme: cosmo
     highlight: textmate

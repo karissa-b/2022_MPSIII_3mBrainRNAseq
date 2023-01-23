@@ -1,0 +1,663 @@
+---
+title: "bashProcessing"
+author: "Karissa Barthelson"
+date: "2022-11-03"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  autodep = TRUE,
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center", 
+  out.width ="75%", 
+  out.height = "75%"
+)
+```
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(data.tree)
+library(readxl)
+library(pander)
+library(ngsReports)
+library(scales)
+library(pheatmap)
+library(ggpubr)
+library(ggfortify)
+library(ggrepel)
+library(edgeR)
+library(limma)
+
+theme_set(theme_bw())
+```
+
+This page describes my pre-processing of the raw RNA-seq data provided from the South Australian Genomics Center (SAGC). 
+
+# MPS-IIIA vs MPS-IIIB
+For the RNA-seq in this family, it was performed
+
+```{r}
+# Metadata was colleted during sample prep. 
+meta <- 
+  read_excel("data/RNASeqMetaData.xlsx", sheet = "SAGC AB1 batch") %>% 
+  na.omit() %>% 
+  mutate(genotype = case_when(
+    genotype == "wt" ~ "WT", 
+    genotype == "het" ~ "sgsh/+",
+    genotype == "naglu hom" ~ "MPS-IIIB", 
+    genotype == "sgsh hom" ~ "MPS-IIIA"
+  ) %>% 
+    factor(levels = c("WT", "sgsh/+", "MPS-IIIA", "MPS-IIIB"))
+  )
+    
+```
+
+
+# MPS-IIIB vs MPS-IIIC & MPS-IIIA vs MPS-IIIC
+
+For for these families, we did the sequencing over two MGI DNBSEQ-G400 flowcells. Each library was spread over the flow cells (rather than half the samples on the first flowcell and the other half on the other flow cell). Data was provided as zipped folders containing more folders for the four lanes within each flow cell. See the folder structure tree below. 
+
+```{r}
+data.frame(pathString = c(
+    "raw_data/Run_1/L01/*fastq.gz", 
+    "raw_data/Run_1/L02/*fastq.gz", 
+    "raw_data/Run_1/L03/*fastq.gz", 
+    "raw_data/Run_1/L04/*fastq.gz", 
+    "raw_data/Run_2/L01/*fastq.gz", 
+    "raw_data/Run_2/L02/*fastq.gz", 
+    "raw_data/Run_2/L03/*fastq.gz", 
+    "raw_data/Run_2/L04/*fastq.gz"
+)
+) %>% 
+  data.tree::as.Node()
+```
+
+To prepare a gene counts matrix for differential expression analysis, I eventually want to merge the `fastq` files for each sample so that only one fastq.gz file exists per fish. At first, I won't merge the fastq files for each *run* into a single fastq file per fish. As I will perform PCA on the counts to assess whether there is a large batch effect of run. 
+
+After this assessment, I will merge the fq files per run, and re-run the pipeline with merged fq files.
+
+To merge the fq files within in each run (and so concatenating over the lanes), I ran the the following `mergeFiles.sh` script for each run. Before I did this, I moved all the fastq files from all the lanes into a single directory. The filenames still have the lane number in them, and so can be differentiated from each other. 
+
+
+```{r}
+cat(readLines("code/mergeFiles.sh"), sep = "\n")
+```
+
+Due to space considerations, going to run the same pipeline for each run seperately. 
+
+## Run 1
+```{r}
+# Metadata was colleted during sample prep. 
+meta <- 
+  read_excel("data/RNASeqMetaData.xlsx", sheet = "Sheet2") %>% 
+  mutate(genotype = case_when(
+    genotype == "wt" ~ "WT", 
+    genotype == "hgsnat" ~ "MPS-IIIC",
+    genotype == "naglu" ~ "MPS-IIIB", 
+    genotype == "sgsh" ~ "MPS-IIIA"
+  ) %>% 
+    factor(levels = c("WT", "MPS-IIIA", "MPS-IIIB", "MPS-IIIC"))
+  )
+    
+```
+### Raw data 
+#### fastqc
+
+I will use the `ngsReports` package to combine and visualise the fastqc results. 
+
+```{r}
+fastqc_raw_1 <- list.files(
+  path = "data/BC_AC_run1/fastqc_raw",
+  pattern = "zip", 
+  recursive = TRUE,
+  full.names = TRUE) %>% 
+  FastqcDataList()
+```
+
+The total number of reads ranged between `r range(readTotals(fastqc_raw_1)$Total_Sequences) %>% comma %>% pander` reads. Note that the number of reads in the `R1` file indeed equals to the number of reads in the `R2` file. 
+
+```{r}
+readTotals(fastqc_raw_1) %>% 
+  mutate(Read = case_when(
+    grepl(Filename, pattern = "_R1") ~ "R1", 
+    grepl(Filename, pattern = "_R2") ~ "R2"
+  ), 
+  ULN = str_remove(Filename, "_S[0-9]+_merged.+")
+  ) %>% 
+  left_join(meta) %>% 
+  dplyr::filter(ULN !="22-02045") %>% 
+  ggplot(aes(x = ULN, y = Total_Sequences, fill = Read)) + 
+           geom_col(position = "dodge") +
+  coord_flip() +
+  scale_fill_viridis_d(end = 0.8) +
+  scale_y_continuous(labels = comma) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right")
+```
+
+#### Quality of raw data
+
+Looks all good to me. The average read quality is always over 25. 
+
+```{r}
+plotBaseQuals(fastqc_raw_1)
+```
+
+#### GC Content
+
+All samples have similar GC content, and the distribution looks similar to what we normally obserce in zebrafish brains. Therefore, no issues are present. 
+
+```{r}
+plotGcContent(
+  x = fastqc_raw_1, 
+  plotType = "line",
+  gcType = "Transcriptome", 
+  species = "Drerio", 
+  usePlotly = F
+) +
+  theme(legend.position = "none")
+```
+
+#### Over-repreented seq
+
+One over-represented sequence is present in this dataset (only in the neg control library, and is in the negative control library. 
+
+```{r}
+getModule(fastqc_raw_1, "Overrep") %>% 
+  as_tibble()
+```
+
+
+### trimmed data fastQC
+
+The raw fastq files were then processed with `fastp`. In this step, the adaptor sequeces were trimmed from the reads. Then all length and quality filters were left as default values. Less than 2% of the reads was discarded, and no observed changes are apparent in the %GC in the reads. 
+
+```{r}
+fastqc_trim_1 <- list.files(
+  path = "data/BC_AC_run1/fastqc_trim",
+  pattern = "zip", 
+  recursive = TRUE,
+  full.names = TRUE) %>% 
+  FastqcDataList()
+```
+
+```{r}
+trimStats <- readTotals(fastqc_raw_1) %>%
+  dplyr::rename(Raw = Total_Sequences) %>%
+  left_join(readTotals(fastqc_trim_1), by = "Filename") %>%
+  dplyr::rename(Trimmed = Total_Sequences) %>%
+  mutate(
+    Discarded = 1 - Trimmed / Raw,
+    Retained = Trimmed / Raw
+  )
+
+trimStats %>% 
+  mutate(ULN = str_remove(Filename, "_S[0-9]+_merged.+")
+  ) %>% 
+  left_join(meta) %>% 
+  na.omit %>% 
+  unique() %>% 
+  ggplot(aes(y = ULN)) +
+  geom_col(aes(x = Discarded*100)) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right") +
+  labs(x = "Percentage reads discarded by fastp")
+```
+
+```{r}
+plotBaseQuals(fastqc_trim_1) +
+  ggtitle("Read quality after trimming", subtitle = "no apparent differences after trimming")
+```
+
+
+```{r}
+ggarrange(
+  plotGcContent(
+    x = fastqc_raw_1, 
+    plotType = "line",
+    gcType = "Transcriptome", 
+    species = "Drerio"
+  ) +
+    theme(legend.position = "none") +
+    ggtitle("Before fastp"), 
+  plotGcContent(
+  x = fastqc_trim_1, 
+  plotType = "line",
+  gcType = "Transcriptome", 
+  species = "Drerio"
+) +
+  theme(legend.position = "none")+
+  ggtitle("After fastp")
+) 
+
+```
+
+### Aligned QC
+The reads were aligned to the GRCz11 genome using `STAR_2.5.2a`. The genome index was generated by <Lawson et al. 2020 Elife>[link](https://elifesciences.org/articles/55792). The majority of reads were aligned uniquely. 
+
+```{r}
+fastqc_align_1 <- list.files(
+  path = "data/BC_AC_run1/fastqc_align",
+  pattern = "zip", 
+  recursive = TRUE,
+  full.names = TRUE) %>% 
+  FastqcDataList()
+```
+
+
+```{r}
+list.files("data/BC_AC_run1/starLog/", full.names = TRUE) %>% 
+  .[grepl(x = ., pattern = "Log.final.out")] %>% 
+  ngsReports::plotAlignmentSummary(type = "star") +
+  scale_fill_viridis_d(end = 0.8) +
+  theme(legend.position = "right") +
+  ggtitle("Summary of alignment (STAR)", 
+          subtitle = "In all samples, the majority of reads mapped uniquely to the zebrafish genome.")
+```
+
+```{r}
+plotBaseQuals(fastqc_align_1)
+```
+
+```{r}
+plotGcContent(x = fastqc_align_1, 
+    plotType = "line",
+    gcType = "Transcriptome", 
+    species = "Drerio"
+  ) +
+  theme(legend.position = "none") 
+```
+
+### Dedup align QC
+
+This dataset was processed with UMIs, which allow PCR duplicates to be removed. I did this using `umi-tools`. After de-duplciation about half of the reads were retained. 
+
+```{r}
+fastqc_align_dedup_1 <- list.files(
+  path = "data/BC_AC_run1/fastqc_dedup",
+  pattern = "zip", 
+  recursive = TRUE,
+  full.names = TRUE) %>% 
+  FastqcDataList()
+```
+
+```{r}
+readTotals(fastqc_align_1) %>% 
+  mutate(align = "raw") %>% 
+  bind_rows(readTotals(fastqc_align_dedup_1) %>% 
+              mutate(align = "dedup")) %>% 
+  mutate(ULN = str_remove(Filename, "_S[0-9]+_merged.+")) %>% 
+  left_join(meta) %>% 
+  ggplot(aes(x = ULN, y = Total_Sequences, fill = align)) + 
+           geom_col(position = "dodge") +
+  coord_flip() +
+  scale_fill_viridis_d(end = 0.8) +
+  scale_y_continuous(labels = comma) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right")
+```
+
+### FeatureCounts summary
+
+The number of reads aligning to each gene was then counted using featureCounts. The plot below is showing the number of reads aligning to the GRCz11 Ensembl release 101. 
+```{r}
+FC_summary <- read.delim("data/BC_AC_run1/featurecounts_GRCz11_101_q10_paired_stranded1/counts.out.summary")
+
+# Tidy up the colnames
+colnames(FC_summary) %<>% 
+  str_remove(pattern = "_S[0-9]+_merged.Aligned.sortedByCoord.dedup.out.bam") %>% 
+  str_remove(pattern = "X04_dedup.bam.") %>% 
+  str_replace(pattern = "[.]", replacement = "-")
+
+FC_summary %>% 
+ gather(key = "ULN", value = "NumReads", starts_with("22")) %>% 
+  left_join(meta) %>% 
+  dplyr::filter(ULN != "22-00201") %>% 
+  as_tibble() %>% 
+  dplyr::filter(NumReads > 0) %>%   
+  ggplot(aes(y = ULN, x = NumReads, fill = Status)) +
+  geom_col() +
+  scale_fill_viridis_d(end = 0.8) +
+  scale_x_continuous(labels = comma) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right") +
+  ggtitle("FeatureCounts using Ensembl gtf file")
+```
+
+# Run 2
+### Raw data 
+#### fastqc
+
+I will use the `ngsReports` package to combine and visualise the fastqc results. 
+
+```{r}
+fastqc_raw_2 <- list.files( 
+  path = "data/BC_AC_run2/fastqc_raw",
+  pattern = "zip", 
+  recursive = TRUE,
+  full.names = TRUE) %>% 
+  FastqcDataList()
+```
+
+The total number of reads ranged between `r range(readTotals(fastqc_raw_2)$Total_Sequences) %>% comma %>% pander` reads. Note that the number of reads in the `R1` file indeed equals to the number of reads in the `R2` file. 
+
+```{r}
+readTotals(fastqc_raw_2) %>% 
+  mutate(Read = case_when(
+    grepl(Filename, pattern = "_R1") ~ "R1", 
+    grepl(Filename, pattern = "_R2") ~ "R2"
+  ), 
+  ULN = str_remove(Filename, "_S[0-9]+_merged.+")
+  ) %>% 
+  left_join(meta) %>% 
+  dplyr::filter(ULN !="22-02045") %>% 
+  ggplot(aes(x = ULN, y = Total_Sequences, fill = Read)) + 
+           geom_col(position = "dodge") +
+  coord_flip() +
+  scale_fill_viridis_d(end = 0.8) +
+  scale_y_continuous(labels = comma) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right")
+```
+
+#### Quality of raw data
+
+Looks all good to me. The average read quality is always over 25. 
+
+```{r}
+plotBaseQuals(fastqc_raw_2)
+```
+
+#### GC Content
+
+All samples have similar GC content, and the distribution looks similar to what we normally obserce in zebrafish brains. Therefore, no issues are present. 
+
+```{r}
+plotGcContent(
+  x = fastqc_raw_2, 
+  plotType = "line",
+  gcType = "Transcriptome", 
+  species = "Drerio", 
+  usePlotly = F
+) +
+  theme(legend.position = "none")
+```
+
+#### Over-repreented seq
+
+One over-represented sequence is present in this dataset (only in the neg control library, and is in the negative control library. 
+
+```{r}
+getModule(fastqc_raw_1, "Overrep") %>% 
+  as_tibble()
+```
+
+
+### trimmed data fastQC
+
+The raw fastq files were then processed with `fastp`. In this step, the adaptor sequeces were trimmed from the reads. Then all length and quality filters were left as default values. Less than 2% of the reads was discarded, and no observed changes are apparent in the %GC in the reads. 
+
+```{r}
+fastqc_trim_2 <- list.files(
+  path = "data/BC_AC_run2/fastqc_trim",
+  pattern = "zip", 
+  recursive = TRUE,
+  full.names = TRUE) %>% 
+  FastqcDataList()
+```
+
+```{r}
+trimStats2 <- readTotals(fastqc_raw_2) %>%
+  dplyr::rename(Raw = Total_Sequences) %>%
+  left_join(readTotals(fastqc_trim_2), by = "Filename") %>%
+  dplyr::rename(Trimmed = Total_Sequences) %>%
+  mutate(
+    Discarded = 1 - Trimmed / Raw,
+    Retained = Trimmed / Raw
+  )
+
+trimStats2 %>% 
+  mutate(ULN = str_remove(Filename, "_S[0-9]+_merged.+")
+  ) %>% 
+  left_join(meta) %>% 
+  dplyr::filter(ULN !="22-02045") %>% 
+  unique() %>% 
+  ggplot(aes(y = ULN)) +
+  geom_col(aes(x = Discarded*100)) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right") +
+  labs(x = "Percentage reads discarded by fastp")
+```
+
+```{r}
+plotBaseQuals(fastqc_trim_2) +
+  ggtitle("Read quality after trimming", subtitle = "no apparent differences after trimming")
+```
+
+
+```{r}
+ggarrange(
+  plotGcContent(
+    x = fastqc_raw_2, 
+    plotType = "line",
+    gcType = "Transcriptome", 
+    species = "Drerio"
+  ) +
+    theme(legend.position = "none") +
+    ggtitle("Before fastp", subtitle = ""), 
+  plotGcContent(
+  x = fastqc_trim_2, 
+  plotType = "line",
+  gcType = "Transcriptome", 
+  species = "Drerio"
+) +
+  theme(legend.position = "none")+
+  ggtitle("After fastp", 
+         subtitle = "")
+) 
+
+```
+
+### Aligned QC
+The reads were aligned to the GRCz11 genome using `STAR_2.5.2a`. The genome index was generated by <Lawson et al. 2020 Elife>[link](https://elifesciences.org/articles/55792). The majority of reads were aligned uniquely. 
+
+```{r}
+fastqc_align_2 <- list.files(
+  path = "data/BC_AC_run2/fastqc_align",
+  pattern = "zip", 
+  recursive = TRUE,
+  full.names = TRUE) %>% 
+  FastqcDataList()
+```
+
+
+```{r}
+list.files("data/BC_AC_run2/starLog/", full.names = TRUE) %>% 
+  .[grepl(x = ., pattern = "Log.final.out")] %>% 
+  ngsReports::plotAlignmentSummary(type = "star") +
+  scale_fill_viridis_d(end = 0.8) +
+  theme(legend.position = "right") +
+  ggtitle("Summary of alignment (STAR)", 
+          subtitle = "In all samples, the majority of reads mapped uniquely to the zebrafish genome.")
+```
+
+```{r}
+plotBaseQuals(fastqc_align_2)
+```
+
+```{r}
+plotGcContent(x = fastqc_align_2, 
+    plotType = "line",
+    gcType = "Transcriptome", 
+    species = "Drerio"
+  ) +
+  theme(legend.position = "none") 
+```
+
+### Dedup align QC
+
+This dataset was processed with UMIs, which allow PCR duplicates to be removed. I did this using `umi-tools`. After de-duplciation about half of the reads were retained. 
+
+```{r}
+fastqc_align_dedup_2 <- list.files(
+  path = "data/BC_AC_run2/fastqc_dedup",
+  pattern = "zip", 
+  recursive = TRUE,
+  full.names = TRUE) %>% 
+  FastqcDataList()
+```
+
+```{r}
+readTotals(fastqc_align_2) %>% 
+  mutate(align = "raw") %>% 
+  bind_rows(readTotals(fastqc_align_dedup_2) %>% 
+              mutate(align = "dedup")) %>% 
+  mutate(ULN = str_remove(Filename, "_S[0-9]+_merged.+")) %>% 
+  left_join(meta) %>% 
+  ggplot(aes(x = ULN, y = Total_Sequences, fill = align)) + 
+           geom_col(position = "dodge") +
+  coord_flip() +
+  scale_fill_viridis_d(end = 0.8) +
+  scale_y_continuous(labels = comma) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right")
+```
+
+### FeatureCounts summary
+
+The number of reads aligning to each gene was then counted using featureCounts. The plot below is showing the number of reads aligning to the GRCz11 Ensembl release 101. 
+```{r}
+FC_summary <- read.delim("data/BC_AC_run2/featurecounts_GRCz11_101_q10_paired_stranded1/counts.out.summary")
+
+# Tidy up the colnames
+colnames(FC_summary) %<>% 
+  str_remove(pattern = "_S[0-9]+_merged.Aligned.sortedByCoord.dedup.out.bam") %>% 
+  str_remove(pattern = "X04_dedup.bam.") %>% 
+  str_replace(pattern = "[.]", replacement = "-")
+
+FC_summary %>% 
+ gather(key = "ULN", value = "NumReads", starts_with("22")) %>% 
+  left_join(meta) %>% 
+  dplyr::filter(ULN != "22-02045") %>% 
+  as_tibble() %>% 
+  dplyr::filter(NumReads > 0) %>%   
+  ggplot(aes(y = ULN, x = NumReads, fill = Status)) +
+  geom_col() +
+  scale_fill_viridis_d(end = 0.8) +
+  scale_x_continuous(labels = comma) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right") +
+  ggtitle("FeatureCounts using Ensembl gtf file")
+```
+
+# PCA Run 1 + run 2
+
+To see if there is any broad effects of the two DNB-seq runs, I will perform PCA on the raw gene counts matrix, as well as on the filtered and normalised counts per run. 
+
+The plot below shows PC1 vs PC2 for the entire dataset. A dotted line is drawn between the matched samples from each run. Overall, the two RNA-seq runs per fish brain mRNA sample mostly resemble each other, except for BC 16, where there is a large effect of run. 
+
+```{r}
+fcCombined <- read_delim("data/BC_AC_run1/featurecounts_GRCz11_101_q10_paired_stranded1/counts.out", delim = "\t", skip = 1) %>%
+  set_names(basename(names(.))) %>% 
+  set_names(names(.) %>% str_remove(pattern = "_S[0-9]+_merged.Aligned.sortedByCoord.dedup.out.bam")) %>% 
+  as_tibble() %>% 
+  dplyr::select(-c(Chr, Start, End, Length, Strand)) %>% 
+  gather(key = "ULN", value = "counts", starts_with("22")) %>% 
+  mutate(run = "1") %>% 
+  bind_rows(read_delim("data/BC_AC_run2/featurecounts_GRCz11_101_q10_paired_stranded1/counts.out", delim = "\t", skip = 1) %>%
+              set_names(basename(names(.))) %>% 
+              set_names(names(.) %>% str_remove(pattern = "_S[0-9]+_merged.Aligned.sortedByCoord.dedup.out.bam")) %>% 
+              as_tibble() %>% 
+              dplyr::select(-c(Chr, Start, End, Length, Strand)) %>% 
+              gather(key = "ULN", value = "counts", starts_with("22")) %>% 
+              mutate(run = "2")) %>% 
+  dplyr::filter(ULN != "22-02045") %>% 
+  mutate(ULN_run = paste0(ULN, "_", run)) %>% 
+  dplyr::select(-ULN, -run) %>% 
+  spread(key = "ULN_run", value = "counts") %>% 
+  column_to_rownames("Geneid")
+
+
+fcCombined %>% 
+  as.matrix() %>% 
+  t() %>% 
+  prcomp() %>% 
+  autoplot(data = tibble(run_ULN = rownames(.$x)) %>%
+             mutate(ULN = str_extract(run_ULN, pattern = "22-[0-9]+")) %>% 
+             left_join(meta),
+           colour = "ULN", 
+           size = 2
+  ) +
+  geom_label_repel(aes(label = SampleName), 
+             fill = NA) +
+  geom_line(aes(group = ULN), linetype = 2) +
+  theme(aspect.ratio = 1, 
+        legend.position = "none") +
+  ggtitle("All samples")
+```
+
+I also want to look within each AC and BC family to see if there were any patterns being masked by the presumably large effect of "Pair". Within the AC samples, while tere might be some clear outliers, the 2 seq runs per fish look very similar. 
+
+```{r}
+fcAC <- fcCombined %>% 
+  as.data.frame() %>% 
+  rownames_to_column("geneid") %>% 
+  gather(key = "ULN_run", value = "counts", starts_with("22-")) %>% 
+  mutate(ULN = str_extract(ULN_run, pattern = "22-[0-9]+")) %>%
+  left_join(meta) %>% 
+  dplyr::filter(MPS == "AC") %>% 
+  dplyr::select(geneid, ULN_run, counts) %>% 
+  spread(key = "ULN_run", value = "counts") %>% 
+  column_to_rownames("geneid")
+
+
+fcBC <- fcCombined %>% 
+  as.data.frame() %>% 
+  rownames_to_column("geneid") %>% 
+  gather(key = "ULN_run", value = "counts", starts_with("22-")) %>% 
+  mutate(ULN = str_extract(ULN_run, pattern = "22-[0-9]+")) %>%
+  left_join(meta) %>% 
+  dplyr::filter(MPS == "BC") %>% 
+  dplyr::select(geneid, ULN_run, counts) %>% 
+  spread(key = "ULN_run", value = "counts") %>% 
+  column_to_rownames("geneid")
+
+ggarrange(
+  fcAC %>% 
+  as.matrix() %>% 
+  t() %>% 
+  prcomp() %>% 
+  autoplot(data = tibble(run_ULN = rownames(.$x)) %>%
+             mutate(ULN = str_extract(run_ULN, pattern = "22-[0-9]+")) %>% 
+             left_join(meta),
+           colour = "ULN", 
+           size = 2
+  ) +
+  geom_label_repel(aes(label = SampleName), 
+             fill = NA) +
+  geom_line(aes(group = ULN), linetype = 2) +
+  theme(aspect.ratio = 1, 
+        legend.position = "none") +
+  ggtitle("MPS-IIIA vs MPS-IIIC samples"),
+
+fcBC %>% 
+  as.matrix() %>% 
+  t() %>% 
+  prcomp() %>% 
+  autoplot(data = tibble(run_ULN = rownames(.$x)) %>%
+             mutate(ULN = str_extract(run_ULN, pattern = "22-[0-9]+")) %>% 
+             left_join(meta),
+           colour = "ULN", 
+           size = 2
+  ) +
+  geom_label_repel(aes(label = SampleName), 
+             fill = NA) +
+  geom_line(aes(group = ULN), linetype = 2) +
+  theme(aspect.ratio = 1, 
+        legend.position = "none")  +
+  ggtitle("MPS-IIIB vs MPS-IIIC samples")
+)
+```
+
+
+
+

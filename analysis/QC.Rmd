@@ -1,0 +1,349 @@
+---
+title: "QC"
+author: "Karissa Barthelson"
+date: "2022-04-23"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+## Introduction
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  autodep = TRUE,
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center", 
+  out.width ="75%", 
+  out.height = "75%"
+)
+```
+```{r loadLibs}
+library(tidyverse)
+library(magrittr)
+library(readxl)
+library(ngsReports)
+library(AnnotationHub)
+library(pander)
+library(scales)
+library(pheatmap)
+library(ggpubr)
+
+theme_set(theme_bw())
+```
+
+```{r anno}
+# I onrmally use annotationHub to get the gene information. However, here, I am using the updated zebrafish transcriptome data from lawson et al ELife (discussed later). This file below is from here 
+# https://www.umassmed.edu/lawson-lab/reagents/zebrafish-transcriptome/
+geneInfoLL <- read_tsv("data/v4.2.1_geneinformation.tab") %>% 
+  mutate(gene_id = LLgeneID) %>% 
+  column_to_rownames("LLgeneID")
+# Keeping the annotation hub code here just i case 
+# ah <- AnnotationHub() %>%
+# 	subset(species == "Danio rerio") %>%
+# 	subset(rdataclass == "EnsDb")
+# 
+# ensDb <- ah[["AH83189"]] # for release 101, latest version and the alignment
+# grTrans <- transcripts(ensDb)
+# trLengths <- exonsBy(ensDb, "tx") %>%
+# 	width() %>%
+# 	vapply(sum, integer(1))
+# mcols(grTrans)$length <- trLengths[names(grTrans)]
+# gcGene <- grTrans %>%
+#   mcols() %>%
+#   as.data.frame() %>%
+#   dplyr::select(gene_id, tx_id, gc_content, length) %>%
+#   as_tibble() %>%
+#   group_by(gene_id) %>%
+#   summarise(
+#     gc_content = sum(gc_content*length) / sum(length),
+#     length = ceiling(median(length))
+#   )
+# grGenes <- genes(ensDb)
+# mcols(grGenes) %<>%
+#   as.data.frame() %>%
+#   left_join(gcGene) %>%
+#   as.data.frame() %>%
+#   DataFrame()
+```
+
+```{r meta}
+# Metadata was colleted during sample prep. 
+meta <- 
+  read_excel("data/RNASeqMetaData.xlsx", sheet = "SAGC AB1 batch") %>% 
+  na.omit() %>% 
+  mutate(genotype = case_when(
+    genotype == "wt" ~ "WT", 
+    genotype == "het" ~ "sgsh/+",
+    genotype == "naglu hom" ~ "MPS-IIIB", 
+    genotype == "sgsh hom" ~ "MPS-IIIA"
+  ) %>% 
+    factor(levels = c("WT", "sgsh/+", "MPS-IIIA", "MPS-IIIB"))
+  )
+    
+```
+
+Here, I will assess the quality of the RNA-seq data for the *sgsh* I388* vs *naglu* A603fs experiment on zebrafish 3m old brains. 
+
+Total RNA was purified from the brains of individual fish. The tail end was used for gDNA extraction and PCR genotyping. The total RNA was DNase treated (to remove any genomic DNA which was carried over from the RNA extraction), then delivered to SAGC for polyA+ library preparation and sequencing using the MGI DNBSEQ technology. 
+
+The sequencing was performed over four lanes which were subsequently merged. This was done using the `merge.sh` script shown below. 
+
+
+```{r}
+ readLines("code/mergeFiles.sh") %>%
+   cat(sep = "\n")
+```
+
+# fastqc: raw data
+
+I will use the `ngsReports` package to combine and visualise the fastqc results. 
+```{r fastqcRawObejct}
+fastqc_raw <- list.files(
+  path = "data/fastqc_raw",
+  pattern = "zip", 
+  recursive = TRUE,
+  full.names = TRUE) %>% 
+  FastqcDataList()
+```
+
+The total number of reads ranged between `r range(readTotals(fastqc_raw)$Total_Sequences) %>% comma %>% pander` reads. Note that the number of reads in the `R1` file indeed equals to the number of reads in the `R2` file. 
+
+```{r}
+readTotals(fastqc_raw) %>% 
+  mutate(Read = case_when(
+    grepl(Filename, pattern = "_R1") ~ "R1", 
+    grepl(Filename, pattern = "_R2") ~ "R2"
+  ), 
+  ULN = str_remove(Filename, "_S[0-9]+_merged.+")
+  ) %>% 
+  left_join(meta) %>% 
+  ggplot(aes(x = ULN, y = Total_Sequences, fill = Read)) + 
+           geom_col(position = "dodge") +
+  coord_flip() +
+  scale_fill_viridis_d(end = 0.8) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right")
+```
+
+## Quality of raw data
+
+Looks all good to me. The average read quality is always over 25. 
+
+```{r}
+plotBaseQuals(fastqc_raw)
+```
+
+## GC Content
+
+All samples have similar GC content, and the distribution looks similar to what we normally obserce in zebrafish brains. Therefore, no issues are present. 
+
+```{r}
+plotGcContent(
+  x = fastqc_raw, 
+  plotType = "line",
+  gcType = "Transcriptome", 
+  species = "Drerio", 
+  usePlotly = F
+) +
+  theme(legend.position = "none")
+```
+
+### Over-repreented seq
+
+No over-represented sequences are present in this dataset (only in the neg control libraries)
+
+```{r}
+getModule(fastqc_raw, "Overrep") %>% 
+  as_tibble()
+```
+
+
+## trimmed data fastQC
+
+The raw fastq files were then processed with `fastp`. In this step, the adaptor sequeces were trimmed from the reads. Then all length and quality filters were left as default values. Less than 2% of the reads was discarded, and no observed changes are apparent in the %GC in the reads. 
+
+```{r}
+fastqc_trim <- list.files(path = "data/fastqc_trim",
+  pattern = "zip", 
+  recursive = TRUE,
+  full.names = TRUE) %>% 
+  FastqcDataList()
+```
+
+```{r}
+trimStats <- readTotals(fastqc_raw) %>%
+  dplyr::rename(Raw = Total_Sequences) %>%
+  left_join(readTotals(fastqc_trim), by = "Filename") %>%
+  dplyr::rename(Trimmed = Total_Sequences) %>%
+  mutate(
+    Discarded = 1 - Trimmed / Raw,
+    Retained = Trimmed / Raw
+  )
+
+trimStats %>% 
+  mutate(ULN = str_remove(Filename, "_S[0-9]+_merged.+")
+  ) %>% 
+  left_join(meta) %>% 
+  na.omit %>% 
+  unique() %>% 
+  ggplot(aes(y = ULN)) +
+  geom_col(aes(x = Discarded*100)) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right") +
+  labs(x = "Percentage reads discarded by fastp")
+```
+
+```{r}
+plotBaseQuals(fastqc_trim) +
+  ggtitle("Read quality after trimming", subtitle = "no apparent differences after trimming")
+```
+
+
+```{r}
+ggarrange(
+  plotGcContent(
+    x = fastqc_raw, 
+    plotType = "line",
+    gcType = "Transcriptome", 
+    species = "Drerio"
+  ) +
+    theme(legend.position = "none") +
+    ggtitle("Before fastp"), 
+  plotGcContent(
+  x = fastqc_trim, 
+  plotType = "line",
+  gcType = "Transcriptome", 
+  species = "Drerio"
+) +
+  theme(legend.position = "none")+
+  ggtitle("After fastp")
+) 
+
+```
+
+## Aligned QC
+The reads were aligned to the GRCz11 genome using `STAR_2.5.2a`. The genome index was generated by <Lawson et al. 2020 Elife>[link](https://elifesciences.org/articles/55792). The majority of reads were aligned uniquely. 
+
+```{r}
+fastqc_align <- list.files(
+  path = "data/fastqc_align",
+  pattern = "zip", 
+  recursive = TRUE,
+  full.names = TRUE) %>% 
+  FastqcDataList()
+```
+
+
+```{r}
+list.files("data/starAlignlog", full.names = TRUE) %>% 
+  .[grepl(x = ., pattern = "Log.final.out")] %>% 
+  ngsReports::plotAlignmentSummary(type = "star") +
+  scale_fill_viridis_d(end = 0.8) +
+  theme(legend.position = "right") +
+  ggtitle("Summary of alignment (STAR)", 
+          subtitle = "In all samples, the majority of reads mapped uniquely to the zebrafish genome.")
+```
+
+```{r}
+plotBaseQuals(fastqc_align)
+```
+
+```{r}
+plotGcContent(x = fastqc_align, 
+    plotType = "line",
+    gcType = "Transcriptome", 
+    species = "Drerio"
+  ) +
+  theme(legend.position = "none") 
+```
+
+## Dedup align QC
+
+This dataset was processed with UMIs, which allow PCR duplicates to be removed. I did this using `umi-tools`. After de-duplciation about half of the reads were retained. 
+
+```{r}
+fastqc_align_dedup <- list.files(
+  path = "data/fastqc_dedup",
+  pattern = "zip", 
+  recursive = TRUE,
+  full.names = TRUE) %>% 
+  FastqcDataList()
+```
+
+```{r}
+readTotals(fastqc_align) %>% 
+  mutate(align = "raw") %>% 
+  bind_rows(readTotals(fastqc_align_dedup) %>% 
+              mutate(align = "dedup")) %>% 
+  mutate(ULN = str_remove(Filename, "_S[0-9]+_merged.+")) %>% 
+  left_join(meta) %>% 
+  ggplot(aes(x = ULN, y = Total_Sequences, fill = align)) + 
+           geom_col(position = "dodge") +
+  coord_flip() +
+  scale_fill_viridis_d(end = 0.8) +
+  scale_y_continuous(labels = comma) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right")
+```
+
+## FeatureCounts summary
+
+The number of reads aligning to each gene was then counted using featureCounts. The plot below is showing the number of reads aligning to the GRCz11 Ensembl release 98. 
+```{r}
+FC_summary <- read.delim("data/featurecounts/counts.out.summary")
+
+# Tidy up the colnames
+colnames(FC_summary) %<>% 
+  str_remove(pattern = "_S[0-9]+_merged.Aligned.sortedByCoord.dedup.out.bam") %>% 
+  str_remove(pattern = "X04_dedup.bam.") %>% 
+  str_replace(pattern = "[.]", replacement = "-")
+
+FC_summary %>% 
+ gather(key = "ULN", value = "NumReads", starts_with("22")) %>% 
+  left_join(meta) %>% 
+  dplyr::filter(ULN != "22-00201") %>% 
+  as_tibble() %>% 
+  dplyr::filter(NumReads > 0) %>%   
+  ggplot(aes(y = ULN, x = NumReads, fill = Status)) +
+  geom_col() +
+  scale_fill_viridis_d(end = 0.8) +
+  scale_x_continuous(labels = comma) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right") +
+  ggtitle("FeatureCounts using Ensembl gtf file")
+```
+
+Using the LawsonLab gtf file, the number of reads unassigned due to having no features was massively reduced. Therefore, I will do the rest of the analysis using these annotations. 
+
+```{r}
+FC_summary_LL <- read.delim("data/featureCountsLL/counts.out.summary")
+
+# Tidy up the colnames
+colnames(FC_summary_LL) %<>% 
+  str_remove(pattern = "_S[0-9]+_merged.Aligned.sortedByCoord.dedup.out.bam") %>% 
+  str_remove(pattern = "X04_dedupLL.bam.") %>% 
+  str_replace(pattern = "[.]", replacement = "-")
+
+FC_summary_LL %>% 
+ gather(key = "ULN", value = "NumReads", starts_with("22")) %>% 
+  left_join(meta) %>% 
+  dplyr::filter(ULN != "22-00201") %>% 
+  as_tibble() %>% 
+  dplyr::filter(NumReads > 0) %>%   
+  ggplot(aes(y = ULN, x = NumReads, fill = Status)) +
+  geom_col() +
+  scale_fill_viridis_d(end = 0.8) +
+  scale_x_continuous(labels = comma) +
+  facet_wrap(~genotype, scales = "free_y", ncol = 1, strip.position = "right") +
+  ggtitle("FeatureCounts using LawwsonLab gtf file")
+```
+
+
+
+
+
+
+
+
+
+
+
