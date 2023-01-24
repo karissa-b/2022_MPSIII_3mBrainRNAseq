@@ -9,3 +9,33 @@ analysis/*png
 analysis/*html
 analysis/*_cache
 analysis/site_libs
+
+## LB added:
+## Common large files
+*.fastq.gz
+*.fq.gz
+*.fa
+*.bam
+*.bai
+*.gds
+*.vcf.gz
+*.vcf.gz.tbi
+*mgikit*
+## Variant analysis
+**/2_genomicsDB
+**/*addUmis/log/*
+**/*trim/log/*
+**/*_STARpass*
+**/*_STARgenome*
+**/*align/log/*
+**/*.firstPass.table
+**/*.secondPass.table
+**/*.snvs.txt.gz
+**/*wasp/log/*
+**/*.static.tsv
+## Python or snakemake workflow related
+**/.snakemake/
+*__pycache__*
+*.snakemake_timestamp
+**/workflow/log
+**/resources

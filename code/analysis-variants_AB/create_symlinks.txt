@@ -1,0 +1,3 @@
+I used the following command to symlink the raw data:
+
+ln -s /hpcfs/users/a1647910/2022_MPSIII_3mBrainRNAseq/raw_data/SAGCQA0303_Karissa/fastq/L0[1-4]/22-[0-9]*_S[0-9]?([0-6])_L0[1-4]_R[1-2]_001.fastq.gz /hpcfs/users/a1647910/2022_MPSIII_3mBrainRNAseq/code/analysis-variants_AB/results/00_rawData/fastq/
