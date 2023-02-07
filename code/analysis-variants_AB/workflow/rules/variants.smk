@@ -168,8 +168,8 @@ rule variants_filter:
         refIndex = rules.refs_refIndex.output,
         refDict = rules.refs_refDict.output,
     output:
-        vcf = temp(os.path.join("results", variants_dir, "5_filter", "all_samples.vcf.gz")),
-        vcfIndex = temp(os.path.join("results", variants_dir, "5_filter", "all_samples.vcf.gz.tbi")),
+        vcf = os.path.join("results", variants_dir, "5_filter", "all_samples.vcf.gz"),
+        vcfIndex = os.path.join("results", variants_dir, "5_filter", "all_samples.vcf.gz.tbi"),
         detailMetrics = os.path.join("results", variants_dir, "5_filter", "log", "all_samples.variant_calling_detail_metrics"),
         summaryMetrics = os.path.join("results", variants_dir, "5_filter", "log", "all_samples.variant_calling_summary_metrics"),
     params:

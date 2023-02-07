@@ -11,11 +11,9 @@ include: "rules/common.smk"
 
 ## Avoid ambiguity in filenames when multiple wildcards are used
 wildcard_constraints:
-    SAMPLE = "|".join([sample for sample in samples]),
-    PAIRTAG = "|".join([tag for tag in config["paired_end"]["tags"]]),
-    MERGETAG = "|".join([tag for tag in config["merge_samples"]["tags"]]),
-
-# print(config["merge_samples"]["tags"])
+    SAMPLE = "|".join(samples),
+    PAIRTAG = "|".join(config["paired_end"]["tags"]) if config["paired_end"]["activate"] else ".*",
+    MERGETAG = "|".join(config["merge_samples"]["tags"]) if config["merge_samples"]["activate"] else ".*",
 
 rule all:
     input:

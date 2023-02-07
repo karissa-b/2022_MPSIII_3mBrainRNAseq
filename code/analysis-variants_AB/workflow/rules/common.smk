@@ -21,7 +21,7 @@ dir_list = [
     "markDuplicates", "splitNCigar", "knownVariants", "bqsr", "variants",
     "wasp", "aseRC",
 ]
-## Remove directories not required by workflow config
+## Remove directories not required as defined by workflow config
 if not config["umi"]["add_header"]["activate"]:
     dir_list.remove("addUmis")
 if not config["umi"]["activate"]:
