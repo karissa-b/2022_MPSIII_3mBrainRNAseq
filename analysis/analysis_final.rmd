@@ -21,15 +21,21 @@ knitr::opts_chunk$set(
 ```
 
 ```{r loadLibs}
+# data wrangling
 library(tidyverse)
 library(magrittr)
 library(readxl)
-library(ngsReports)
+
+# annotations
 library(AnnotationHub)
 library(biomaRt)
 library(msigdbr)
+
+# table formatting
 library(pander)
 library(kableExtra)
+
+# data vis
 library(scales)
 library(pheatmap)
 library(ggpubr)
@@ -37,12 +43,12 @@ library(ggrepel)
 library(ggfortify)
 library(RColorBrewer)
 library(UpSetR)
+
+# bioc RNAseq packages
 library(edgeR)
 library(cqn)
 library(goseq)
 library(fgsea)
-library(vegan) # for PCoA
-library(ape)   # for PCoA
 library(harmonicmeanp)
 library(ssizeRNA)
 
@@ -79,6 +85,7 @@ mcols(grGenes) %<>%
 ```
 
 ```{r}
+# all the metadata from the fish in analysis
 meta <- 
   read_excel("data/meta_final.xlsx") %>% 
   mutate(genotype = case_when(
@@ -115,6 +122,8 @@ featureCounts <-
 ```
 
 ## filter lowly expressed genes
+
+following the 10/min lib size rule
 ```{r filt}
 a <- featureCounts %>% 
     cpm(log = TRUE) %>%
@@ -632,17 +641,17 @@ GO <-
   split(f = .$gs_name) %>%
   lapply(extract2, "gene_id")
 
-GOdf <-  msigdbr("Danio rerio", category = "C5") %>% 
-  dplyr::filter(grepl(gs_name, pattern = "^GO")) %>% 
-  left_join(x.ab$genes, by = c("gene_symbol" = "gene_name")) %>% 
-  dplyr::filter(gene_id %in% rownames(x)) %>% 
-  mutate(gs_name = str_replace(gs_name, pattern = "GOBP_", replacement = "GO_")) %>% 
-  mutate(gs_name = str_replace(gs_name, pattern = "GOMF_", replacement = "GO_")) %>%     
-  mutate(gs_name = str_replace(gs_name, pattern = "GOCC_", replacement = "GO_")) %>%     
-  left_join(goSummaries) %>% 
-  dplyr::filter(shortest_path >= minPath) %>%
-  distinct(gs_name, gene_id, .keep_all = TRUE) %>% 
-  dplyr::select(gs_name, gene_id)
+# GOdf <-  msigdbr("Danio rerio", category = "C5") %>% 
+#   dplyr::filter(grepl(gs_name, pattern = "^GO")) %>% 
+#   left_join(x.ab$genes, by = c("gene_symbol" = "gene_name")) %>% 
+#   dplyr::filter(gene_id %in% rownames(x)) %>% 
+#   mutate(gs_name = str_replace(gs_name, pattern = "GOBP_", replacement = "GO_")) %>% 
+#   mutate(gs_name = str_replace(gs_name, pattern = "GOMF_", replacement = "GO_")) %>%     
+#   mutate(gs_name = str_replace(gs_name, pattern = "GOCC_", replacement = "GO_")) %>%     
+#   left_join(goSummaries) %>% 
+#   dplyr::filter(shortest_path >= minPath) %>%
+#   distinct(gs_name, gene_id, .keep_all = TRUE) %>% 
+#   dplyr::select(gs_name, gene_id)
 
 sizes_GO <- GO %>%
   lapply(length) %>%
@@ -675,18 +684,11 @@ chr <- x.ab$genes %>%
   lapply(extract2, "gene_id") %>% 
   .[c("MT", seq(1:25))] # omit the ALT chromosmes and scaffolds
 
-#biomart to get the conversion between mouse and zebrafish IDs
-mart <- useMart("ensembl", "drerio_gene_ensembl")
-getFromBiomart <- c("ensembl_gene_id", "mmusculus_homolog_associated_gene_name")
-zf_id_2_mm_genename <- getBM(attributes = getFromBiomart,
-                             mart = mart) %>% 
-  as_tibble() %>% 
-  set_colnames(c("gene_id", "mouse_gene_name"))
 
 cell_type_markers <- 
   read_xlsx("data/gene_sets/Suppdata2_jiangetal_2021_fcelldev.xlsx", sheet = "Brain") %>% 
   dplyr::rename("gene_name" = gene) %>% 
-  left_join(x.ac$genes) %>% 
+  left_join(x.ab$genes) %>% 
   dplyr::filter(gene_id %in% rownames(x.ab)) %>% 
   split(f = .$`cell type`) %>% 
   lapply(extract2, "gene_id")
@@ -696,6 +698,13 @@ cell_type_markers %<>%
   lapply(function(y) {
     y[y %in% rownames(x.ab)]
   })
+
+allC2.ab <- msigdbr("Danio rerio", category = "C2") %>% 
+  left_join(x.ab$genes, by = c("gene_symbol" = "gene_name")) %>% 
+  dplyr::filter(gene_id %in% rownames(x.ab)) %>% 
+  distinct(gs_name, gene_id, .keep_all = TRUE) %>% 
+  split(f = .$gs_name) %>%
+  lapply(extract2, "gene_id")
 ```
 
 ## GOSEQ 
@@ -755,7 +764,9 @@ goseq(pwf, gene2cat = GO) %>%
   mutate(FDR = p.adjust(over_represented_pvalue, method = "fdr")) %>% 
   dplyr::select(-under_represented_pvalue) %>% 
   #write_csv("output/results/goseq_cqn/famAB_sgshHetcoef.csv")
-  dplyr::slice(1:10) %>% 
+  dplyr::slice(1:10)
+  
+  
   kable(caption = "Top 10 over-represented GO terms in sgsh het DE genes. 
         Some reach statistical significance") %>% 
   kable_styling(full_width = FALSE)
@@ -803,7 +814,7 @@ fryKEGG.ab$`MPS-IIIA` %>%
        x = "-log10(PValue)", 
        y = "")  
 
-fryKEGG$`sgsh/+` %>% 
+fryKEGG.ab$`sgsh/+` %>% 
   dplyr::slice(1:10) %>% 
   mutate(pathway = str_remove(pathway, pattern = "KEGG_")) %>% 
   ggplot(aes(x = -log10(PValue.Mixed), y = reorder(pathway, -PValue.Mixed))) +
@@ -814,13 +825,13 @@ fryKEGG$`sgsh/+` %>%
        x = "-log10(PValue)", 
        y = "")
 
-sigpaths <- fryKEGG %>% 
+sigpaths <- fryKEGG.ab %>% 
   bind_rows() %>% 
   dplyr::filter(FDR.Mixed < 0.05) %>% 
     .$pathway %>% 
     unique()
   
-fryKEGG %>% 
+fryKEGG.ab %>% 
   bind_rows() %>% 
   dplyr::filter(pathway %in% sigpaths) %>% 
   mutate(pathway = str_remove(pathway, pattern = "KEGG_")) %>% 
@@ -837,15 +848,53 @@ fryKEGG %>%
 
 ```
 
+```{r}
+fryC2.ab <- 
+  design.ab %>% colnames() %>% .[2:4] %>% 
+  sapply(function(y) {
+    logCPM.ab %>% 
+      fry(
+        index = allC2.ab,
+        design = design.ab, 
+        contrast = y, 
+        sort = "mixed"
+      ) %>% 
+      rownames_to_column("pathway") %>% 
+      as_tibble() %>% 
+      mutate(coef = y)
+  }, simplify = FALSE)
+
+
+sigpaths <- fryC2.ab %>% 
+  bind_rows() %>% 
+  dplyr::filter(FDR.Mixed < 0.05) %>% 
+    .$pathway %>% 
+    unique()
+  
+fryC2.ab %>% 
+  bind_rows() %>% 
+  dplyr::filter(pathway %in% sigpaths) %>% 
+  mutate(pathway = str_remove(pathway, pattern = "KEGG_")) %>% 
+  ggplot(aes(x = -log10(PValue.Mixed), y = reorder(pathway, -FDR.Mixed))) +
+  geom_col(aes(fill = coef, alpha = FDR.Mixed < 0.05), position = "dodge") +
+  scale_fill_viridis_d(end = 0.75) +
+  scale_alpha_manual(values = c(0.5,1)) +
+  theme_pubr() +
+  geom_vline(xintercept = 2.3) +
+  labs(fill = "FDR < 0.05", 
+       x = "-log10(PValue)", 
+       y = "")
+```
+
 
 ### GO
 ```{r}
-fry_GO <-  design %>% colnames() %>% .[2:4] %>% 
+fry_GO.ab <-  design.ab %>% colnames() %>% .[2:4] %>% 
   sapply(function(y) {
-    logCPM %>% 
+    logCPM.ab %>% 
       fry(
         index = GO,
-        design = design, 
+        design = design.ab, 
         contrast = y, 
         sort = "mixed"
       ) %>% 
@@ -1139,24 +1188,8 @@ kegga(de = kegga_DE,
 ```
 
 
-## Data export
-```{r}
-
-x %>% saveRDS("data/R_objects/dge_AB.rds")
-fryKEGG %>% saveRDS("data/R_objects/AB_fryKEGG.rds")
-fryIRE %>% saveRDS("data/R_objects/AB_fryIRE.rds")
-celltype %>% saveRDS("data/R_objects/AB_frycellTypes.rds")
-toptables_cqn %>% saveRDS("data/R_objects/AB_toptab_cqn.rds")
-
-```
-
-
-
-
-
 # A and C , B and C analyses
 ```{r}
-
 featureCounts2 <- 
   read_delim(file = "data/mergedBCAC/fc/counts.out", delim = "\t", skip = 1) %>%
   set_names(basename(names(.))) %>% 
@@ -1165,7 +1198,7 @@ featureCounts2 <-
   dplyr::select(-c(Chr, Start, End, Length, Strand)) %>% 
   gather(key = "ULN", value = "counts", starts_with("22")) %>% 
   left_join(meta) %>% 
-  dplyr::select(Geneid, counts, sample) %>% 
+  dplyr::select(Geneid, counts, sample ) %>% 
   spread(key = "sample", value = "counts") %>% 
   column_to_rownames("Geneid") %>% 
   .[,-(dim(.)[2])]# omit the SAGC neg control lane, the final col of the df. 
@@ -1255,7 +1288,7 @@ ggarrange(a, b, common.legend = TRUE)
 ```{r dge}
 x2 <- featureCounts2 %>% 
   as.matrix() %>% 
-  .[rowSums(cpm(.) >= 3) >= 6,] %>% 
+  .[rowSums(cpm(.) >= 2.435138) >= 6,] %>% 
   DGEList(
     samples = tibble(sample = colnames(.)) %>%
       left_join(meta),
@@ -1573,6 +1606,7 @@ fit_cqn.ac <- x.ac %>%
   estimateDisp(design.ac) %>% 
   glmFit(design.ac)
 
+# call the toptable
 toptables_cqn.ac <- design.ac %>% colnames() %>% .[2:3] %>% 
   sapply(function(x){
     glmLRT(fit_cqn.ac, coef = x) %>%
@@ -1743,17 +1777,17 @@ GO <-
   split(f = .$gs_name) %>%
   lapply(extract2, "gene_id")
 
-GOdf <-  msigdbr("Danio rerio", category = "C5") %>% 
-  dplyr::filter(grepl(gs_name, pattern = "^GO")) %>% 
-  left_join(x2$genes, by = c("gene_symbol" = "gene_name")) %>% 
-  dplyr::filter(gene_id %in% rownames(x2)) %>% 
-  mutate(gs_name = str_replace(gs_name, pattern = "GOBP_", replacement = "GO_")) %>% 
-  mutate(gs_name = str_replace(gs_name, pattern = "GOMF_", replacement = "GO_")) %>%     
-  mutate(gs_name = str_replace(gs_name, pattern = "GOCC_", replacement = "GO_")) %>%     
-  left_join(goSummaries) %>% 
-  dplyr::filter(shortest_path >= minPath) %>%
-  distinct(gs_name, gene_id, .keep_all = TRUE) %>% 
-  dplyr::select(gs_name, gene_id)
+# GOdf <-  msigdbr("Danio rerio", category = "C5") %>% 
+#   dplyr::filter(grepl(gs_name, pattern = "^GO")) %>% 
+#   left_join(x2$genes, by = c("gene_symbol" = "gene_name")) %>% 
+#   dplyr::filter(gene_id %in% rownames(x2)) %>% 
+#   mutate(gs_name = str_replace(gs_name, pattern = "GOBP_", replacement = "GO_")) %>% 
+#   mutate(gs_name = str_replace(gs_name, pattern = "GOMF_", replacement = "GO_")) %>%     
+#   mutate(gs_name = str_replace(gs_name, pattern = "GOCC_", replacement = "GO_")) %>%     
+#   left_join(goSummaries) %>% 
+#   dplyr::filter(shortest_path >= minPath) %>%
+#   distinct(gs_name, gene_id, .keep_all = TRUE) %>% 
+#   dplyr::select(gs_name, gene_id)
 
   sizes_GO <- GO %>%
     lapply(length) %>%
@@ -1797,6 +1831,24 @@ cell_type_markers %<>%
   lapply(function(y) {
     y[y %in% rownames(x2)]
   })
+
+allC2.bcac <- msigdbr("Danio rerio", category = "C2") %>% 
+  left_join(x2$genes, by = c("gene_symbol" = "gene_name")) %>% 
+  dplyr::filter(gene_id %in% rownames(x2)) %>% 
+  distinct(gs_name, gene_id, .keep_all = TRUE) %>% 
+  split(f = .$gs_name) %>%
+  lapply(extract2, "gene_id")
+
+sizes_allc2 <- allC2.bcac %>%
+    lapply(length) %>%
+    unlist %>%
+    as.data.frame() %>%
+    set_colnames( "n_genes") %>%
+    rownames_to_column("gs")
+
+
+# retain gene sets with at least 5 genes in it
+allC2.bcac <- allC2.bcac[sizes_allc2 %>% dplyr::filter(n_genes > 5) %>% .$gs]
 ```
 
 ## GOSEQ 
@@ -1810,13 +1862,13 @@ pwf <- toptables_cqn.ac$`MPS-IIIA` %>%
         )
       )
 
-goseq(pwf, gene2cat = GO) %>% 
+goseqac.a <- goseq(pwf, gene2cat = c(GO)) %>% 
   as_tibble() %>% 
   dplyr::filter(numDEInCat > 0) %>% 
   mutate(FDR = p.adjust(over_represented_pvalue, method = "fdr")) %>% 
-  dplyr::select(-under_represented_pvalue) %>% 
+  dplyr::select(-under_represented_pvalue) 
   #write_csv("output/results/goseq_cqn/famAC_Acoef.csv")
-  dplyr::filter(FDR < 0.05) 
+ # dplyr::filter(FDR < 0.05) 
 
 pwf <- toptables_cqn.ac$`MPS-IIIC` %>%
       with(
@@ -1826,14 +1878,22 @@ pwf <- toptables_cqn.ac$`MPS-IIIC` %>%
         )
       )
 
-goseq(pwf, gene2cat = GO) %>% 
+goseqac.c <- goseq(pwf, gene2cat = GO) %>% 
   as_tibble() %>% 
   dplyr::filter(numDEInCat > 0) %>% 
   mutate(FDR = p.adjust(over_represented_pvalue, method = "fdr")) %>% 
-  dplyr::select(-under_represented_pvalue) %>% 
-  #write_csv("output/results/goseq_cqn/famAC_Ccoef.csv")
+  dplyr::select(-under_represented_pvalue) 
+  # #write_csv("output/results/goseq_cqn/famAC_Ccoef.csv")
+  # dplyr::filter(FDR < 0.05) %>% 
+  # head(10)
+
+goseqac.a %>% 
+  mutate(coef = "MPS-IIIA") %>% 
+  bind_rows(goseqac.c %>% 
+              mutate(coef = "MPS-IIIC")) %>% 
   dplyr::filter(FDR < 0.05) %>% 
-  head(10)
+  ggplot(aes(x = coef, y = category)) + 
+  geom_tile(aes(fill = -log10(over_represented_pvalue)))
 ```
 
 
@@ -1922,7 +1982,7 @@ fryKEGG.ac %>%
 ```{r}
 toptables_cqn.ac %>% 
   bind_rows() %>% 
-  dplyr::filter(gene_id %in% KEGG$KEGG_LYSOSOME) %>% 
+  dplyr::filter(gene_id %in% KEGG$KEGG_AMINO_SUGAR_AND_NUCLEOTIDE_SUGAR_METABOLISM) %>% 
   dplyr::select(gene_name, logFC, coef) %>% 
   dplyr::distinct(gene_name, coef, .keep_all = T) %>% 
   spread(key = "coef", value = "logFC") %>% 
@@ -1930,7 +1990,7 @@ toptables_cqn.ac %>%
   t() %>% 
   pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
                                                name = "RdBu")))(100), 
-           main = "KEGG_LYSOSOME: FDR = 6.44e-5", 
+           main = "KEGG_AMINO_SUGAR_AND_NUCLEOTIDE_SUGAR_METABOLISM", 
            breaks = c(seq(min(.), 0, length.out=ceiling(100/2) + 1), 
               seq(max(.)/100, max(.), length.out=50)), 
            cellheight = 30, 
@@ -2101,10 +2161,10 @@ fry_chr.ac %>%
 An enrichment of DE genes is observed on the same chromosome as the mutation. This is obsevred in the manhat plots below. 
 
 ```{r}
-manhat_input <- 
+manhat_input.ac <- 
 	toptables_cqn.ac %>% 
   bind_rows() %>% 
-	left_join(x$genes %>% 
+	left_join(x.ac$genes %>% 
 			  	as_tibble() %>% 
 			  	dplyr::select(start, end, chromosome, gene_id) %>% 
 			  	group_by(gene_id) %>% 
@@ -2121,7 +2181,7 @@ manhat_input <-
 	dplyr::select(-chrLen) %>% 
   left_join(toptables_cqn.ac %>% 
               bind_rows() %>% 
-              left_join(x$genes %>% 
+              left_join(x.ac$genes %>% 
                           as_tibble() %>% 
                           dplyr::select(start, end, chromosome, gene_id) %>% 
                           group_by(gene_id) %>% 
@@ -2134,7 +2194,7 @@ manhat_input <-
   dplyr::arrange(mid, chromosome) %>% 
   mutate(midCum = chrSt + mid)
 
-axis <- manhat_input %>%
+axis.ac <- manhat_input %>%
   group_by(chromosome) %>%
   dplyr::arrange(chromosome) %>%
   summarize(center = (max(midCum) + min(midCum)) / 2) %>%
@@ -3043,7 +3103,7 @@ toptables_cqn.b2 %>%
 ```{r}
  
 KEGG <- msigdbr("Danio rerio", category = "C2", subcategory = "CP:KEGG") %>% 
-  left_join(x.ab$genes, by = c("gene_symbol" = "gene_name")) %>% 
+  left_join(x.b2$genes, by = c("gene_symbol" = "gene_name")) %>% 
   dplyr::filter(gene_id %in% rownames(x.b2)) %>% 
   distinct(gs_name, gene_id, .keep_all = TRUE) %>% 
   split(f = .$gs_name) %>%
@@ -3114,7 +3174,7 @@ cell_type_markers <-
   read_xlsx("data/gene_sets/Suppdata2_jiangetal_2021_fcelldev.xlsx", sheet = "Brain") %>% 
   dplyr::rename("gene_name" = gene) %>% 
   left_join(x.b2$genes) %>% 
-  dplyr::filter(gene_id %in% rownames(x.ab)) %>% 
+  dplyr::filter(gene_id %in% rownames(x.b2)) %>% 
   split(f = .$`cell type`) %>% 
   lapply(extract2, "gene_id")
   
@@ -3336,8 +3396,6 @@ ggplot(manhat_input.bc, aes(x = midCum, y = -log10(PValue))) +
 # post-hoc power analysis
 
 ```{r}
-# set a seed for a reproducible result
-set.seed(2016)
 ab.A.samps <- x.ab$samples %>% 
   dplyr::filter(genotype == "WT") %>% 
   .$sample
@@ -3349,9 +3407,7 @@ mu.ab <- x.ab$counts %>%
 
 disp.ab <-  x.ab %>% estimateDisp(design.ab) %>% . $tagwise.dispersion
 
-fc.ab <- function(x){exp(rnorm(x.ab, log(1), 0.5*log(2)))}
-
-dim(x.ab$counts)[1]
+fc.ab <- function(x){exp(rnorm(x, log(1), 0.5*log(2)))}
 
 abPowerPlot <- ssizeRNA_vary(nGenes = dim(x.ab$counts)[1], # Num detectable genes
               pi0 = 0.9, # Proportion of non-DE genes
@@ -3362,6 +3418,7 @@ abPowerPlot <- ssizeRNA_vary(nGenes = dim(x.ab$counts)[1], # Num detectable gene
               fdr = 0.05, # FDR level to control
               power = 0.7, # power level
               maxN = 20,
+              side = "two-sided",
               replace = TRUE
                 )
 
@@ -3376,19 +3433,22 @@ mu.ac <- x.ac$counts %>%
 
 disp.ac <-  x.ac %>% estimateDisp() %>% . $tagwise.dispersion
 
-fc.ac <- function(x){exp(rnorm(x.ac, log(1), 0.5*log(2)))}
+fc.ac <- function(x){exp(rnorm(x, log(1), 0.5*log(2)))}
 
 dim(x.ac$counts)
 
-ac.powerplot <- ssizeRNA_vary(nGenes = 16073, # Num detectable genes
+# set a seed for a reproducible result
+set.seed(2223)
+ac.powerplot <- ssizeRNA_vary(nGenes = dim(x.ac$counts)[1], # Num detectable genes
               pi0 = 0.9, # Proportion of non-DE genes
-              m = 20, # pseudo sample size
+              m = 30, # pseudo sample size
               mu = mu.ac, # Average read count for each gene in control group. Calculated from this current dataset)
               disp = disp.ac, # Dispersion parameter for each gene
               fc = fc.ac, # Fold change per gene
               fdr = 0.05, # FDR level to control
               power = 0.7, # power level
-              maxN = 20,
+              maxN = 20, 
+              side = "two-sided",
               replace = T
                 )
 
@@ -3404,11 +3464,11 @@ mu.bc <- x.bc$counts %>%
 
 disp.bc <-  x.bc %>% estimateDisp() %>% . $tagwise.dispersion
 
-fc.bc <- function(x){exp(rnorm(x.bc, log(1), 0.5*log(2)))}
+fc.bc <- function(x){exp(rnorm(x, log(1), 0.5*log(2)))}
 
 dim(x.bc$counts)
 
-bcPowerPlot <- ssizeRNA_vary(nGenes = 16073, # Num detectable genes
+bcPowerPlot <- ssizeRNA_vary(nGenes = dim(x.bc$counts)[1], # Num detectable genes
               pi0 = 0.9, # Proportion of non-DE genes
               m = 20, # pseudo sample size
               mu = mu.bc, # Average read count for each gene in control group. Calculated from this current dataset)
@@ -3417,50 +3477,30 @@ bcPowerPlot <- ssizeRNA_vary(nGenes = 16073, # Num detectable genes
               fdr = 0.05, # FDR level to control
               power = 0.7, # power level
               maxN = 20,
+              side = "two-sided",
               replace = T
                 )
 
-acpp <- ac.powerplot$power %>% 
-  as_tibble() %>% 
-  set_colnames(c("Sample size (n)", "Power")) %>% 
-  ggplot(aes(x = `Sample size (n)`, 
-             y = Power)) +
-  geom_point() +
-  geom_line() +
-  scale_x_continuous(limits = c(0,20))+
-  scale_y_continuous(limits = c(0,1)) +
-  geom_hline(yintercept =  0.6620218) +
-  geom_vline(xintercept =  7) +
-  annotate(geom = "label", x = 1.5, y = 0.75, label = "~66% power\n n = 7") +
-  ggtitle("A and C")
 
-bcpp <- bcPowerPlot$power %>% 
-  as_tibble() %>% 
-  set_colnames(c("Sample size (n)", "Power")) %>% 
-  ggplot(aes(x = `Sample size (n)`, 
-             y = Power)) +
-  geom_point() +
-  geom_line() +
-  scale_x_continuous(limits = c(0,20))+
-  scale_y_continuous(limits = c(0,1)) +
-  geom_hline(yintercept =  0.5251222) +
-  geom_vline(xintercept =  11) +
-  annotate(geom = "label", x = 1.5, y = 0.6, label = "~50% power\n n = 11") +
-  ggtitle("B and C")
 
-abpp <- abPowerPlot$power %>% 
+abPowerPlot$power %>% 
   as_tibble() %>% 
-  set_colnames(c("Sample size (n)", "Power")) %>% 
-  ggplot(aes(x = `Sample size (n)`, 
-             y = Power)) +
+  mutate(exp = "A and B") %>% 
+  bind_rows(ac.powerplot$power %>% 
+              as_tibble() %>% 
+              mutate(exp = "A and C")) %>% 
+  bind_rows(bcPowerPlot$power %>% 
+              as_tibble() %>% 
+              mutate(exp = "B and C")
+  ) %>% 
+  set_colnames(c("Sample size (n)", "Power", "Experiment")) %>% 
+  ggplot(aes(y = Power, x = `Sample size (n)`, colour = Experiment)) +
   geom_point() +
   geom_line() +
-  scale_x_continuous(limits = c(0,20))+
-  scale_y_continuous(limits = c(0,1)) +
-  geom_hline(yintercept =  0.2496993) +
-  geom_vline(xintercept =  4) +
-  annotate(geom = "label", x = 1.5, y = 0.4, label = "~25% power\n n = 4") +
-  ggtitle("A and B")
+  scale_x_continuous(limits = c(0,15), breaks = seq(0,15, by = 1)) +
+  theme(panel.grid = element_blank()) +
+  ggsave("output/plots/powerplots.png", width = 10, height = 2.5, units = "cm", dpi = 600, scale  =2)
+
 
 ggarrange(abpp, acpp, bcpp,
           ncol = 1, 
@@ -3473,17 +3513,26 @@ ggarrange(abpp, acpp, bcpp,
 ```{r}
 x.ac %>% saveRDS("data/R_objects/dge_ac.rds")
 toptables_cqn.ac %>% saveRDS("data/R_objects/toptab_ac_cqn.rds")
-fryKEGG %>% saveRDS("data/R_objects/AC_fryKEGG.rds")
+fryKEGG.ac %>% saveRDS("data/R_objects/AC_fryKEGG.rds")
 fryIRE.ac %>% saveRDS("data/R_objects/AC_fryIRE.rds")
 celltype.ac %>% saveRDS("data/R_objects/AC_frycellTypes.rds")
 
-
+x.ab %>% saveRDS("data/R_objects/dge_AB.rds")
+fryKEGG.ab %>% saveRDS("data/R_objects/AB_fryKEGG.rds")
+fryIRE.ab %>% saveRDS("data/R_objects/AB_fryIRE.rds")
+celltypes.ab %>% saveRDS("data/R_objects/AB_frycellTypes.rds")
+toptables_cqn.ab %>% saveRDS("data/R_objects/AB_toptab_cqn.rds")
 
 x.bc %>% saveRDS("data/R_objects/dge_bc.rds")
 toptables_cqn.bc %>% saveRDS("data/R_objects/toptab_bc_cqn.rds")
-fryKEGG %>% saveRDS("data/R_objects/BC_fryKEGG.rds")
+fryKEGG.bc %>% saveRDS("data/R_objects/BC_fryKEGG.rds")
 fryIRE.bc %>% saveRDS("data/R_objects/BC_fryIRE.rds")
 celltype.bc %>% saveRDS("data/R_objects/BC_frycellTypes.rds")
 
+x.b2 %>% saveRDS("data/R_objects/dge_B2.rds")
+fryKEGG.b2 %>% saveRDS("data/R_objects/B2_fryKEGG.rds")
+fryIRE.b2 %>% saveRDS("data/R_objects/B2_fryIRE.rds")
+celltype.b2 %>% saveRDS("data/R_objects/B2_frycellTypes.rds")
+toptables_cqn.b2 %>% saveRDS("data/R_objects/B2_toptab_cqn.rds")
 ```
 

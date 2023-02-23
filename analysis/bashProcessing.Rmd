@@ -658,6 +658,38 @@ fcBC %>%
 )
 ```
 
+# effect of run
+
+```{r}
+run1 <- read_delim("data/BC_AC_run1/featurecounts_GRCz11_101_q10_paired_stranded1/counts.out", delim = "\t", skip = 1) %>%
+  set_names(basename(names(.))) %>% 
+  set_names(names(.) %>% str_remove(pattern = "_S[0-9]+_merged.Aligned.sortedByCoord.dedup.out.bam")) %>% 
+  as_tibble() %>% 
+  dplyr::select(-c(Chr, Start, End, Length, Strand)) %>% 
+  gather(key = "ULN", value = "counts", starts_with("22")) %>% 
+  mutate(run = "1") %>% 
+  dplyr::filter(ULN != "22-02045") %>% 
+  mutate(ULN_run = paste0(ULN, "_", run)) %>% 
+  dplyr::select(-ULN, -run) %>% 
+  spread(key = "ULN_run", value = "counts") %>% 
+  column_to_rownames("Geneid")
+
+```
+
+```{r}
+run1 %>% 
+    as.matrix() %>% 
+    DGEList() %>%
+    calcNormFactors() %>% 
+  .$samples %>% 
+  .$lib.size %>% 
+  min()
+# = 3251655
+
+run1 %>% 
+  .[rowSums(cpm(.) >= 3.07) >= 6,] %>% dim
+```
+
 
 
 

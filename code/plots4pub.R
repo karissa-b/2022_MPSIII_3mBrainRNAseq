@@ -1,6 +1,7 @@
 # PLOTS FOR PUB
 library(patchwork)
 library(UpSetR)
+library(fgsea)
 library(pathview)
 
 toptabs_cqn_all <- toptables_cqn.ab %>%
@@ -12,9 +13,9 @@ toptabs_cqn_all <- toptables_cqn.ab %>%
   bind_rows(toptables_cqn.bc %>%
               bind_rows() %>%
               mutate(mps = "B and C") ) %>%
-  bind_rows(toptables_cqn.b2 %>%
-              bind_rows() %>%
-              mutate(mps = "B2") ) %>%
+  # bind_rows(toptables_cqn.b2 %>%
+  #             bind_rows() %>%
+  #             mutate(mps = "B2") ) %>%
   mutate(coef_mps = paste0(coef, "_", mps))
 
 logCPm.all <- logCPM.ac %>%
@@ -26,9 +27,9 @@ logCPm.all <- logCPM.ac %>%
 
 
 
-# custom function to plot spearman cors
+# custom function to plot pearson cors
 makePearsonCorrPlot <- function(geneset, plot.title) {
-  plotSpearmanCor <- function(x.axis.coef, y.axis.coef, geneset) {
+  plotpearsonCor <- function(x.axis.coef, y.axis.coef, geneset) {
     toptabs_cqn_all %>%
       dplyr::filter(gene_id %in% geneset) %>%
       dplyr::filter(coef != "sgsh/+") %>%
@@ -48,33 +49,33 @@ makePearsonCorrPlot <- function(geneset, plot.title) {
       theme(aspect.ratio = 1)
   }
 
-  a <- plotSpearmanCor(x.axis.coef = "MPS-IIIA_A and B",
+  a <- plotpearsonCor(x.axis.coef = "MPS-IIIA_A and B",
                        y.axis.coef = "MPS-IIIA_A and C",
                        geneset = geneset)
 
   # MPS-IIIB
-  b <- plotSpearmanCor(x.axis.coef = "MPS-IIIB_A and B",
+  b <- plotpearsonCor(x.axis.coef = "MPS-IIIB_A and B",
                        y.axis.coef = "MPS-IIIB_B and C",
                        geneset = geneset)
 
   # MPS-IIIC
-  c <- plotSpearmanCor(x.axis.coef = "MPS-IIIC_A and C",
+  c <- plotpearsonCor(x.axis.coef = "MPS-IIIC_A and C",
                        y.axis.coef = "MPS-IIIC_B and C",
                        geneset = geneset)
 
   # A v B
-  d <- plotSpearmanCor(x.axis.coef = "MPS-IIIA_A and B",
+  d <- plotpearsonCor(x.axis.coef = "MPS-IIIA_A and B",
                        y.axis.coef = "MPS-IIIB_A and B",
                        geneset = geneset)
 
 
   # A v C
-  e <- plotSpearmanCor(x.axis.coef = "MPS-IIIA_A and C",
+  e <- plotpearsonCor(x.axis.coef = "MPS-IIIA_A and C",
                        y.axis.coef = "MPS-IIIC_A and C",
                        geneset = geneset)
 
   # B v C
-  f <- plotSpearmanCor(x.axis.coef = "MPS-IIIB_B and C",
+  f <- plotpearsonCor(x.axis.coef = "MPS-IIIB_B and C",
                        y.axis.coef = "MPS-IIIC_B and C",
                        geneset = geneset)
 
@@ -83,11 +84,78 @@ makePearsonCorrPlot <- function(geneset, plot.title) {
     plot_annotation(title = plot.title)
 }
 
-
-
-
 # PCA ---------------------------------------------------------------------
-#``````` A and B ```````
+# PCA all samps
+a <- logCPM.ab %>%
+  as.data.frame() %>%
+  rownames_to_column("gene_id") %>%
+  left_join(logCPM.ac%>%
+              as.data.frame() %>%
+              rownames_to_column("gene_id")
+            ) %>%
+  left_join(logCPM.bc %>%
+              as.data.frame() %>%
+              rownames_to_column("gene_id")
+  )  %>%
+  na.omit() %>%
+  remove_rownames() %>%
+  column_to_rownames("gene_id") %>%
+  t() %>%
+  prcomp() %>%
+  autoplot(data = tibble(sample = rownames(.$x)) %>%
+             left_join(meta) %>%
+             mutate(Arm = MPS),
+           colour = "Arm",
+           alpha = 0.75,
+           size = 4
+  ) +
+  stat_ellipse(aes(group = MPS, colour = MPS)) +
+  theme_classic()
+  ggsave("output/plots/PCA_allDataOneplot.png", width = 7, height = 5, units = "cm", scale = 2)
+
+
+
+# AB no hets
+
+logCPM.ab %>%
+  as.data.frame() %>%
+  dplyr::select(c(x.ab$samples %>%
+                  dplyr::filter(genotype != "sgsh/+") %>% .$sample)) %>%
+  as.matrix() %>%
+  t() %>%
+  prcomp() %>%
+  autoplot(data = tibble(sample = rownames(.$x)) %>%
+             left_join(x.ab$samples),
+           colour = "genotype",
+           shape = "Sex",
+           size = 4
+  ) +
+  scale_color_manual(values = c("#4000ff", #WT
+                                #"#ff7aab", # sgsh het
+                                "#ff005e", # A
+                                "#ffae00" #B
+  )) +
+  theme(aspect.ratio = 1) +
+  labs(title = "A and B",
+       colour = "Genotype") +
+  ggsave("output/plots/PCA_ab_nohet.png", width = 7, height = 5, units = "cm", scale =1.5)
+
+# example home tank
+logCPM.ac %>%
+  t() %>%
+  prcomp() %>%
+  autoplot(data = tibble(sample = rownames(.$x)) %>%
+             left_join(x.ac$samples) %>%
+             mutate(Tank = str_remove(Tank, pattern = "AC_P2_lay1_tank")),
+           colour = "Tank",
+           shape = "genotype",
+           size = 4
+  ) +
+  theme_classic() +
+  scale_color_brewer(palette = "Dark2") +
+  ggsave("output/plots/PCA_ac_hometank.png", width = 7, height = 5, units = "cm", scale = 2)
+
+  #``````` A and B ```````
 ggarrange(
   logCPM.ab %>%
     t() %>%
@@ -132,7 +200,10 @@ logCPM.bc %>%
   t() %>%
   prcomp() %>%
   autoplot(data = tibble(sample = rownames(.$x)) %>%
-             left_join(x.bc$samples),
+             left_join(x.bc$samples) %>%
+             mutate(P = str_extract(Tank, pattern = "P[1|2]"),
+                    lay = str_extract(Tank, pattern = "P[1|2]_lay[1-3]"),
+                    DOB = as.character(DOB)),
            colour = "genotype",
            shape = "Sex",
            size = 4
@@ -290,12 +361,29 @@ frykegg.all <-
               bind_rows() %>%
               mutate(MPS = "BC"))
 
+
+
+
+
+  bind_rows(fryKEGG.b2 %>%
+              bind_rows() %>%
+              mutate(MPS= "B2"))
+
 sigpaths <-
   frykegg.all %>%
   dplyr::filter(FDR.Mixed < 0.05) %>%
   .$pathway %>%
   unique()
 
+sigpaths %>% str_remove("KEGG_") %>% sort
+
+Aonly <- fryKEGG.ac$`MPS-IIIA` %>%
+  dplyr::filter(FDR.Mixed < 0.05) %>%
+  dplyr::filter(!pathway %in% (fryKEGG.b2$`MPS-IIIB` %>%
+                  dplyr::filter(FDR.Mixed < 0.05) %>%
+                  .$pathway)) %>%
+  .$pathway %>%
+  str_remove("KEGG_")
 
 frykegg.all %>%
   bind_rows() %>%
@@ -303,17 +391,36 @@ frykegg.all %>%
   dplyr::filter(coef != "sgsh/+") %>%
   mutate(MPS = case_when(MPS == "AC" ~ "A and C",
                          MPS == "AB" ~ "A and B",
-                         MPS == "BC" ~ "B and C")) %>%
-  mutate(pathway = str_remove(pathway, pattern = "KEGG_")) %>%
+                         MPS == "BC" ~ "B and C",
+                         MPS == "B2" ~ "B_6m") %>%
+           factor(levels = c("A and C", "B_6m", "A and B", "B and C"))) %>%
+  mutate(pathway = str_remove(pathway, pattern = "KEGG_"),
+         order = case_when(
+           pathway == "LYSOSOME" ~ 1,
+           pathway %in% c("OTHER_GLYCAN_DEGRADATION",
+                          "GLYCOSAMINOGLYCAN_DEGRADATION")  ~ 2,
+           pathway %in% c("AMINO_SUGAR_AND_NUCLEOTIDE_SUGAR_METABOLISM",
+                          "ANTIGEN_PROCESSING_AND_PRESENTATION") ~ 3,
+           pathway %in% c("FATTY_ACID_METABOLISM" ) ~ 4,
+           pathway %in% c("SYSTEMIC_LUPUS_ERYTHEMATOSUS",
+                          "SPHINGOLIPID_METABOLISM",
+                          "DRUG_METABOLISM_CYTOCHROME_P450",
+                          "SNARE_INTERACTIONS_IN_VESICULAR_TRANSPORT",
+                          "COMPLEMENT_AND_COAGULATION_CASCADES",
+                          "CELL_ADHESION_MOLECULES_CAMS") ~ 5,
+           pathway %in% Aonly ~ 6,
+           TRUE ~7),
+         DE = FDR.Mixed < 0.05
+         ) %>%
   ggplot(aes(x = coef,
-             y = pathway )) +
+             y = reorder(pathway, -order)) ) +
   geom_tile(aes(fill = -log10(PValue.Mixed),
                 alpha = FDR.Mixed < 0.05)) +
   geom_label(aes(label = signif(FDR.Mixed, digits = 2)),
              fill = NA) +
-  facet_wrap(~MPS, scales = "free_x") +
+  facet_wrap(~MPS, scales = "free_x", nrow = 1) +
   scale_fill_viridis_c() +
-  scale_alpha_manual(values = c(0.5,1)) +
+  scale_alpha_manual(values = c(0.1,1)) +
   ggpubr::theme_pubclean() +
   theme(panel.grid.major.y = element_blank(),
         axis.ticks = element_blank(),
@@ -322,8 +429,8 @@ frykegg.all %>%
         axis.text.x = element_text(face = "bold", size = 15, angle = 315, hjust = 0.1, vjust = 0.2),
         legend.position = "right"
 
-  )+
-  ggsave("output/plots/KEGG_pval_heatmap.png", width = 16, height = 16, units = "cm", dpi = 500, scale = 2)
+  ) +
+    ggsave("output/plots/KEGG_pval_heatmap.png", width = 18, height = 16, units = "cm", dpi = 500, scale = 2)
 
 # overlapping genes in the KEGGs ------------------------------------------
 KEGG[sigpaths] %>%
@@ -344,10 +451,11 @@ toptabs_cqn_all %>%
   dplyr::distinct(gene_name, coef_mps, .keep_all = T) %>%
   spread(key = "coef_mps", value = "logFC") %>%
   column_to_rownames("gene_name") %>%
+  na.omit() %>%
   t() %>%
   pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
                                                    name = "RdBu")))(100),
-           main = "KEGG_LYSOSOME",
+           main = "",
            breaks = c(seq(min(.), 0, length.out=ceiling(100/2) + 1),
                       seq(max(.)/100, max(.), length.out=50)),
            cellheight = 30, cellwidth = 16,
@@ -387,6 +495,7 @@ toptabs_cqn_all %>%
   dplyr::distinct(gene_name, coef_mps, .keep_all = T) %>%
   spread(key = "coef_mps", value = "logFC") %>%
   column_to_rownames("gene_name") %>%
+  na.omit %>%
   t() %>%
   pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
                                                    name = "RdBu")))(100),
@@ -400,22 +509,134 @@ toptabs_cqn_all %>%
 dev.off()
 
 
+png("output/plots/KEGG_AMINO_SUGAR_AND_NUCLEOTIDE_SUGAR_METABOLISM_Heatmap.png", width = 70, height = 20, units = "cm", res = 100)
+toptabs_cqn_all %>%
+  bind_rows() %>%
+  dplyr::filter(gene_id %in% KEGG$KEGG_AMINO_SUGAR_AND_NUCLEOTIDE_SUGAR_METABOLISM) %>%
+  dplyr::filter(coef != "sgsh/+") %>%
+  mutate(coef_mps = paste0(coef, " (", mps, ")")) %>%
+  dplyr::select(gene_name, logFC, coef_mps) %>%
+  dplyr::distinct(gene_name, coef_mps, .keep_all = T) %>%
+  spread(key = "coef_mps", value = "logFC") %>%
+  na.omit() %>%
+  column_to_rownames("gene_name") %>%
+  t() %>%
+  pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
+                                                   name = "RdBu")))(256),
+           main = "KEGG_AMINO_SUGAR_AND_NUCLEOTIDE_SUGAR_METABOLISM",
+           breaks = c(seq(min(.), 0, length.out=ceiling(256/2) + 1),
+                      seq(max(.)/256, max(.), length.out=256/2)),
+           cellheight = 30, cellwidth = 16,
+           angle_col = 45,
+           treeheight_row = 10,
+           fontsize = 15)
+dev.off()
+
+png("output/plots/KEGG_ANTIGEN_PROCESSING_AND_PRESENTATION_Heatmap.png", width = 70, height = 20, units = "cm", res = 100)
+toptabs_cqn_all %>%
+  bind_rows() %>%
+  dplyr::filter(gene_id %in% KEGG$KEGG_ANTIGEN_PROCESSING_AND_PRESENTATION) %>%
+  dplyr::filter(coef != "sgsh/+") %>%
+  mutate(coef_mps = paste0(coef, " (", mps, ")")) %>%
+  dplyr::select(gene_name, logFC, coef_mps) %>%
+  dplyr::distinct(gene_name, coef_mps, .keep_all = T) %>%
+  spread(key = "coef_mps", value = "logFC") %>%
+  na.omit() %>%
+  column_to_rownames("gene_name") %>%
+  t() %>%
+  pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
+                                                   name = "RdBu")))(256),
+           main = "KEGG_ANTIGEN_PROCESSING_AND_PRESENTATION",
+           breaks = seq(-0.6, to = 0.6, by = 1.2/256),
+           cellheight = 30, cellwidth = 16,
+           angle_col = 45,
+           treeheight_row = 10,
+           fontsize = 15)
+dev.off()
+
+png("output/plots/KEGG_COMPLEMENT_AND_COAGULATION_CASCADES_Heatmap.png", width = 70, height = 20, units = "cm", res = 100)
+toptabs_cqn_all %>%
+  dplyr::filter(gene_id %in% KEGG$KEGG_COMPLEMENT_AND_COAGULATION_CASCADES) %>%
+  dplyr::filter(coef != "sgsh/+") %>%
+  mutate(coef_mps = paste0(coef, " (", mps, ")")) %>%
+  dplyr::select(gene_name, logFC, coef_mps) %>%
+  dplyr::distinct(gene_name, coef_mps, .keep_all = T) %>%
+  spread(key = "coef_mps", value = "logFC") %>%
+  na.omit() %>%
+  column_to_rownames("gene_name") %>%
+  t() %>%
+  pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
+                                                   name = "RdBu")))(256),
+           main = "KEGG_COMPLEMENT_AND_COAGULATION_CASCADES",
+           breaks = seq(-0.6, to = 0.6, by = 1.2/256),
+           cellheight = 30, cellwidth = 16,
+           angle_col = 45,
+           treeheight_row = 10,
+           fontsize = 15)
+dev.off()
+
+
+png("output/plots/ac_only/KEGG_FATTY_ACID_METABOLISM_Heatmap.png", width = 70, height = 20, units = "cm", res = 100)
+toptables_cqn.ac %>%
+  dplyr::filter(gene_id %in% KEGG$KEGG_FATTY_ACID_METABOLISM) %>%
+  dplyr::filter(coef != "sgsh/+") %>%
+  mutate(coef_mps = paste0(coef, " (", mps, ")")) %>%
+  dplyr::select(gene_name, logFC, coef_mps) %>%
+  dplyr::distinct(gene_name, coef_mps, .keep_all = T) %>%
+  spread(key = "coef_mps", value = "logFC") %>%
+  na.omit() %>%
+  column_to_rownames("gene_name") %>%
+  t() %>%
+  pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
+                                                   name = "RdBu")))(256),
+           main = "KEGG_FATTY_ACID_METABOLISM",
+           breaks = seq(-0.6, to = 0.6, by = 1.2/256),
+           cellheight = 30, cellwidth = 16,
+           angle_col = 45,
+           treeheight_row = 10,
+           fontsize = 15)
+dev.off()
+
+png("output/plots/ac_only/KEGG_FATTY_ACID_METABOLISM_Heatmap.png", width = 70, height = 20, units = "cm", res = 100)
+toptables_cqn.ac %>%
+  bind_rows() %>%
+  dplyr::filter(gene_id %in% KEGG$KEGG_FATTY_ACID_METABOLISM) %>%
+  dplyr::filter(coef != "sgsh/+") %>%
+  dplyr::select(gene_name, logFC, coef) %>%
+  dplyr::distinct(gene_name, coef, .keep_all = T) %>%
+  spread(key = "coef", value = "logFC") %>%
+  na.omit() %>%
+  column_to_rownames("gene_name") %>% view
+  t() %>%
+  pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
+                                                   name = "RdBu")))(256),
+           main = "KEGG_FATTY_ACID_METABOLISM",
+           breaks = seq(-0.6, to = 0.6, by = 1.2/256),
+           cellheight = 30, cellwidth = 16,
+           angle_col = 45,
+           treeheight_row = 10,
+           fontsize = 15)
+dev.off()
+
+# correlations of
+
+
 # correlations of
 
 
 # lyso correlations --------------------------------------------------
 makePearsonCorrPlot(geneset = KEGG$KEGG_LYSOSOME, plot.title = "KEGG_LYSOSOME") +
-  ggsave("output/plots/spearmancorrs_kegglyso.png", width = 5, height = 3, units = "cm", dpi = 500, scale = 5)
+  ggsave("output/plots/pearsonCor_kegglyso.png", width = 5, height = 3, units = "cm", dpi = 500, scale = 5)
 
 # glycosodeg correlations --------------------------------------------------
 
 makePearsonCorrPlot(geneset = KEGG$KEGG_GLYCOSAMINOGLYCAN_DEGRADATION, plot.title = "KEGG_GLYCOSAMINOGLYCAN_DEGRADATION")
-  ggsave("output/plots/spearmancorrs_KEGG_GLYCOSAMINOGLYCAN_DEGRADATION.png", width = 5, height = 3, units = "cm", dpi = 500, scale = 5)
+  ggsave("output/plots/pearsoncorrs_KEGG_GLYCOSAMINOGLYCAN_DEGRADATION.png", width = 5, height = 3, units = "cm", dpi = 500, scale = 5)
 
 
 # other glycan deg correlations --------------------------------------------------------
   makePearsonCorrPlot(geneset = KEGG$KEGG_OTHER_GLYCAN_DEGRADATION, plot.title = "KEGG_OTHER_GLYCAN_DEGRADATION") +
-  ggsave("output/plots/spearmancorrs_KEGG_OTHER_GLYCAN_DEGRADATION.png", width = 5, height = 3, units = "cm", dpi = 500, scale = 5)
+  ggsave("output/plots/pearsoncorrs_KEGG_OTHER_GLYCAN_DEGRADATION.png", width = 5, height = 3, units = "cm", dpi = 500, scale = 5)
 
 # COMPLEMENT_AND_COAGULATION_CASCADES correlations
   makePearsonCorrPlot(geneset = KEGG$KEGG_COMPLEMENT_AND_COAGULATION_CASCADES, plot.title = "KEGG_COMPLEMENT_AND_COAGULATION_CASCADES") +
@@ -438,24 +659,33 @@ makePearsonCorrPlot(geneset = KEGG$KEGG_GLYCOSAMINOGLYCAN_DEGRADATION, plot.titl
 # gsea cell type ----------------------------------------------------------
 # cell type heatmap -----------------------------------------------------------------
 frycell.all <-
-  celltype.ac %>%
-  bind_rows() %>%
-  mutate(MPS = "A and C") %>%
-  bind_rows(celltypes.ab %>%
-              bind_rows() %>%
-              mutate(MPS= "A and B")) %>%
-  bind_rows(celltype.bc %>%
-              bind_rows() %>%
-              mutate(MPS = "B and C"))
-
-# kegg lyso correlations --------------------------------------------------
+    celltype.ac %>%
+    bind_rows() %>%
+    mutate(MPS = "A and C") %>%
+    bind_rows(celltypes.ab %>%
+                bind_rows() %>%
+                mutate(MPS= "A and B")) %>%
+    bind_rows(celltype.bc %>%
+                bind_rows() %>%
+                 mutate(MPS = "B and C"))
+      %>%
+    # bind_rows(celltype.b2 %>%
+    #             bind_rows() %>%
+    #             mutate(MPS = "B2"))
 
 
 
 frycell.all %>%
   dplyr::filter(coef != "sgsh/+") %>%
+    arrange(PValue) %>%
+    mutate(order = case_when(
+      pathway %in% c("Oligodendrocyte", "Oligodendrocyte_sla high",
+                     "Neural stem cell", "Microglia_apoc1 high")~ 1,
+        TRUE ~ 2
+    )
+             ) %>%
   ggplot(aes(x = coef,
-             y = pathway)
+             y = reorder(x = pathway, -order))
   ) +
   geom_tile(aes(fill = -log10(PValue),
                 alpha = FDR < 0.05),
@@ -463,20 +693,21 @@ frycell.all %>%
   geom_label(aes(label = signif(FDR, digits = 2)
   ),
   fill = NA) +
-  facet_wrap(~MPS, scales = "free_x") +
+  facet_wrap(~MPS, scales = "free_x", nrow = 1) +
   scale_fill_viridis_c() +
-  scale_alpha_manual(values = c(0.5,1)) +
+  scale_alpha_manual(values = c(0.1,1)) +
   ggpubr::theme_pubclean() +
   theme(panel.grid.major.y = element_blank(),
+        legend.position = "right",
         axis.ticks = element_blank(),
         axis.title = element_blank(),
         axis.text.y = element_text(face = "bold", size = 15),
         axis.text.x = element_text(face = "bold", size = 15, angle = 315, hjust = 0.1, vjust = 0.2)
         ) +
-  ggsave("output/plots/celltype_heatmap.png", width = 12, height = 16, units = "cm", dpi = 500, scale = 2)
+  ggsave("output/plots/celltype_heatmap.png", width = 15, height = 16, units = "cm", dpi = 500, scale = 2)
 
 
-# correlations ------------------------------------------------------------
+  x# correlations ------------------------------------------------------------
 
 makePearsonCorrPlot(geneset = cell_type_markers$Oligodendrocyte, plot.title = "OLIGODENDROCYTES") +
   ggsave("output/plots/Pearsoncorrs_oligoden.png", width = 5, height = 3, units = "cm", dpi = 500, scale = 5)
@@ -494,9 +725,48 @@ makePearsonCorrPlot(geneset = cell_type_markers$`Microglia_apoc1 high`, plot.tit
     ggsave("output/plots/Pearsoncorrs_Microglia_apoc1 high.png", width = 5, height = 3, units = "cm", dpi = 500, scale = 5)
 
 
-# heatmaps of FC ----------------------------------------------------------
+# heatmaps of FC ----------------------------------------------------------#
+
+  anno_celltype <-
+    cell_type_markers[c("Oligodendrocyte", "Neural stem cell", "Microglia_apoc1 high") ] %>%
+    unlist() %>%
+    as.data.frame() %>%
+    rownames_to_column("pathway") %>%
+    set_colnames(c("pathway", "gene_id")) %>%
+    mutate(pathway = str_remove(pathway, pattern = "[0-9]+$")) %>%
+    as_tibble() %>%
+    pivot_wider(names_from = pathway, values_from = pathway) %>%
+    left_join(x.ac$genes %>% dplyr::select(gene_id, gene_name)) %>%
+    dplyr::select(-gene_id) %>%
+    dplyr::distinct(gene_name, .keep_all= T) %>%
+    dplyr::filter(!is.na(gene_name)) %>%
+    column_to_rownames("gene_name")
+
+  # all
+  toptabs_cqn_all %>%
+    dplyr::filter(gene_id %in% c(cell_type_markers$Oligodendrocyte,
+                                 cell_type_markers$`Microglia_apoc1 high`,
+                                 cell_type_markers$`Neural stem cell`)) %>%
+    dplyr::filter(coef != "sgsh/+") %>%
+    mutate(coef_mps = paste0(coef, " (", mps, ")")) %>%
+    dplyr::select(gene_name, logFC, coef_mps) %>%
+    dplyr::distinct(gene_name, coef_mps, .keep_all = T) %>%
+    spread(key = "coef_mps", value = "logFC") %>%
+    column_to_rownames("gene_name") %>%
+    pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
+                                                     name = "RdBu")))(100),
+             main = "Oligodendrocytes",
+             breaks = c(seq(-1,1, by = 2/100)),
+           #  cellheight = 30, cellwidth = 12,
+             angle_col = 45,
+             treeheight_row = 10,
+             annotation_row = anno_celltype
+             #treeheight_col = 20
+    )
+
 
 # oligoden ----------------------------------------------------------------
+
 
 png("output/plots/oligodenHeatmap.png", width = 50, height = 20, units = "cm", res = 100)
 toptabs_cqn_all %>%
@@ -511,31 +781,21 @@ toptabs_cqn_all %>%
   pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
                                                    name = "RdBu")))(100),
            main = "Oligodendrocytes",
-           breaks = c(seq(min(.), 0, length.out=ceiling(100/2) + 1),
-                      seq(max(.)/100, max(.), length.out=50)),
+           breaks = c(seq(-1,1, by = 2/100)),
            cellheight = 30, cellwidth = 12,
            angle_col = 45,
            treeheight_row = 10,
+           annotation_col = anno_celltype
            #treeheight_col = 20
   )
 dev.off()
 
 
 
-anno_celltype <- cell_type_markers[c("Oligodendrocyte", "Neural stem cell", "Microglia_apoc1 high") ] %>%
-  unlist() %>%
-  as.data.frame() %>%
-  rownames_to_column("pathway") %>%
-  set_colnames(c("pathway", "gene_id")) %>%
-  mutate(pathway = str_remove(pathway, pattern = "[0-9]+$")) %>%
-  as_tibble() %>%
-  pivot_wider(names_from = pathway, values_from = pathway) %>%
-  left_join(x.ac$genes %>% dplyr::select(gene_id, gene_name)) %>%
-  dplyr::select(-gene_id) %>%
-  dplyr::distinct(gene_name, .keep_all
 
-                  = T) %>%
-  column_to_rownames("gene_name")
+
+
+
 
 # neural stem cell --------------------------------------------------------
 
@@ -587,13 +847,15 @@ toptabs_cqn_all %>%
   )
 dev.off()
 
-cell_type_markers[c("Oligodendrocyte", "Neural stem cell", "Microglia_apoc1 high") ] %>%
+png("output/plots/upset_celltype.png", width = 12, height = 8, units = "cm", res = 300)
+cell_type_markers[c("Oligodendrocyte", "Oligodendrocyte_sla high", "Neural stem cell", "Microglia_apoc1 high" ) ] %>%
   fromList() %>%
   upset(
         order.by = "freq",
         nsets = 23,
-        mb.ratio = c(0.4, 0.6)
+        mb.ratio = c(0.6, 0.4),
         )
+dev.off()
 
 # stem cell heatmap -------------------------------------------------------
 
@@ -863,17 +1125,50 @@ plotpathview(coef1 = "MPS-IIIB_B and C",
 
 
 plotpathview(coef1 = "MPS-IIIA_A and B",
-             coef2 = "MPS-IIIC_A and B",
+             coef2 = "MPS-IIIB_A and B",
              outsuff = "AB lyso",
              keggID = "04142"
 )
 
+plotpathview(coef1 = "MPS-IIIA_A and C",
+             coef2 = "MPS-IIIC_A and C",
+             outsuff = "antigenAC",
+             keggID = "04612"
+)
+
+
+plotpathview(coef1 = "MPS-IIIA_A and C",
+             coef2 = "MPS-IIIC_A and C",
+             outsuff = "aminosugNucleoSug",
+             keggID = "00520"
+)
+
+plotpathview(coef1 = "MPS-IIIA_A and C",
+             coef2 = "MPS-IIIC_A and C",
+             outsuff = "fattyacid",
+             keggID = "01212"
+)
+01212
 
 
 
 # IRE ---------------------------------------------------------------------
 
-irePlot <- fryire.all %>%
+fryire.all <-
+  fryIRE.ac %>%
+  bind_rows() %>%
+  mutate(MPS = "AC") %>%
+  bind_rows(fryIRE.ab %>%
+              bind_rows() %>%
+              mutate(MPS= "AB")) %>%
+  bind_rows(fryIRE.bc %>%
+              bind_rows() %>%
+              mutate(MPS = "BC"))
+  #bind_rows(fryIRE.b2 %>%
+             # bind_rows() %>%
+             #  mutate(MPS = "B2"))
+
+fryire.all %>%
   dplyr::filter(coef != "sgsh/+") %>%
   mutate(MPS = case_when(MPS == "AC" ~ "A and C",
                          MPS == "AB" ~ "A and B",
@@ -889,17 +1184,16 @@ irePlot <- fryire.all %>%
              fill = NA) +
   facet_wrap(~MPS, scales = "free_x", nrow = 1 ) +
   scale_fill_viridis_c() +
-  scale_alpha_manual(values = c(0.5,1)) +
+  scale_alpha_manual(values = c(0.2,1)) +
   ggpubr::theme_pubclean() +
   theme(panel.grid.major.y = element_blank(),
         axis.ticks = element_blank(),
         axis.title = element_blank(),
-        text = element_text(face = "bold", size = 15),
+        text = element_text(face = "bold", size = 16),
         axis.text.x = element_text(face = "bold", size = 15, angle = 315, hjust = 0.1, vjust = 0.2),
-        legend.position = "right"
-
-  )
-  #ggsave("output/plots/ire_withExtraB_pvals.png", width = 5, height = 2.5, units = "cm", dpi = 500, scale = 5)
+        legend.position = "bottom"
+  ) +
+  ggsave("output/plots/ire_pvals.png", width = 5, height = 2.5, units = "cm", dpi = 500, scale = 5)
 
 png("output/plots/ire/ire3_allHeatmap.png", width = 50, height = 20, units = "cm", res = 100)
 toptabs_cqn_all %>%
@@ -1030,5 +1324,178 @@ ggarrange(
   ggsave("output/plots/ire/irePlot.png", width = 5, height = 3, units = "cm", dpi = 500, scale = 7 )
 
 
+
+
+
+# why is fatty acid DE in hgsnat but not sgsh ----------------------------
+temp <- x.ac$genes %>%
+  dplyr::filter(gene_name %in% c("acsl1b", "hadh", "adh8b", "ehhadh")) %>%
+  .$gene_id
+
+temp2 <- logCPM.ac %>%
+  as.data.frame() %>%
+  rownames_to_column('gene_id') %>%
+  dplyr::filter(!(gene_id %in% temp)) %>%
+  column_to_rownames('gene_id')
+  .[-temp,]
+
+# looking at the HM,
+design.ac %>% colnames() %>% .[2:3] %>%
+  sapply(function(y) {
+    temp2 %>%
+      fry(
+        index = KEGG,
+        design = design.ac,
+        contrast = y,
+        sort = "mixed"
+      ) %>%
+      rownames_to_column("pathway") %>%
+      as_tibble() %>%
+      mutate(coef = y)
+  }, simplify = FALSE)
+
+# leading edge genes
+
+fgsea <- toptables_cqn.ac %>%
+  sapply(function(x) {
+    x %>%
+      mutate(rank = sign(logFC) * log10(1/PValue)) %>%
+      arrange(rank) %>%
+      dplyr::select(gene_id, rank) %>% #only want the Pvalue with sign
+      with(structure(rank, names = gene_id)) %>%
+      rev() # reverse so the start of the list is upregulated genes
+  }, simplify = FALSE
+  ) %>%
+  lapply(function(x){
+    fgseaMultilevel(stats = x,
+                    pathways = cell_type_markers) %>%
+      as_tibble() %>%
+      dplyr::rename(FDR = padj) %>%
+      mutate(padj = p.adjust(pval, "bonferroni")) %>%
+      dplyr::select(pathway, pval, FDR, padj, everything()) %>%
+      arrange(pval) %>%
+      mutate(sig = padj < 0.05)
+  })
+
+fgsea$`MPS-IIIA` %<>% mutate(coef = "MPS-IIIA")
+fgsea$`MPS-IIIC` %<>% mutate(coef = "MPS-IIIC")
+
+
+# UpSet Leading edge ------------------------------------------------------
+
+png("output/plots/ac_only/upsetA_celltype.png", width = 12, height = 8, units = "cm", res = 300)
+fgsea$`MPS-IIIA` %>%
+  dplyr::filter(pathway %in% c("Oligodendrocyte",
+                               "Oligodendrocyte_sla high",
+                               "Neural stem cell",
+                               "Microglia_apoc1 high")) %>%
+  dplyr::select(pathway, leadingEdge) %>%
+  unnest %>%
+  split(f = .$pathway) %>%
+  lapply(magrittr::extract2, "leadingEdge") %>%
+  fromList() %>%
+  upset(order.by = "freq",
+        mb.ratio = c(0.7, 0.3))
+dev.off()
+
+png("output/plots/ac_only/upsetC_celltype.png", width = 12, height = 8, units = "cm", res = 300)
+fgsea$`MPS-IIIC` %>%
+  dplyr::filter(pathway %in% c("Oligodendrocyte",
+                               "Oligodendrocyte_sla high",
+                               "Neural stem cell",
+                               "Microglia_apoc1 high")) %>%
+  dplyr::select(pathway, leadingEdge) %>%
+  unnest %>%
+  split(f = .$pathway) %>%
+  lapply(magrittr::extract2, "leadingEdge") %>%
+  fromList() %>%
+  upset(order.by = "freq")
+dev.off()
+
+# plot 4 bruce ------------------------------------------------------------
+
+toptables_cqn.ac %>%
+  bind_rows() %>%
+  ggplot(aes(y = -log10(PValue), x = logFC, colour = DE)) +
+  geom_point(
+    alpha = 0.5, size = 1.25
+  ) +
+  facet_wrap(~coef, nrow = 1) +
+  coord_cartesian(xlim = c(-2.5,2.5),
+                  ylim = c(0, 10) ) +
+  theme(legend.position = "bottom") +
+  scale_color_manual(values = c("grey50", "red")) +
+  geom_label_repel(aes(label = gene_name),
+                   data = . %>%
+                     dplyr::filter(FDR < 0.1) %>%
+                     dplyr::filter(gene_id %in% GO$GO_OLIGODENDROCYTE_DIFFERENTIATION))
+
+goseqac.a %>%
+  dplyr::filter(FDR < 0.05) %>%
+  mutate(propDE = numDEInCat/numInCat) %>%
+  ggplot(aes(x = -log10(over_represented_pvalue),
+             fill = propDE,
+             y = reorder(category, -over_represented_pvalue))) +
+  geom_col(colour = "black") +
+  scale_fill_viridis_c() +
+  labs(fill = "Proportion of DE\ngenes in GO term",
+       x = "-log10(pvalue)" )+
+  theme(panel.grid = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title.y = element_blank(),
+        text = element_text(face = "bold", size = 15),
+        legend.position = "right") +
+  ggsave("output/plots/GOtermssgsh_ac.png", width = 15, height = 10, units = "cm",
+         dpi = 400, scale = 2.5)
+
+goseqac.c %>%
+  dplyr::filter(FDR < 0.1) %>%
+  ggplot(aes(x = -log10(over_represented_pvalue),
+             y = reorder(category, -over_represented_pvalue))) +
+  geom_col() +
+  ggtitle("Significnt GO terms in MPS-IIIC")
+
+
+# Manhattenpltos ----------------------------------------------------------
+plotman = function(manhatinput, axis) {
+  ggplot(manhatinput, aes(x = midCum, y = -log10(PValue))) +
+  geom_point(aes(color=chromosome), alpha = 0.5, size = 1) +
+  geom_point(alpha = 0.5, size = 1, colour = "red",
+             data = . %>%
+               dplyr::filter(coef == "MPS-IIIB" & chromosome == 24)) +
+  geom_point(alpha = 0.5, size = 1, colour = "red",
+             data = . %>%
+               dplyr::filter(coef ==  "MPS-IIIA" & chromosome == 22)) +
+  geom_point(alpha = 0.5, size = 1, colour = "red",
+               data = . %>%
+                 dplyr::filter(coef ==  "MPS-IIIC" & chromosome == 1)) +
+  geom_point(alpha = 0.5, size = 1, colour = "red",
+             data = . %>%
+               dplyr::filter(coef ==  "sgsh/+" & chromosome == 22)) +
+  scale_color_manual(values = axis.ab$colour) +
+  scale_x_continuous(label = axis.ab$chromosome, breaks = axis.ab$center) +
+  scale_y_continuous(limits =c(0, 10)) + # zoom in
+  facet_wrap(~coef, ncol = 1) +
+  labs(x = "Chromosome", y = expression(paste(-log[10], "(p)"))) +
+  theme(
+    legend.position="none",
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )
+}
+
+a <- plotman(manhatinput = manhat_input.ab, axis = axis.ab) +
+  ggtitle("A and B")
+
+
+b <- plotman(manhatinput = manhat_input.ac, axis = axis.ac) +
+  ggtitle("A and C")
+c <- plotman(manhatinput = manhat_input.bc, axis = axis.bc) +
+  ggtitle("B and C")
+
+a / (b + c) +
+  plot_annotation(tag_levels = 'A') +
+  ggsave("output/plots/stackedmanhats.png", width = 15, height = 20, units = "cm", dpi = 400, scale = 2)
 
 
