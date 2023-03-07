@@ -57,14 +57,14 @@ theme_set(theme_bw())
 
 ```{r anno}
 ah <- AnnotationHub() %>%
-	subset(species == "Danio rerio") %>%
-	subset(rdataclass == "EnsDb")
+  subset(species == "Danio rerio") %>%
+  subset(rdataclass == "EnsDb")
 
 ensDb <- ah[["AH83189"]] # for release 101, latest version in Ah
 grTrans <- transcripts(ensDb)
 trLengths <- exonsBy(ensDb, "tx") %>%
-	width() %>%
-	vapply(sum, integer(1))
+  width() %>%
+  vapply(sum, integer(1))
 mcols(grTrans)$length <- trLengths[names(grTrans)]
 gcGene <- grTrans %>%
   mcols() %>%
@@ -124,10 +124,10 @@ featureCounts <-
 ## filter lowly expressed genes
 
 following the 10/min lib size rule
-```{r filt}
+```{r filt_1}
 a <- featureCounts %>% 
-    cpm(log = TRUE) %>%
-    as.data.frame() %>% 
+  cpm(log = TRUE) %>%
+  as.data.frame() %>% 
   pivot_longer(
     cols = everything(),
     names_to = "sample",
@@ -156,8 +156,8 @@ a <- featureCounts %>%
 
 b <- featureCounts %>% 
   .[rowSums(cpm(.) >= 0.5) >= 4,] %>% 
-    cpm(log = TRUE) %>%
-    as.data.frame() %>% 
+  cpm(log = TRUE) %>%
+  as.data.frame() %>% 
   pivot_longer(
     cols = everything(),
     names_to = "sample",
@@ -186,7 +186,7 @@ b <- featureCounts %>%
 ggarrange(a, b, common.legend = TRUE)
 ```
 
-```{r dge}
+```{r dge_1}
 x.ab <- featureCounts %>% 
   as.matrix() %>% 
   .[rowSums(cpm(.) >= 0.5) >= 4,] %>%
@@ -213,9 +213,9 @@ x.ab$counts %>%
   t() %>% 
   prcomp() %>% 
   autoplot(data = tibble(sample = rownames(.$x)) %>%
-      left_join(x.ab$samples),
-    colour = "genotype", 
-    size = 6
+             left_join(x.ab$samples),
+           colour = "genotype", 
+           size = 6
   ) +
   theme(aspect.ratio = 1) +
   labs(colour = "Genotype", 
@@ -228,9 +228,9 @@ x.ab$counts %>%
   t() %>% 
   prcomp() %>% 
   autoplot(data = tibble(sample = rownames(.$x)) %>%
-      left_join(x.ab$samples),
-    colour = "Sex", 
-    size = 6
+             left_join(x.ab$samples),
+           colour = "Sex", 
+           size = 6
   ) +
   theme(aspect.ratio = 1) +
   labs(colour = "sex", 
@@ -241,15 +241,15 @@ x.ab$counts %>%
   t() %>% 
   prcomp() %>% 
   autoplot(data = tibble(sample = rownames(.$x)) %>%
-        left_join(x.ab$samples),
-      colour = "Home.tank", 
-      shape = "genotype",
-    size = 6
+             left_join(x.ab$samples),
+           colour = "Home.tank", 
+           shape = "genotype",
+           size = 6
   ) +
   theme(aspect.ratio = 1) +
   labs(colour = "Home.tank",
        title = "By home tank"
-       )
+  )
 ```
 
 No clear batch effects are observed. However. one outlier sgsh heterozygous fish is possible. Will keep this in mind when looking at the differentially expressed genes and gene sets later to see if it is driving the changes to gene expression. 
@@ -277,14 +277,14 @@ toptable_1.ab <- design.ab %>% colnames() %>% .[2:4] %>%
       .[["table"]] %>%
       as_tibble() %>%
       arrange(PValue) %>%
-       mutate(
+      mutate(
         coef = x,
         DE = FDR < 0.05
       ) %>% 
       dplyr::select(
         gene_name, logFC, logCPM, PValue, FDR, DE, everything()  
       )
-      
+    
   }, simplify = FALSE)
 ```
 
@@ -325,7 +325,7 @@ toptable_1.ab %>%
                   ylim = c(0, 20) )+
   theme(legend.position = "none") +
   scale_color_manual(values = c("grey50", "red")) 
-  #ggsave("output/plots/volvano.png", width = 18, height = 10, units = "cm", dpi = 300, scale = 1.5)
+#ggsave("output/plots/volvano.png", width = 18, height = 10, units = "cm", dpi = 300, scale = 1.5)
 ```
 
 #### MD plot
@@ -349,44 +349,44 @@ toptable_1.ab %>%
 These plots are zoomed in between -10 and 10 on the y-axisfor vis purposes. the blue lines of best fit are a bit wonky, meaning there are some biases here for %GC and Length. Therefore, conditional quantile normailsation is required. 
 ```{r}
 ggarrange(
-toptable_1.ab %>% 
-  bind_rows() %>% 
-  mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
-  ggplot(aes(x = length, y = rankstat)) +
-  geom_point(
-    aes(colour = DE),
-    alpha = 0.5
-  ) +
-  geom_smooth(se = FALSE, method = "gam") +
-  facet_grid(rows = vars(coef)) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = c("grey50", "red")) +
-  scale_x_log10()+
-  labs(x = "Average transcript length per gene",
-       colour = "Differentially expressed?",
-       y = "sign(logFC)*-log10(PValue)") +
-  coord_cartesian(ylim = c(-10, 10)),
-
-toptable_1.ab %>% 
-  bind_rows() %>% 
-  mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
-  ggplot(aes(x = gc_content, y = rankstat)) +
-  geom_point(
-    aes(colour = DE),
-    alpha = 0.5
-  ) +
-  geom_smooth(se = FALSE, method = "gam") +
-  facet_grid(rows = vars(coef)) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = c("grey50", "red")) +
-  coord_cartesian(ylim = c(-10,10)) + 
-  labs(x = "Weighted average GC content (%) per gene", 
-       colour = "Differentially expressed?", 
-       y = "sign(logFC)*-log10(PValue)"),
-common.legend = TRUE, 
-labels = "AUTO"
+  toptable_1.ab %>% 
+    bind_rows() %>% 
+    mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
+    ggplot(aes(x = length, y = rankstat)) +
+    geom_point(
+      aes(colour = DE),
+      alpha = 0.5
+    ) +
+    geom_smooth(se = FALSE, method = "gam") +
+    facet_grid(rows = vars(coef)) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = c("grey50", "red")) +
+    scale_x_log10()+
+    labs(x = "Average transcript length per gene",
+         colour = "Differentially expressed?",
+         y = "sign(logFC)*-log10(PValue)") +
+    coord_cartesian(ylim = c(-10, 10)),
+  
+  toptable_1.ab %>% 
+    bind_rows() %>% 
+    mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
+    ggplot(aes(x = gc_content, y = rankstat)) +
+    geom_point(
+      aes(colour = DE),
+      alpha = 0.5
+    ) +
+    geom_smooth(se = FALSE, method = "gam") +
+    facet_grid(rows = vars(coef)) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = c("grey50", "red")) +
+    coord_cartesian(ylim = c(-10,10)) + 
+    labs(x = "Weighted average GC content (%) per gene", 
+         colour = "Differentially expressed?", 
+         y = "sign(logFC)*-log10(PValue)"),
+  common.legend = TRUE, 
+  labels = "AUTO"
 ) 
 ```
 
@@ -396,7 +396,7 @@ A little bit of bias is obsevred for %GC content and gene length, so will apply 
 
 ```{r}
 cqn.ab <-   
-x.ab %>% 
+  x.ab %>% 
   with(
     cqn(
       counts = counts,
@@ -470,14 +470,14 @@ toptables_cqn.ab <- design.ab %>% colnames() %>% .[2:4] %>%
       .[["table"]] %>%
       as_tibble() %>%
       arrange(PValue) %>%
-       mutate(
+      mutate(
         coef = x,
         DE = FDR < 0.05
       ) %>% 
       dplyr::select(
         gene_name, logFC, logCPM, PValue, FDR, DE, everything()  
       )
-      
+    
   }, simplify = FALSE)
 ```
 
@@ -524,7 +524,7 @@ toptables_cqn.ab %>%
                   ylim = c(0, 20) )+
   theme(legend.position = "none") +
   scale_color_manual(values = c("grey50", "red")) 
-  #ggsave("output/plots/volvano.png", width = 18, height = 10, units = "cm", dpi = 300, scale = 1.5)
+#ggsave("output/plots/volvano.png", width = 18, height = 10, units = "cm", dpi = 300, scale = 1.5)
 ```
 
 ### MD plot
@@ -547,44 +547,44 @@ toptables_cqn.ab %>%
 The %GC and length bias data was checked again. Some gene length bias still remains. But this seems to be driven only at the ends, where there is less genes. So this should be ok.
 ```{r}
 ggarrange(
-toptables_cqn.ab %>% 
-  bind_rows() %>% 
-  mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
-  ggplot(aes(x = length, y = rankstat)) +
-  geom_point(
-    aes(colour = DE),
-    alpha = 0.5
-  ) +
-  geom_smooth(se = FALSE, method = "gam") +
-  facet_grid(rows = vars(coef)) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = c("grey50", "red")) +
-  scale_x_log10()+
-  labs(x = "Average transcript length per gene",
-       colour = "Differentially expressed?",
-       y = "sign(logFC)*-log10(PValue)") +
-  coord_cartesian(ylim = c(-10, 10)),
-
-toptables_cqn.ab %>% 
-  bind_rows() %>% 
-  mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
-  ggplot(aes(x = gc_content, y = rankstat)) +
-  geom_point(
-    aes(colour = DE),
-    alpha = 0.5
-  ) +
-  geom_smooth(se = FALSE, method = "gam") +
-  facet_grid(rows = vars(coef)) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = c("grey50", "red")) +
-  coord_cartesian(ylim = c(-10,10)) + 
-  labs(x = "Weighted average GC content (%) per gene", 
-       colour = "Differentially expressed?", 
-       y = "sign(logFC)*-log10(PValue)"),
-common.legend = TRUE, 
-labels = "AUTO"
+  toptables_cqn.ab %>% 
+    bind_rows() %>% 
+    mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
+    ggplot(aes(x = length, y = rankstat)) +
+    geom_point(
+      aes(colour = DE),
+      alpha = 0.5
+    ) +
+    geom_smooth(se = FALSE, method = "gam") +
+    facet_grid(rows = vars(coef)) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = c("grey50", "red")) +
+    scale_x_log10()+
+    labs(x = "Average transcript length per gene",
+         colour = "Differentially expressed?",
+         y = "sign(logFC)*-log10(PValue)") +
+    coord_cartesian(ylim = c(-10, 10)),
+  
+  toptables_cqn.ab %>% 
+    bind_rows() %>% 
+    mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
+    ggplot(aes(x = gc_content, y = rankstat)) +
+    geom_point(
+      aes(colour = DE),
+      alpha = 0.5
+    ) +
+    geom_smooth(se = FALSE, method = "gam") +
+    facet_grid(rows = vars(coef)) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = c("grey50", "red")) +
+    coord_cartesian(ylim = c(-10,10)) + 
+    labs(x = "Weighted average GC content (%) per gene", 
+         colour = "Differentially expressed?", 
+         y = "sign(logFC)*-log10(PValue)"),
+  common.legend = TRUE, 
+  labels = "AUTO"
 ) 
 ```
 
@@ -623,7 +623,7 @@ goSummaries <- url("https://uofabioinformaticshub.github.io/summaries2GO/data/go
     Term = Term(id),
     gs_name = Term %>% str_to_upper() %>% str_replace_all("[ -]", "_"),
     gs_name = paste0("GO_", gs_name)
-    )
+  )
 
 minPath <- 3
 
@@ -692,7 +692,7 @@ cell_type_markers <-
   dplyr::filter(gene_id %in% rownames(x.ab)) %>% 
   split(f = .$`cell type`) %>% 
   lapply(extract2, "gene_id")
-  
+
 
 cell_type_markers %<>% 
   lapply(function(y) {
@@ -713,12 +713,12 @@ I first will look at enrichment of GO terms within the DE genes using goseq. I l
 ```{r}
 
 pwf <- toptables_cqn.ab$`MPS-IIIB` %>%
-      with(
-        nullp(
-          DEgenes = structure(DE, names = gene_id), 
-          bias.data = length
-        )
-      )
+  with(
+    nullp(
+      DEgenes = structure(DE, names = gene_id), 
+      bias.data = length
+    )
+  )
 
 goseq(pwf, gene2cat = GO) %>% 
   as_tibble() %>% 
@@ -732,12 +732,12 @@ goseq(pwf, gene2cat = GO) %>%
   kable_styling(full_width = FALSE)
 
 pwf <- toptables_cqn.ab$`MPS-IIIA` %>%
-      with(
-        nullp(
-          DEgenes = structure(DE, names = gene_id), 
-          bias.data = length
-        )
-      )
+  with(
+    nullp(
+      DEgenes = structure(DE, names = gene_id), 
+      bias.data = length
+    )
+  )
 
 goseq(pwf, gene2cat = GO) %>% 
   as_tibble() %>% 
@@ -751,12 +751,12 @@ goseq(pwf, gene2cat = GO) %>%
   kable_styling(full_width = FALSE)
 
 pwf <- toptables_cqn.ab$`sgsh/+` %>%
-      with(
-        nullp(
-          DEgenes = structure(DE, names = gene_id), 
-          bias.data = length
-        )
-      )
+  with(
+    nullp(
+      DEgenes = structure(DE, names = gene_id), 
+      bias.data = length
+    )
+  )
 
 goseq(pwf, gene2cat = GO) %>% 
   as_tibble() %>% 
@@ -765,12 +765,12 @@ goseq(pwf, gene2cat = GO) %>%
   dplyr::select(-under_represented_pvalue) %>% 
   #write_csv("output/results/goseq_cqn/famAB_sgshHetcoef.csv")
   dplyr::slice(1:10)
-  
-  
-  kable(caption = "Top 10 over-represented GO terms in sgsh het DE genes. 
-        Some reach statistical significance") %>% 
-  kable_styling(full_width = FALSE)
-  
+
+
+# kable(caption = "Top 10 over-represented GO terms in sgsh het DE genes. 
+#       Some reach statistical significance") %>% 
+# kable_styling(full_width = FALSE)
+
 ```
 
 
@@ -828,9 +828,9 @@ fryKEGG.ab$`sgsh/+` %>%
 sigpaths <- fryKEGG.ab %>% 
   bind_rows() %>% 
   dplyr::filter(FDR.Mixed < 0.05) %>% 
-    .$pathway %>% 
-    unique()
-  
+  .$pathway %>% 
+  unique()
+
 fryKEGG.ab %>% 
   bind_rows() %>% 
   dplyr::filter(pathway %in% sigpaths) %>% 
@@ -844,7 +844,7 @@ fryKEGG.ab %>%
   labs(fill = "FDR < 0.05", 
        x = "-log10(PValue)", 
        y = "")
-  #ggsave("output/plots/AB_KEGG.png", width = 20, height = 10, units = "cm", dpi = 400, scale = 2)
+#ggsave("output/plots/AB_KEGG.png", width = 20, height = 10, units = "cm", dpi = 400, scale = 2)
 
 ```
 
@@ -868,9 +868,9 @@ fryC2.ab <-
 sigpaths <- fryC2.ab %>% 
   bind_rows() %>% 
   dplyr::filter(FDR.Mixed < 0.05) %>% 
-    .$pathway %>% 
-    unique()
-  
+  .$pathway %>% 
+  unique()
+
 fryC2.ab %>% 
   bind_rows() %>% 
   dplyr::filter(pathway %in% sigpaths) %>% 
@@ -907,7 +907,7 @@ fry_GO.ab <-  design.ab %>% colnames() %>% .[2:4] %>%
 
 
 ```{r}
-toptables_cqn %>% 
+toptables_cqn.ab %>% 
   bind_rows() %>% 
   dplyr::filter(gene_id %in% GO$GO_REGULATION_OF_MICROGLIAL_CELL_ACTIVATION) %>% 
   dplyr::select(gene_name, logFC, coef) %>% 
@@ -916,16 +916,16 @@ toptables_cqn %>%
   column_to_rownames("gene_name") %>% 
   t() %>% 
   pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
-                                               name = "RdBu")))(100), 
+                                                   name = "RdBu")))(100), 
            main = "GO_REGULATION_OF_MICROGLIAL_CELL_ACTIVATION: FDR = 6.44e-5", 
            breaks = c(seq(min(.), 0, length.out=ceiling(100/2) + 1), 
-              seq(max(.)/100, max(.), length.out=50)), 
+                      seq(max(.)/100, max(.), length.out=50)), 
            cellheight = 30, cellwidth = 12,angle_col = 45,
            treeheight_row = 0, treeheight_col = 0
-           )
+  )
 
 
-toptables_cqn %>% 
+toptables_cqn.ab %>% 
   bind_rows() %>% 
   dplyr::filter(gene_id %in% KEGG$KEGG_OXIDATIVE_PHOSPHORYLATION) %>% 
   dplyr::select(gene_name, logFC, coef) %>% 
@@ -934,13 +934,13 @@ toptables_cqn %>%
   column_to_rownames("gene_name") %>% 
   t() %>% 
   pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
-                                               name = "RdBu")))(100), 
+                                                   name = "RdBu")))(100), 
            main = "KEGG_LYSOSOME: FDR = 6.44e-5", 
            breaks = c(seq(min(.), 0, length.out=ceiling(100/2) + 1), 
-              seq(max(.)/100, max(.), length.out=50)), 
+                      seq(max(.)/100, max(.), length.out=50)), 
            cellheight = 30, cellwidth = 12,angle_col = 45,
            treeheight_row = 0, treeheight_col = 0
-           )
+  )
 ```
 
 ### IRE
@@ -1028,21 +1028,21 @@ fry_chr.ab %>%
   mutate(pathway = factor(pathway, levels = c("MT", seq(1:25)))) %>% 
   ggplot(aes(y = pathway, x = -log10(PValue.Mixed), fill = coef)) +
   geom_col(position = "dodge")
-  
+
 ```
 
 An enrichment of DE genes is observed on the same chromosome as the mutation. This is obsevred in the manhat plots below. 
 
 ```{r}
 manhat_input.ab <- 
-	toptables_cqn.ab %>% 
+  toptables_cqn.ab %>% 
   bind_rows() %>% 
-	left_join(x.ab$genes %>% 
-			  	as_tibble() %>% 
-			  	dplyr::select(start, end, chromosome, gene_id) %>% 
-			  	group_by(gene_id) %>% 
-			  	mutate(mid = mean(c(start, end)))
-	) %>% 
+  left_join(x.ab$genes %>% 
+              as_tibble() %>% 
+              dplyr::select(start, end, chromosome, gene_id) %>% 
+              group_by(gene_id) %>% 
+              mutate(mid = mean(c(start, end)))
+  ) %>% 
   dplyr::filter(chromosome %in% seq(1:25)) %>% 
   group_by(gene_id) %>% 
   mutate(mid = mean(c(start, end))) %>% 
@@ -1051,7 +1051,7 @@ manhat_input.ab <-
   group_by(chromosome) %>% 
   summarise(chrLen = max(mid)) %>% 
   mutate(chrSt = cumsum(chrLen)-chrLen) %>% 
-	dplyr::select(-chrLen) %>% 
+  dplyr::select(-chrLen) %>% 
   left_join(toptables_cqn.ab %>% 
               bind_rows() %>% 
               left_join(x.ab$genes %>% 
@@ -1159,7 +1159,7 @@ kegga_DE <- toptables_cqn.ab %>%
   dplyr::filter(!(gene_id %in% DEgeneshet) ) %>% # and not DE in hets 
   .$gene_id %>% 
   unique
-  
+
 #KEGG using a background of all genes
 kegga(de = kegga_DE, 
       
@@ -1179,12 +1179,12 @@ kegga(de = kegga_DE,
         mutate(pathway = pathway %>% str_remove_all("[0-9]+$")) %>%
         dplyr::select(gene_id, pathway)  
 ) %>% 
-   topKEGG() %>% 
-    as.data.frame() %>% 
-    rownames_to_column("pathway") %>% 
-    mutate(FDR = p.adjust(P.DE, "fdr")) %>% 
-    dplyr::select(pathway, raw.p = P.DE, FDR, `No. DE` = DE, `No. in geneset` = N) %>%
-    head(10) 
+  topKEGG() %>% 
+  as.data.frame() %>% 
+  rownames_to_column("pathway") %>% 
+  mutate(FDR = p.adjust(P.DE, "fdr")) %>% 
+  dplyr::select(pathway, raw.p = P.DE, FDR, `No. DE` = DE, `No. in geneset` = N) %>%
+  head(10) 
 ```
 
 
@@ -1209,21 +1209,21 @@ featureCounts2 <-
 
 ```{r}
 min.lib.size = featureCounts2 %>% 
-    as.matrix() %>% 
-    DGEList() %>%
-    calcNormFactors() %>% 
+  as.matrix() %>% 
+  DGEList() %>%
+  calcNormFactors() %>% 
   .$samples %>% 
   .$lib.size %>% 
   min()
 ```
 
 Genes which are lowly expressed are uninformative for differential gene expression analysis. A general rule of thumb for considering a gene to be lowly expressed if it contains a count per million (CPM) of more than 10/(min_lib_size/1000000) in at least one of the experimental groups. This will allow us . The min lib size in this analysis is `r comma(min.lib.size)`. So the minimum CPM in this analysis will be `r 10/(min.lib.size/1000000)`.
- 
 
-```{r filt}
+
+```{r filt_2}
 a <- featureCounts2 %>% 
-    cpm(log = TRUE) %>%
-    as.data.frame() %>% 
+  cpm(log = TRUE) %>%
+  as.data.frame() %>% 
   pivot_longer(
     cols = everything(),
     names_to = "sample",
@@ -1253,8 +1253,8 @@ a <- featureCounts2 %>%
 
 b <- featureCounts2 %>% 
   .[rowSums(cpm(.) >= 2.435138) >= 6,] %>% 
-    cpm(log = TRUE) %>%
-    as.data.frame() %>% 
+  cpm(log = TRUE) %>%
+  as.data.frame() %>% 
   pivot_longer(
     cols = everything(),
     names_to = "sample",
@@ -1285,7 +1285,7 @@ ggarrange(a, b, common.legend = TRUE)
 ```
 
 
-```{r dge}
+```{r dge_2}
 x2 <- featureCounts2 %>% 
   as.matrix() %>% 
   .[rowSums(cpm(.) >= 2.435138) >= 6,] %>% 
@@ -1315,9 +1315,9 @@ x2$counts %>%
   t() %>% 
   prcomp() %>% 
   autoplot(data = tibble(sample = rownames(.$x)) %>%
-      left_join(x2$samples),
-    colour = "MPS", 
-    size = 6
+             left_join(x2$samples),
+           colour = "MPS", 
+           size = 6
   ) +
   theme(aspect.ratio = 1, 
         legend.position = "bottom") +
@@ -1339,33 +1339,33 @@ ACsamps <- meta %>%
   .$sample
 
 ggarrange(
-x2$counts %>% 
-  .[,ACsamps] %>% 
-  cpm(log=TRUE) %>% 
-  t() %>% 
-  prcomp() %>% 
-  autoplot(data = tibble(sample = rownames(.$x)) %>%
-      left_join(x2$samples),
-    colour = "genotype", 
-    size = 6
-  ) +
-  theme(aspect.ratio = 1) +
-  ggtitle("by genotype") +
-  labs(colour = ""),
-
-x2$counts %>% 
-  .[,ACsamps] %>% 
-  cpm(log=TRUE) %>% 
-  t() %>% 
-  prcomp() %>% 
-  autoplot(data = tibble(sample = rownames(.$x)) %>%
-      left_join(x2$samples),
-    colour = "Tank", 
-    size = 6
-  ) +
-  theme(aspect.ratio = 1) +
-  labs(colour = "") +
-  ggtitle("by tank")
+  x2$counts %>% 
+    .[,ACsamps] %>% 
+    cpm(log=TRUE) %>% 
+    t() %>% 
+    prcomp() %>% 
+    autoplot(data = tibble(sample = rownames(.$x)) %>%
+               left_join(x2$samples),
+             colour = "genotype", 
+             size = 6
+    ) +
+    theme(aspect.ratio = 1) +
+    ggtitle("by genotype") +
+    labs(colour = ""),
+  
+  x2$counts %>% 
+    .[,ACsamps] %>% 
+    cpm(log=TRUE) %>% 
+    t() %>% 
+    prcomp() %>% 
+    autoplot(data = tibble(sample = rownames(.$x)) %>%
+               left_join(x2$samples),
+             colour = "Tank", 
+             size = 6
+    ) +
+    theme(aspect.ratio = 1) +
+    labs(colour = "") +
+    ggtitle("by tank")
 )
 ```
 
@@ -1374,33 +1374,33 @@ x2$counts %>%
 The BC group of fish came from 2 sets of parents, across multiple lays/ This is evident in the plot below. The effect of "Home Tank" cannot be ignored in a DE analysis. 
 ```{r}
 ggarrange(
-x2$counts %>% 
-  .[,BCsamps] %>% 
-  cpm(log=TRUE) %>% 
-  t() %>% 
-  prcomp() %>% 
-  autoplot(data = tibble(sample = rownames(.$x)) %>%
-      left_join(x2$samples),
-    colour = "genotype", 
-    size = 6
-  ) +
-  theme(aspect.ratio = 1) +
-  ggtitle("by genotype") +
-  labs(colour = ""),
-
-x2$counts %>% 
-  .[,BCsamps] %>% 
-  cpm(log=TRUE) %>% 
-  t() %>% 
-  prcomp() %>% 
-  autoplot(data = tibble(sample = rownames(.$x)) %>%
-      left_join(x2$samples),
-    colour = "Tank", 
-    size = 6
-  ) +
-  theme(aspect.ratio = 1) +
-  labs(colour = "") +
-  ggtitle("by tank")
+  x2$counts %>% 
+    .[,BCsamps] %>% 
+    cpm(log=TRUE) %>% 
+    t() %>% 
+    prcomp() %>% 
+    autoplot(data = tibble(sample = rownames(.$x)) %>%
+               left_join(x2$samples),
+             colour = "genotype", 
+             size = 6
+    ) +
+    theme(aspect.ratio = 1) +
+    ggtitle("by genotype") +
+    labs(colour = ""),
+  
+  x2$counts %>% 
+    .[,BCsamps] %>% 
+    cpm(log=TRUE) %>% 
+    t() %>% 
+    prcomp() %>% 
+    autoplot(data = tibble(sample = rownames(.$x)) %>%
+               left_join(x2$samples),
+             colour = "Tank", 
+             size = 6
+    ) +
+    theme(aspect.ratio = 1) +
+    labs(colour = "") +
+    ggtitle("by tank")
 )
 ```
 From hereout, I will process the 2 comparisons separately. 
@@ -1426,14 +1426,14 @@ toptable_1.ac <- design.ac %>% colnames() %>% .[2:3] %>%
       .[["table"]] %>%
       as_tibble() %>%
       arrange(PValue) %>%
-       mutate(
+      mutate(
         coef = x,
         DE = FDR < 0.05
       ) %>% 
       dplyr::select(
         gene_name, logFC, logCPM, PValue, FDR, DE, everything()  
       )
-      
+    
   }, simplify = FALSE)
 ```
 
@@ -1493,44 +1493,44 @@ toptable_1.ac %>%
 ### %GC AND LENGTH CHECK
 ```{r}
 ggarrange(
-toptable_1.ac %>% 
-  bind_rows() %>% 
-  mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
-  ggplot(aes(x = length, y = rankstat)) +
-  geom_point(
-    aes(colour = DE),
-    alpha = 0.5
-  ) +
-  geom_smooth(se = FALSE, method = "gam") +
-  facet_grid(rows = vars(coef)) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = c("grey50", "red")) +
-  scale_x_log10()+
-  labs(x = "Average transcript length per gene",
-       colour = "Differentially expressed?",
-       y = "sign(logFC)*-log10(PValue)") +
-  coord_cartesian(ylim = c(-10, 10)),
-
-toptable_1.ac %>% 
-  bind_rows() %>% 
-  mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
-  ggplot(aes(x = gc_content, y = rankstat)) +
-  geom_point(
-    aes(colour = DE),
-    alpha = 0.5
-  ) +
-  geom_smooth(se = FALSE, method = "gam") +
-  facet_grid(rows = vars(coef)) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = c("grey50", "red")) +
-  coord_cartesian(ylim = c(-10,10)) + 
-  labs(x = "Weighted average GC content (%) per gene", 
-       colour = "Differentially expressed?", 
-       y = "sign(logFC)*-log10(PValue)"),
-common.legend = TRUE, 
-labels = "AUTO"
+  toptable_1.ac %>% 
+    bind_rows() %>% 
+    mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
+    ggplot(aes(x = length, y = rankstat)) +
+    geom_point(
+      aes(colour = DE),
+      alpha = 0.5
+    ) +
+    geom_smooth(se = FALSE, method = "gam") +
+    facet_grid(rows = vars(coef)) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = c("grey50", "red")) +
+    scale_x_log10()+
+    labs(x = "Average transcript length per gene",
+         colour = "Differentially expressed?",
+         y = "sign(logFC)*-log10(PValue)") +
+    coord_cartesian(ylim = c(-10, 10)),
+  
+  toptable_1.ac %>% 
+    bind_rows() %>% 
+    mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
+    ggplot(aes(x = gc_content, y = rankstat)) +
+    geom_point(
+      aes(colour = DE),
+      alpha = 0.5
+    ) +
+    geom_smooth(se = FALSE, method = "gam") +
+    facet_grid(rows = vars(coef)) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = c("grey50", "red")) +
+    coord_cartesian(ylim = c(-10,10)) + 
+    labs(x = "Weighted average GC content (%) per gene", 
+         colour = "Differentially expressed?", 
+         y = "sign(logFC)*-log10(PValue)"),
+  common.legend = TRUE, 
+  labels = "AUTO"
 ) 
 ```
 
@@ -1542,7 +1542,7 @@ A little bit of bias is obsevred for %GC content and gene length, so will apply 
 
 ```{r}
 cqn.ac <-   
-x.ac %>% 
+  x.ac %>% 
   with(
     cqn(
       counts = counts,
@@ -1572,7 +1572,7 @@ ggarrange(
     t() %>%
     prcomp() %>% 
     autoplot(data = tibble(sample = rownames(.$x)) %>%
-               left_join(x$samples),
+               left_join(x.ac$samples),
              colour = "genotype", 
              size = 4
     ) +
@@ -1583,7 +1583,7 @@ ggarrange(
     t() %>% 
     prcomp() %>%
     autoplot(data = tibble(sample = rownames(.$x)) %>%
-               left_join(x$samples),
+               left_join(x.ac$samples),
              colour = "genotype", 
              size = 4
     ) +
@@ -1614,14 +1614,14 @@ toptables_cqn.ac <- design.ac %>% colnames() %>% .[2:3] %>%
       .[["table"]] %>%
       as_tibble() %>%
       arrange(PValue) %>%
-       mutate(
+      mutate(
         coef = x,
         DE = FDR < 0.05
       ) %>% 
       dplyr::select(
         gene_name, logFC, logCPM, PValue, FDR, DE, everything()  
       )
-      
+    
   }, simplify = FALSE)
 ```
 
@@ -1688,44 +1688,44 @@ toptables_cqn.ac %>%
 
 ```{r}
 ggarrange(
-toptables_cqn.ac %>% 
-  bind_rows() %>% 
-  mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
-  ggplot(aes(x = length, y = rankstat)) +
-  geom_point(
-    aes(colour = DE),
-    alpha = 0.5
-  ) +
-  geom_smooth(se = FALSE, method = "gam") +
-  facet_grid(rows = vars(coef)) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = c("grey50", "red")) +
-  scale_x_log10()+
-  labs(x = "Average transcript length per gene",
-       colour = "Differentially expressed?",
-       y = "sign(logFC)*-log10(PValue)") +
-  coord_cartesian(ylim = c(-10, 10)),
-
-toptables_cqn.ac %>% 
-  bind_rows() %>% 
-  mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
-  ggplot(aes(x = gc_content, y = rankstat)) +
-  geom_point(
-    aes(colour = DE),
-    alpha = 0.5
-  ) +
-  geom_smooth(se = FALSE, method = "gam") +
-  facet_grid(rows = vars(coef)) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = c("grey50", "red")) +
-  coord_cartesian(ylim = c(-10,10)) + 
-  labs(x = "Weighted average GC content (%) per gene", 
-       colour = "Differentially expressed?", 
-       y = "sign(logFC)*-log10(PValue)"),
-common.legend = TRUE, 
-labels = "AUTO"
+  toptables_cqn.ac %>% 
+    bind_rows() %>% 
+    mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
+    ggplot(aes(x = length, y = rankstat)) +
+    geom_point(
+      aes(colour = DE),
+      alpha = 0.5
+    ) +
+    geom_smooth(se = FALSE, method = "gam") +
+    facet_grid(rows = vars(coef)) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = c("grey50", "red")) +
+    scale_x_log10()+
+    labs(x = "Average transcript length per gene",
+         colour = "Differentially expressed?",
+         y = "sign(logFC)*-log10(PValue)") +
+    coord_cartesian(ylim = c(-10, 10)),
+  
+  toptables_cqn.ac %>% 
+    bind_rows() %>% 
+    mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
+    ggplot(aes(x = gc_content, y = rankstat)) +
+    geom_point(
+      aes(colour = DE),
+      alpha = 0.5
+    ) +
+    geom_smooth(se = FALSE, method = "gam") +
+    facet_grid(rows = vars(coef)) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = c("grey50", "red")) +
+    coord_cartesian(ylim = c(-10,10)) + 
+    labs(x = "Weighted average GC content (%) per gene", 
+         colour = "Differentially expressed?", 
+         y = "sign(logFC)*-log10(PValue)"),
+  common.legend = TRUE, 
+  labels = "AUTO"
 ) 
 ```
 
@@ -1759,7 +1759,7 @@ goSummaries <- url("https://uofabioinformaticshub.github.io/summaries2GO/data/go
     Term = Term(id),
     gs_name = Term %>% str_to_upper() %>% str_replace_all("[ -]", "_"),
     gs_name = paste0("GO_", gs_name)
-    )
+  )
 
 minPath <- 3
 
@@ -1789,12 +1789,12 @@ GO <-
 #   distinct(gs_name, gene_id, .keep_all = TRUE) %>% 
 #   dplyr::select(gs_name, gene_id)
 
-  sizes_GO <- GO %>%
-    lapply(length) %>%
-    unlist %>%
-    as.data.frame() %>%
-    set_colnames( "n_genes") %>%
-    rownames_to_column("gs")
+sizes_GO <- GO %>%
+  lapply(length) %>%
+  unlist %>%
+  as.data.frame() %>%
+  set_colnames( "n_genes") %>%
+  rownames_to_column("gs")
 
 
 # retain gene sets with at least 5 genes in it
@@ -1840,11 +1840,11 @@ allC2.bcac <- msigdbr("Danio rerio", category = "C2") %>%
   lapply(extract2, "gene_id")
 
 sizes_allc2 <- allC2.bcac %>%
-    lapply(length) %>%
-    unlist %>%
-    as.data.frame() %>%
-    set_colnames( "n_genes") %>%
-    rownames_to_column("gs")
+  lapply(length) %>%
+  unlist %>%
+  as.data.frame() %>%
+  set_colnames( "n_genes") %>%
+  rownames_to_column("gs")
 
 
 # retain gene sets with at least 5 genes in it
@@ -1855,37 +1855,37 @@ allC2.bcac <- allC2.bcac[sizes_allc2 %>% dplyr::filter(n_genes > 5) %>% .$gs]
 
 ```{r}
 pwf <- toptables_cqn.ac$`MPS-IIIA` %>%
-      with(
-        nullp(
-          DEgenes = structure(DE, names = gene_id), 
-          bias.data = length
-        )
-      )
+  with(
+    nullp(
+      DEgenes = structure(DE, names = gene_id), 
+      bias.data = length
+    )
+  )
 
 goseqac.a <- goseq(pwf, gene2cat = c(GO)) %>% 
   as_tibble() %>% 
   dplyr::filter(numDEInCat > 0) %>% 
   mutate(FDR = p.adjust(over_represented_pvalue, method = "fdr")) %>% 
   dplyr::select(-under_represented_pvalue) 
-  #write_csv("output/results/goseq_cqn/famAC_Acoef.csv")
- # dplyr::filter(FDR < 0.05) 
+#write_csv("output/results/goseq_cqn/famAC_Acoef.csv")
+# dplyr::filter(FDR < 0.05) 
 
 pwf <- toptables_cqn.ac$`MPS-IIIC` %>%
-      with(
-        nullp(
-          DEgenes = structure(DE, names = gene_id), 
-          bias.data = length
-        )
-      )
+  with(
+    nullp(
+      DEgenes = structure(DE, names = gene_id), 
+      bias.data = length
+    )
+  )
 
 goseqac.c <- goseq(pwf, gene2cat = GO) %>% 
   as_tibble() %>% 
   dplyr::filter(numDEInCat > 0) %>% 
   mutate(FDR = p.adjust(over_represented_pvalue, method = "fdr")) %>% 
   dplyr::select(-under_represented_pvalue) 
-  # #write_csv("output/results/goseq_cqn/famAC_Ccoef.csv")
-  # dplyr::filter(FDR < 0.05) %>% 
-  # head(10)
+# #write_csv("output/results/goseq_cqn/famAC_Ccoef.csv")
+# dplyr::filter(FDR < 0.05) %>% 
+# head(10)
 
 goseqac.a %>% 
   mutate(coef = "MPS-IIIA") %>% 
@@ -1940,9 +1940,9 @@ fryKEGG.ac$`MPS-IIIC` %>%
 sigpaths.ac <- fryKEGG.ac %>% 
   bind_rows() %>% 
   dplyr::filter(FDR.Mixed < 0.05) %>% 
-    .$pathway %>% 
-    unique()
-  
+  .$pathway %>% 
+  unique()
+
 fryKEGG.ac %>% 
   bind_rows() %>% 
   dplyr::filter(pathway %in% sigpaths.ac) %>% 
@@ -1956,7 +1956,7 @@ fryKEGG.ac %>%
   labs(fill = "FDR < 0.05", 
        x = "-log10(PValue)", 
        y = "")
-  #ggsave("output/plots/AC_KEGG.png", width = 20, height = 20, units = "cm", dpi = 400, scale = 2)
+#ggsave("output/plots/AC_KEGG.png", width = 20, height = 20, units = "cm", dpi = 400, scale = 2)
 ```
 
 
@@ -1989,15 +1989,15 @@ toptables_cqn.ac %>%
   column_to_rownames("gene_name") %>% 
   t() %>% 
   pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
-                                               name = "RdBu")))(100), 
+                                                   name = "RdBu")))(100), 
            main = "KEGG_AMINO_SUGAR_AND_NUCLEOTIDE_SUGAR_METABOLISM", 
            breaks = c(seq(min(.), 0, length.out=ceiling(100/2) + 1), 
-              seq(max(.)/100, max(.), length.out=50)), 
+                      seq(max(.)/100, max(.), length.out=50)), 
            cellheight = 30, 
            cellwidth = 10,
            angle_col = 45,
            treeheight_row = 0, treeheight_col = 0
-           )
+  )
 
 ```
 ### IRE
@@ -2027,7 +2027,7 @@ fryIRE.ac %>%
   geom_vline(xintercept = 1.2) +
   scale_alpha_manual(values = c(0.5,1)) +
   annotate(geom = "label", x = 1.1, y = "ire5_HQ", label = "FDR = 0.05") 
-  #ggsave("output/plots/AC_ire.png", width = 20, height = 10, units = "cm", dpi = 400, scale = 2)
+#ggsave("output/plots/AC_ire.png", width = 20, height = 10, units = "cm", dpi = 400, scale = 2)
 
 
 toptables_cqn.ac %>% 
@@ -2039,17 +2039,17 @@ toptables_cqn.ac %>%
   column_to_rownames("gene_name") %>% 
   t() %>% 
   pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
-                                               name = "RdBu")))(100), 
+                                                   name = "RdBu")))(100), 
            main = "3' IRE genes: FDR = 0.066", 
            breaks = c(seq(min(.), 0, length.out=ceiling(100/2) + 1), 
-              seq(max(.)/100, max(.), length.out=50)), 
+                      seq(max(.)/100, max(.), length.out=50)), 
            # cellheight = 30, 
            # cellwidth = 1,
            angle_col = 45,
            treeheight_row = 0, 
            treeheight_col = 0, 
            show_colnames = T
-           )
+  )
 ```
 
 ### Cell type prop check
@@ -2097,16 +2097,16 @@ toptables_cqn.ac %>%
   arrange(desc(`MPS-IIIA`)) %>% 
   t() %>% 
   pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
-                                               name = "RdBu")))(100), 
+                                                   name = "RdBu")))(100), 
            main = "Oligodendrocytes in MPS-IIIA", 
            breaks = c(seq(min(.), 0, length.out=ceiling(100/2) + 1), 
-              seq(max(.)/100, max(.), length.out=50)), 
+                      seq(max(.)/100, max(.), length.out=50)), 
            cellheight = 30, cellwidth = 12,
            angle_col = 45,
            cluster_rows = F,
            cluster_cols = F,
            treeheight_row = 0, treeheight_col = 0
-           )
+  )
 
 toptables_cqn.ac %>% 
   bind_rows() %>% 
@@ -2119,16 +2119,16 @@ toptables_cqn.ac %>%
   arrange(desc(`MPS-IIIC`)) %>% 
   t() %>% 
   pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
-                                               name = "RdBu")))(100), 
+                                                   name = "RdBu")))(100), 
            main = "Oligodendrocytes in MPS-IIIC", 
            breaks = c(seq(min(.), 0, length.out=ceiling(100/2) + 1), 
-              seq(max(.)/100, max(.), length.out=50)), 
+                      seq(max(.)/100, max(.), length.out=50)), 
            cellheight = 30, cellwidth = 12,
            angle_col = 45,
            cluster_rows = F,
            cluster_cols = F,
            treeheight_row = 0, treeheight_col = 0
-           )
+  )
 ```
 
 
@@ -2155,21 +2155,21 @@ fry_chr.ac %>%
   mutate(pathway = factor(pathway, levels = c("MT", seq(1:25)))) %>% 
   ggplot(aes(y = pathway, x = -log10(PValue.Mixed), fill = coef)) +
   geom_col(position = "dodge")
-  
+
 ```
 
 An enrichment of DE genes is observed on the same chromosome as the mutation. This is obsevred in the manhat plots below. 
 
 ```{r}
 manhat_input.ac <- 
-	toptables_cqn.ac %>% 
+  toptables_cqn.ac %>% 
   bind_rows() %>% 
-	left_join(x.ac$genes %>% 
-			  	as_tibble() %>% 
-			  	dplyr::select(start, end, chromosome, gene_id) %>% 
-			  	group_by(gene_id) %>% 
-			  	mutate(mid = mean(c(start, end)))
-	) %>% 
+  left_join(x.ac$genes %>% 
+              as_tibble() %>% 
+              dplyr::select(start, end, chromosome, gene_id) %>% 
+              group_by(gene_id) %>% 
+              mutate(mid = mean(c(start, end)))
+  ) %>% 
   dplyr::filter(chromosome %in% seq(1:25)) %>% 
   group_by(gene_id) %>% 
   mutate(mid = mean(c(start, end))) %>% 
@@ -2178,7 +2178,7 @@ manhat_input.ac <-
   group_by(chromosome) %>% 
   summarise(chrLen = max(mid)) %>% 
   mutate(chrSt = cumsum(chrLen)-chrLen) %>% 
-	dplyr::select(-chrLen) %>% 
+  dplyr::select(-chrLen) %>% 
   left_join(toptables_cqn.ac %>% 
               bind_rows() %>% 
               left_join(x.ac$genes %>% 
@@ -2194,7 +2194,7 @@ manhat_input.ac <-
   dplyr::arrange(mid, chromosome) %>% 
   mutate(midCum = chrSt + mid)
 
-axis.ac <- manhat_input %>%
+axis.ac <- manhat_input.ac %>%
   group_by(chromosome) %>%
   dplyr::arrange(chromosome) %>%
   summarize(center = (max(midCum) + min(midCum)) / 2) %>%
@@ -2203,7 +2203,7 @@ axis.ac <- manhat_input %>%
     colour = rep(c("grey40", "black"), length.out = 25)
   )
 
-ggplot(manhat_input, aes(x = midCum, y = -log10(PValue))) +
+ggplot(manhat_input.ac, aes(x = midCum, y = -log10(PValue))) +
   geom_point(aes(color=chromosome), alpha = 0.5, size = 1) +
   geom_point(alpha = 0.5, size = 1, colour = "red", 
              data = . %>% 
@@ -2211,8 +2211,8 @@ ggplot(manhat_input, aes(x = midCum, y = -log10(PValue))) +
   geom_point(alpha = 0.5, size = 1, colour = "red", 
              data = . %>% 
                dplyr::filter(coef ==  "MPS-IIIA" & chromosome == 22)) +
-  scale_color_manual(values = axis$colour) +
-  scale_x_continuous(label = axis$chromosome, breaks = axis$center) +
+  scale_color_manual(values = axis.ac$colour) +
+  scale_x_continuous(label = axis.ac$chromosome, breaks = axis.ac$center) +
   scale_y_continuous(limits =c(0, 10)) + # zoom in
   facet_wrap(~coef, ncol = 1) +
   labs(x = "Chromosome", y = expression(paste(-log[10], "(p)"))) +
@@ -2243,14 +2243,14 @@ toptable_1.bc <- design.bc %>% colnames() %>% .[2:3] %>%
       .[["table"]] %>%
       as_tibble() %>%
       arrange(PValue) %>%
-       mutate(
+      mutate(
         coef = x,
         DE = FDR < 0.05
       ) %>% 
       dplyr::select(
         gene_name, logFC, logCPM, PValue, FDR, DE, everything()  
       )
-      
+    
   }, simplify = FALSE)
 ```
 
@@ -2312,44 +2312,44 @@ toptable_1.bc %>%
 ### %GC AND LENGTH CHECK
 ```{r}
 ggarrange(
-toptable_1.bc %>% 
-  bind_rows() %>% 
-  mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
-  ggplot(aes(x = length, y = rankstat)) +
-  geom_point(
-    aes(colour = DE),
-    alpha = 0.5
-  ) +
-  geom_smooth(se = FALSE, method = "gam") +
-  facet_grid(rows = vars(coef)) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = c("grey50", "red")) +
-  scale_x_log10()+
-  labs(x = "Average transcript length per gene",
-       colour = "Differentially expressed?",
-       y = "sign(logFC)*-log10(PValue)") +
-  coord_cartesian(ylim = c(-10, 10)),
-
-toptable_1.bc %>% 
-  bind_rows() %>% 
-  mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
-  ggplot(aes(x = gc_content, y = rankstat)) +
-  geom_point(
-    aes(colour = DE),
-    alpha = 0.5
-  ) +
-  geom_smooth(se = FALSE, method = "gam") +
-  facet_grid(rows = vars(coef)) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = c("grey50", "red")) +
-  coord_cartesian(ylim = c(-10,10)) + 
-  labs(x = "Weighted average GC content (%) per gene", 
-       colour = "Differentially expressed?", 
-       y = "sign(logFC)*-log10(PValue)"),
-common.legend = TRUE, 
-labels = "AUTO"
+  toptable_1.bc %>% 
+    bind_rows() %>% 
+    mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
+    ggplot(aes(x = length, y = rankstat)) +
+    geom_point(
+      aes(colour = DE),
+      alpha = 0.5
+    ) +
+    geom_smooth(se = FALSE, method = "gam") +
+    facet_grid(rows = vars(coef)) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = c("grey50", "red")) +
+    scale_x_log10()+
+    labs(x = "Average transcript length per gene",
+         colour = "Differentially expressed?",
+         y = "sign(logFC)*-log10(PValue)") +
+    coord_cartesian(ylim = c(-10, 10)),
+  
+  toptable_1.bc %>% 
+    bind_rows() %>% 
+    mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
+    ggplot(aes(x = gc_content, y = rankstat)) +
+    geom_point(
+      aes(colour = DE),
+      alpha = 0.5
+    ) +
+    geom_smooth(se = FALSE, method = "gam") +
+    facet_grid(rows = vars(coef)) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = c("grey50", "red")) +
+    coord_cartesian(ylim = c(-10,10)) + 
+    labs(x = "Weighted average GC content (%) per gene", 
+         colour = "Differentially expressed?", 
+         y = "sign(logFC)*-log10(PValue)"),
+  common.legend = TRUE, 
+  labels = "AUTO"
 ) 
 ```
 
@@ -2361,7 +2361,7 @@ A  bit of bias is obsevred for %GC content and gene length, so will apply the `c
 
 ```{r}
 cqn.bc <-   
-x.bc %>% 
+  x.bc %>% 
   with(
     cqn(
       counts = counts,
@@ -2374,7 +2374,7 @@ logCPM.bc <- cqn.bc$y + cqn.bc$offset
 ```
 
 ## plot out the model fits
-```{r plotCQN, fig.cap ="*Model fits for GC content and gene length under the CQN model. Variability is clearly visible at either end*"}
+```{r plotCQN_2, fig.cap ="*Model fits for GC content and gene length under the CQN model. Variability is clearly visible at either end*"}
 par(mfrow = c(1, 2))
 cqnplot(cqn.bc, n = 1, xlab = "GC Content")
 cqnplot(cqn.bc, n = 2, xlab = "Length")
@@ -2391,7 +2391,7 @@ ggarrange(
     t() %>%
     prcomp() %>% 
     autoplot(data = tibble(sample = rownames(.$x)) %>%
-               left_join(x$samples),
+               left_join(x.bc$samples),
              colour = "genotype", 
              size = 4
     ) +
@@ -2402,7 +2402,7 @@ ggarrange(
     t() %>% 
     prcomp() %>%
     autoplot(data = tibble(sample = rownames(.$x)) %>%
-               left_join(x$samples),
+               left_join(x.bc$samples),
              colour = "genotype", 
              size = 4
     ) +
@@ -2431,14 +2431,14 @@ toptables_cqn.bc <- design.bc %>% colnames() %>% .[2:3] %>%
       .[["table"]] %>%
       as_tibble() %>%
       arrange(PValue) %>%
-       mutate(
+      mutate(
         coef = x,
         DE = FDR < 0.05
       ) %>% 
       dplyr::select(
         gene_name, logFC, logCPM, PValue, FDR, DE, everything()  
       )
-      
+    
   }, simplify = FALSE)
 ```
 
@@ -2507,44 +2507,44 @@ toptables_cqn.bc %>%
 
 ```{r}
 ggarrange(
-toptables_cqn.bc %>% 
-  bind_rows() %>% 
-  mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
-  ggplot(aes(x = length, y = rankstat)) +
-  geom_point(
-    aes(colour = DE),
-    alpha = 0.5
-  ) +
-  geom_smooth(se = FALSE, method = "gam") +
-  facet_grid(rows = vars(coef)) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = c("grey50", "red")) +
-  scale_x_log10()+
-  labs(x = "Average transcript length per gene",
-       colour = "Differentially expressed?",
-       y = "sign(logFC)*-log10(PValue)") +
-  coord_cartesian(ylim = c(-10, 10)),
-
-toptables_cqn.bc %>% 
-  bind_rows() %>% 
-  mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
-  ggplot(aes(x = gc_content, y = rankstat)) +
-  geom_point(
-    aes(colour = DE),
-    alpha = 0.5
-  ) +
-  geom_smooth(se = FALSE, method = "gam") +
-  facet_grid(rows = vars(coef)) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = c("grey50", "red")) +
-  coord_cartesian(ylim = c(-10,10)) + 
-  labs(x = "Weighted average GC content (%) per gene", 
-       colour = "Differentially expressed?", 
-       y = "sign(logFC)*-log10(PValue)"),
-common.legend = TRUE, 
-labels = "AUTO"
+  toptables_cqn.bc %>% 
+    bind_rows() %>% 
+    mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
+    ggplot(aes(x = length, y = rankstat)) +
+    geom_point(
+      aes(colour = DE),
+      alpha = 0.5
+    ) +
+    geom_smooth(se = FALSE, method = "gam") +
+    facet_grid(rows = vars(coef)) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = c("grey50", "red")) +
+    scale_x_log10()+
+    labs(x = "Average transcript length per gene",
+         colour = "Differentially expressed?",
+         y = "sign(logFC)*-log10(PValue)") +
+    coord_cartesian(ylim = c(-10, 10)),
+  
+  toptables_cqn.bc %>% 
+    bind_rows() %>% 
+    mutate(rankstat = sign(logFC)*-log10(PValue)) %>% 
+    ggplot(aes(x = gc_content, y = rankstat)) +
+    geom_point(
+      aes(colour = DE),
+      alpha = 0.5
+    ) +
+    geom_smooth(se = FALSE, method = "gam") +
+    facet_grid(rows = vars(coef)) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = c("grey50", "red")) +
+    coord_cartesian(ylim = c(-10,10)) + 
+    labs(x = "Weighted average GC content (%) per gene", 
+         colour = "Differentially expressed?", 
+         y = "sign(logFC)*-log10(PValue)"),
+  common.legend = TRUE, 
+  labels = "AUTO"
 ) 
 ```
 
@@ -2555,12 +2555,12 @@ labels = "AUTO"
 
 ```{r}
 pwf <- toptables_cqn.bc$`MPS-IIIB` %>%
-      with(
-        nullp(
-          DEgenes = structure(DE, names = gene_id), 
-          bias.data = length
-        )
-      )
+  with(
+    nullp(
+      DEgenes = structure(DE, names = gene_id), 
+      bias.data = length
+    )
+  )
 
 goseq(pwf, gene2cat = GO) %>% 
   as_tibble() %>% 
@@ -2571,12 +2571,12 @@ goseq(pwf, gene2cat = GO) %>%
   dplyr::filter(FDR < 0.05) 
 
 pwf <- toptables_cqn.bc$`MPS-IIIC` %>%
-      with(
-        nullp(
-          DEgenes = structure(DE, names = gene_id), 
-          bias.data = length
-        )
-      )
+  with(
+    nullp(
+      DEgenes = structure(DE, names = gene_id), 
+      bias.data = length
+    )
+  )
 
 goseq(pwf, gene2cat = GO) %>% 
   as_tibble() %>% 
@@ -2587,7 +2587,7 @@ goseq(pwf, gene2cat = GO) %>%
   dplyr::filter(FDR < 0.05) %>% 
   head(10)
 
-  
+
 ```
 
 
@@ -2681,29 +2681,29 @@ fryIRE.bc %>%
   scale_alpha_manual(values = c(0.5, 1)) +
   geom_vline(xintercept = 1.5) +
   annotate(geom = "label", x = 1.8, y = "ire5_HQ", label = "FDR = 0.05") 
-  #ggsave("output/plots/AC_ire.png", width = 20, height = 10, units = "cm", dpi = 400, scale = 2)
+#ggsave("output/plots/AC_ire.png", width = 20, height = 10, units = "cm", dpi = 400, scale = 2)
 
 
 toptables_cqn.bc %>% 
   bind_rows() %>% 
-    dplyr::filter(gene_id %in% ireGenes$ire3_all) %>% 
+  dplyr::filter(gene_id %in% ireGenes$ire3_all) %>% 
   dplyr::select(gene_name, logFC, coef) %>% 
   dplyr::distinct(gene_name, coef, .keep_all = T) %>% 
   spread(key = "coef", value = "logFC") %>% 
   column_to_rownames("gene_name") %>% 
   t() %>% 
   pheatmap(color = colorRampPalette(rev(brewer.pal(n = 5,
-                                               name = "RdBu")))(100), 
+                                                   name = "RdBu")))(100), 
            main = "3' IRE genes: FDR = 0.066", 
            breaks = c(seq(min(.), 0, length.out=ceiling(100/2) + 1), 
-              seq(max(.)/100, max(.), length.out=50)), 
+                      seq(max(.)/100, max(.), length.out=50)), 
            # cellheight = 30, 
            # cellwidth = 1,
            angle_col = 45,
            treeheight_row = 0, 
            treeheight_col = 0, 
            show_colnames = F
-           )
+  )
 ```
 
 ### Cell type prop check
@@ -2761,21 +2761,21 @@ fry_chr.bc %>%
   mutate(pathway = factor(pathway, levels = c("MT", seq(1:25)))) %>% 
   ggplot(aes(y = pathway, x = -log10(PValue.Mixed), fill = coef)) +
   geom_col(position = "dodge")
-  
+
 ```
 
 An enrichment of DE genes is observed on the same chromosome as the mutation. This is obsevred in the manhat plots below. 
 
 ```{r}
 manhat_input.bc <- 
-	toptables_cqn.bc %>% 
+  toptables_cqn.bc %>% 
   bind_rows() %>% 
-	left_join(x2$genes %>% 
-			  	as_tibble() %>% 
-			  	dplyr::select(start, end, chromosome, gene_id) %>% 
-			  	group_by(gene_id) %>% 
-			  	mutate(mid = mean(c(start, end)))
-	) %>% 
+  left_join(x2$genes %>% 
+              as_tibble() %>% 
+              dplyr::select(start, end, chromosome, gene_id) %>% 
+              group_by(gene_id) %>% 
+              mutate(mid = mean(c(start, end)))
+  ) %>% 
   dplyr::filter(chromosome %in% seq(1:25)) %>% 
   group_by(gene_id) %>% 
   mutate(mid = mean(c(start, end))) %>% 
@@ -2784,7 +2784,7 @@ manhat_input.bc <-
   group_by(chromosome) %>% 
   summarise(chrLen = max(mid)) %>% 
   mutate(chrSt = cumsum(chrLen)-chrLen) %>% 
-	dplyr::select(-chrLen) %>% 
+  dplyr::select(-chrLen) %>% 
   left_join(toptables_cqn.bc %>% 
               bind_rows() %>% 
               left_join(x2$genes %>% 
@@ -2845,7 +2845,7 @@ meta.extrab <-
   Sex = as.factor(sex),
   sample = paste0("B_", fish) 
   )
-  
+
 featureCounts.B <- 
   read_delim(file = "data/nagluvQ96data/05_featureCounts/counts.out", delim = "\t", skip = 1) %>%
   set_names(basename(names(.))) %>% 
@@ -2860,10 +2860,10 @@ featureCounts.B <-
   .[,-(dim(.)[2])]
 ```
 ## filter lowly expressed genes
-```{r filt}
+```{r filt_3}
 a <- featureCounts.B %>% 
-    cpm(log = TRUE) %>%
-    as.data.frame() %>% 
+  cpm(log = TRUE) %>%
+  as.data.frame() %>% 
   pivot_longer(
     cols = everything(),
     names_to = "sample",
@@ -2892,8 +2892,8 @@ a <- featureCounts.B %>%
 
 b <- featureCounts.B %>% 
   .[rowSums(cpm(.) >= 0.5) >= 8,] %>% 
-    cpm(log = TRUE) %>%
-    as.data.frame() %>% 
+  cpm(log = TRUE) %>%
+  as.data.frame() %>% 
   pivot_longer(
     cols = everything(),
     names_to = "sample",
@@ -2922,7 +2922,7 @@ b <- featureCounts.B %>%
 ggarrange(a, b, common.legend = TRUE)
 ```
 
-```{r dge}
+```{r dge_3}
 x.b2 <- featureCounts.B %>% 
   as.matrix() %>% 
   .[rowSums(cpm(.) >= 0.5) >= 4,] %>%
@@ -2944,7 +2944,7 @@ I used PCA to see whether tank or sex is influening the brain transcriptome. Not
 
 ```{r}
 ggarrange(
- cpm(x.b2, log = T) %>%
+  cpm(x.b2, log = T) %>%
     t() %>%
     prcomp() %>% 
     autoplot(data = tibble(sample = rownames(.$x)) %>%
@@ -2953,8 +2953,8 @@ ggarrange(
              size = 4
     )+
     scale_color_viridis_d(option = "turbo", end = 0.8) , 
-    
-    cpm(x.b2, log = T) %>%
+  
+  cpm(x.b2, log = T) %>%
     t() %>%
     prcomp() %>% 
     autoplot(data = tibble(sample = rownames(.$x)) %>%
@@ -2963,8 +2963,8 @@ ggarrange(
              size = 4
     )+
     scale_color_viridis_d(option = "turbo", end = 0.8) , 
- 
-     cpm(x.b2, log = T) %>%
+  
+  cpm(x.b2, log = T) %>%
     t() %>%
     prcomp() %>% 
     autoplot(data = tibble(sample = rownames(.$x)) %>%
@@ -2992,7 +2992,7 @@ A  bit of bias is obsevred for %GC content and gene length, so will apply the `c
 
 ```{r}
 cqn.b2 <-   
-x.b2 %>% 
+  x.b2 %>% 
   with(
     cqn(
       counts = counts,
@@ -3005,7 +3005,7 @@ logCPM.b2 <- cqn.b2$y + cqn.b2$offset
 ```
 
 ## plot out the model fits
-```{r plotCQN, fig.cap ="*Model fits for GC content and gene length under the CQN model. Variability is clearly visible at either end*"}
+```{r plotCQN_3, fig.cap ="*Model fits for GC content and gene length under the CQN model. Variability is clearly visible at either end*"}
 par(mfrow = c(1, 2))
 cqnplot(cqn.b2, n = 1, xlab = "GC Content")
 cqnplot(cqn.b2, n = 2, xlab = "Length")
@@ -3031,14 +3031,14 @@ toptables_cqn.b2 <- design.b2 %>% colnames() %>% .[2] %>%
       .[["table"]] %>%
       as_tibble() %>%
       arrange(PValue) %>%
-       mutate(
+      mutate(
         coef = x,
         DE = FDR < 0.05
       ) %>% 
       dplyr::select(
         gene_name, logFC, logCPM, PValue, FDR, DE, everything()  
       )
-      
+    
   }, simplify = FALSE)
 ```
 
@@ -3101,7 +3101,7 @@ toptables_cqn.b2 %>%
 ## Gene set enrichment analysis
 #### GENE SETS
 ```{r}
- 
+
 KEGG <- msigdbr("Danio rerio", category = "C2", subcategory = "CP:KEGG") %>% 
   left_join(x.b2$genes, by = c("gene_symbol" = "gene_name")) %>% 
   dplyr::filter(gene_id %in% rownames(x.b2)) %>% 
@@ -3177,7 +3177,7 @@ cell_type_markers <-
   dplyr::filter(gene_id %in% rownames(x.b2)) %>% 
   split(f = .$`cell type`) %>% 
   lapply(extract2, "gene_id")
-  
+
 
 cell_type_markers %<>% 
   lapply(function(y) {
@@ -3190,12 +3190,12 @@ cell_type_markers %<>%
 
 ```{r}
 pwf <- toptables_cqn.b2$`MPS-IIIB` %>%
-      with(
-        nullp(
-          DEgenes = structure(DE, names = gene_id), 
-          bias.data = length
-        )
-      )
+  with(
+    nullp(
+      DEgenes = structure(DE, names = gene_id), 
+      bias.data = length
+    )
+  )
 
 goseq(pwf, gene2cat = GO) %>% 
   as_tibble() %>% 
@@ -3323,21 +3323,21 @@ fry_chr.b2 %>%
   mutate(pathway = factor(pathway, levels = c("MT", seq(1:25)))) %>% 
   ggplot(aes(y = pathway, x = -log10(PValue.Mixed), fill = coef)) +
   geom_col(position = "dodge")
-  
+
 ```
 
 An enrichment of DE genes is observed on the same chromosome as the mutation. This is obsevred in the manhat plots below. 
 
 ```{r}
 manhat_input.bc <- 
-	toptables_cqn.bc %>% 
+  toptables_cqn.bc %>% 
   bind_rows() %>% 
-	left_join(x2$genes %>% 
-			  	as_tibble() %>% 
-			  	dplyr::select(start, end, chromosome, gene_id) %>% 
-			  	group_by(gene_id) %>% 
-			  	mutate(mid = mean(c(start, end)))
-	) %>% 
+  left_join(x2$genes %>% 
+              as_tibble() %>% 
+              dplyr::select(start, end, chromosome, gene_id) %>% 
+              group_by(gene_id) %>% 
+              mutate(mid = mean(c(start, end)))
+  ) %>% 
   dplyr::filter(chromosome %in% seq(1:25)) %>% 
   group_by(gene_id) %>% 
   mutate(mid = mean(c(start, end))) %>% 
@@ -3346,7 +3346,7 @@ manhat_input.bc <-
   group_by(chromosome) %>% 
   summarise(chrLen = max(mid)) %>% 
   mutate(chrSt = cumsum(chrLen)-chrLen) %>% 
-	dplyr::select(-chrLen) %>% 
+  dplyr::select(-chrLen) %>% 
   left_join(toptables_cqn.bc %>% 
               bind_rows() %>% 
               left_join(x2$genes %>% 
@@ -3410,17 +3410,17 @@ disp.ab <-  x.ab %>% estimateDisp(design.ab) %>% . $tagwise.dispersion
 fc.ab <- function(x){exp(rnorm(x, log(1), 0.5*log(2)))}
 
 abPowerPlot <- ssizeRNA_vary(nGenes = dim(x.ab$counts)[1], # Num detectable genes
-              pi0 = 0.9, # Proportion of non-DE genes
-              m = 40, # pseudo sample size
-              mu = mu.ab, # Average read count for each gene in control group. Calculated from this current dataset)
-              disp = disp.ab, # Dispersion parameter for each gene
-              fc = fc.ab, # Fold change per gene
-              fdr = 0.05, # FDR level to control
-              power = 0.7, # power level
-              maxN = 20,
-              side = "two-sided",
-              replace = TRUE
-                )
+                             pi0 = 0.9, # Proportion of non-DE genes
+                             m = 40, # pseudo sample size
+                             mu = mu.ab, # Average read count for each gene in control group. Calculated from this current dataset)
+                             disp = disp.ab, # Dispersion parameter for each gene
+                             fc = fc.ab, # Fold change per gene
+                             fdr = 0.05, # FDR level to control
+                             power = 0.7, # power level
+                             maxN = 20,
+                             side = "two-sided",
+                             replace = TRUE
+)
 
 ac.A.samps <- x.ac$samples %>% 
   dplyr::filter(genotype == "WT") %>% 
@@ -3440,17 +3440,17 @@ dim(x.ac$counts)
 # set a seed for a reproducible result
 set.seed(2223)
 ac.powerplot <- ssizeRNA_vary(nGenes = dim(x.ac$counts)[1], # Num detectable genes
-              pi0 = 0.9, # Proportion of non-DE genes
-              m = 30, # pseudo sample size
-              mu = mu.ac, # Average read count for each gene in control group. Calculated from this current dataset)
-              disp = disp.ac, # Dispersion parameter for each gene
-              fc = fc.ac, # Fold change per gene
-              fdr = 0.05, # FDR level to control
-              power = 0.7, # power level
-              maxN = 20, 
-              side = "two-sided",
-              replace = T
-                )
+                              pi0 = 0.9, # Proportion of non-DE genes
+                              m = 30, # pseudo sample size
+                              mu = mu.ac, # Average read count for each gene in control group. Calculated from this current dataset)
+                              disp = disp.ac, # Dispersion parameter for each gene
+                              fc = fc.ac, # Fold change per gene
+                              fdr = 0.05, # FDR level to control
+                              power = 0.7, # power level
+                              maxN = 20, 
+                              side = "two-sided",
+                              replace = T
+)
 
 # BC sans
 bc.A.samps <- x.bc$samples %>% 
@@ -3469,17 +3469,17 @@ fc.bc <- function(x){exp(rnorm(x, log(1), 0.5*log(2)))}
 dim(x.bc$counts)
 
 bcPowerPlot <- ssizeRNA_vary(nGenes = dim(x.bc$counts)[1], # Num detectable genes
-              pi0 = 0.9, # Proportion of non-DE genes
-              m = 20, # pseudo sample size
-              mu = mu.bc, # Average read count for each gene in control group. Calculated from this current dataset)
-              disp = disp.bc, # Dispersion parameter for each gene
-              fc = fc.bc, # Fold change per gene
-              fdr = 0.05, # FDR level to control
-              power = 0.7, # power level
-              maxN = 20,
-              side = "two-sided",
-              replace = T
-                )
+                             pi0 = 0.9, # Proportion of non-DE genes
+                             m = 20, # pseudo sample size
+                             mu = mu.bc, # Average read count for each gene in control group. Calculated from this current dataset)
+                             disp = disp.bc, # Dispersion parameter for each gene
+                             fc = fc.bc, # Fold change per gene
+                             fdr = 0.05, # FDR level to control
+                             power = 0.7, # power level
+                             maxN = 20,
+                             side = "two-sided",
+                             replace = T
+)
 
 
 
@@ -3498,14 +3498,15 @@ abPowerPlot$power %>%
   geom_point() +
   geom_line() +
   scale_x_continuous(limits = c(0,15), breaks = seq(0,15, by = 1)) +
-  theme(panel.grid = element_blank()) +
-  ggsave("output/plots/powerplots.png", width = 10, height = 2.5, units = "cm", dpi = 600, scale  =2)
+  theme(panel.grid = element_blank())
 
-
-ggarrange(abpp, acpp, bcpp,
-          ncol = 1, 
-          labels = "AUTO") +
-  ggsave("output/plots/powercalc.png", width = 10, height = 5, units = "cm", dpi = 500, scale = 5)
+# ggsave("output/plots/powerplots.png", width = 10, height = 2.5, units = "cm", dpi = 600, scale  =2)
+# 
+# 
+# ggarrange(abpp, acpp, bcpp,
+#           ncol = 1, 
+#           labels = "AUTO")
+# ggsave("output/plots/powercalc.png", width = 10, height = 5, units = "cm", dpi = 500, scale = 5)
 ```
 
 
