@@ -7,8 +7,17 @@ navbar:
     href: index.html
   - text: QC
     href: QC.html
-  - text: Analysis
-    href: analysis.html
+  - text: Initial analysis
+    href: analysis_final.html
+  - text: DAR analysis
+    menu:
+      - text: MPS-IIIA/B
+        href: dar-analysis_AB.html
+      - text: MPS-IIIA/C
+        href: dar-analysis_AC.html
+      - text: MPS-IIIB/C
+        href: dar-analysis_BC.html
+
 output:
   workflowr::wflow_html:
     toc: yes

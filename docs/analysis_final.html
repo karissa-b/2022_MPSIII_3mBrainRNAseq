@@ -339,7 +339,25 @@ div.tocify {
   <a href="QC.html">QC</a>
 </li>
 <li>
-  <a href="analysis.html">Analysis</a>
+  <a href="analysis_final.html">Initial analysis</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    DAR analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="dar-analysis_AB.html">MPS-IIIA/B</a>
+    </li>
+    <li>
+      <a href="dar-analysis_AC.html">MPS-IIIA/C</a>
+    </li>
+    <li>
+      <a href="dar-analysis_BC.html">MPS-IIIB/C</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -363,7 +381,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -374,8 +392,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -384,13 +402,13 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-03-07
+<strong>Last updated:</strong> 2023-03-09
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>2022_MPSIII_3mBrainRNAseq/</code>
@@ -413,21 +431,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -518,15 +533,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomkarissab2022MPSIII3mBrainRNAseqtreee87fe48d96e6c17ceb1ab090e6400008482109cctargetblanke87fe48a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomkarissab2022MPSIII3mBrainRNAseqtree5d8be565df21f2008e8e84f225c774161e5a9761targetblank5d8be56a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/tree/e87fe48d96e6c17ceb1ab090e6400008482109cc" target="_blank">e87fe48</a>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/tree/5d8be565df21f2008e8e84f225c774161e5a9761" target="_blank">5d8be56</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomkarissab2022MPSIII3mBrainRNAseqtreee87fe48d96e6c17ceb1ab090e6400008482109cctargetblanke87fe48a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomkarissab2022MPSIII3mBrainRNAseqtree5d8be565df21f2008e8e84f225c774161e5a9761targetblank5d8be56a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -536,7 +551,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/tree/e87fe48d96e6c17ceb1ab090e6400008482109cc" target="_blank">e87fe48</a>.
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/tree/5d8be565df21f2008e8e84f225c774161e5a9761" target="_blank">5d8be56</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -552,37 +567,14 @@ were generated:
 <pre><code>
 Ignored files:
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
 
 Untracked files:
-    Untracked:  analysis/analysis_final_lb.rmd
     Untracked:  analysis/dar-analysis_AB.Rmd
-    Untracked:  data/sample_basenames.csv
+    Untracked:  analysis/dar-analysis_AC.Rmd
+    Untracked:  data/dar-analysis/
 
 Unstaged changes:
-    Modified:   analysis/analysis_final.rmd
-    Modified:   data/R_objects/AB_fryIRE.rds
-    Modified:   data/R_objects/AB_fryKEGG.rds
-    Modified:   data/R_objects/AB_frycellTypes.rds
-    Modified:   data/R_objects/AB_toptab_cqn.rds
-    Modified:   data/R_objects/AC_fryIRE.rds
-    Modified:   data/R_objects/AC_fryKEGG.rds
-    Modified:   data/R_objects/AC_frycellTypes.rds
-    Modified:   data/R_objects/B2_fryIRE.rds
-    Modified:   data/R_objects/B2_fryKEGG.rds
-    Modified:   data/R_objects/B2_frycellTypes.rds
-    Modified:   data/R_objects/B2_toptab_cqn.rds
-    Modified:   data/R_objects/BC_fryIRE.rds
-    Modified:   data/R_objects/BC_fryKEGG.rds
-    Modified:   data/R_objects/BC_frycellTypes.rds
-    Deleted:    data/R_objects/dge.ac.rds
-    Modified:   data/R_objects/dge_AB.rds
-    Modified:   data/R_objects/dge_B2.rds
-    Modified:   data/R_objects/dge_ac.rds
-    Modified:   data/R_objects/dge_bc.rds
-    Modified:   data/R_objects/toptab_ac_cqn.rds
-    Modified:   data/R_objects/toptab_bc_cqn.rds
-    Modified:   output/plots/powerplots.png
+    Modified:   analysis/_site.yml
 
 </code></pre>
 <p>
@@ -628,6 +620,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/analysis/analysis_final.rmd" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+<td>
+Fix errors to allow analysis_final.rmd render
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/karissa-b/2022_MPSIII_3mBrainRNAseq/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/analysis_final.html" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+<td>
+Fix errors to allow analysis_final.rmd render
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -823,6 +849,43 @@ b &lt;- featureCounts %&gt;%
 
 ggarrange(a, b, common.legend = TRUE)</code></pre>
 <p><img src="figure/analysis_final.rmd/filt_1-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-filt_1-1">
+Past versions of filt_1-1.png
+</button>
+</p>
+<div id="fig-filt_1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/filt_1-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>x.ab &lt;- featureCounts %&gt;% 
   as.matrix() %&gt;% 
   .[rowSums(cpm(.) &gt;= 0.5) &gt;= 4,] %&gt;%
@@ -858,6 +921,43 @@ similarity between samples and to assess any batch effects.</p>
        title = &quot;By genotype&quot;) +
   scale_color_brewer(palette = &quot;Set2&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-3-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-3-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>x.ab$counts %&gt;% 
   cpm(log=TRUE) %&gt;% 
   t() %&gt;% 
@@ -871,6 +971,43 @@ similarity between samples and to assess any batch effects.</p>
   labs(colour = &quot;sex&quot;, 
        title = &quot;By sex&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-3-2.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
+Past versions of unnamed-chunk-3-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-3-2.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>x.ab$counts %&gt;% 
   cpm(log=TRUE) %&gt;% 
   t() %&gt;% 
@@ -886,6 +1023,43 @@ similarity between samples and to assess any batch effects.</p>
        title = &quot;By home tank&quot;
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-3-3.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-3">
+Past versions of unnamed-chunk-3-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-3-3.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>No clear batch effects are observed. However. one outlier sgsh
 heterozygous fish is possible. Will keep this in mind when looking at
 the differentially expressed genes and gene sets later to see if it is
@@ -945,6 +1119,43 @@ toptable_1.ab &lt;- design.ab %&gt;% colnames() %&gt;% .[2:4] %&gt;%
   ggtitle(&quot;Number of DE genes in each comparison&quot;,
           subtitle = &quot;The MPS-IIIA zebrafish samples have the most DE genes&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-5-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-5-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="volcano-plot" class="section level4">
 <h4>Volcano plot</h4>
@@ -965,6 +1176,43 @@ toptable_1.ab &lt;- design.ab %&gt;% colnames() %&gt;% .[2:4] %&gt;%
   theme(legend.position = &quot;none&quot;) +
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;)) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-6-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-6-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#ggsave(&quot;output/plots/volvano.png&quot;, width = 18, height = 10, units = &quot;cm&quot;, dpi = 300, scale = 1.5)</code></pre>
 </div>
 <div id="md-plot" class="section level4">
@@ -981,6 +1229,43 @@ toptable_1.ab &lt;- design.ab %&gt;% colnames() %&gt;% .[2:4] %&gt;%
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;)) +
   geom_smooth(se = F)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-7-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-7-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="gc-and-length" class="section level3">
@@ -1030,6 +1315,43 @@ normailsation is required.</p>
   labels = &quot;AUTO&quot;
 ) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-8-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-8-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="cqn" class="section level2">
@@ -1058,6 +1380,43 @@ cqnplot(cqn.ab, n = 2, xlab = &quot;Length&quot;)</code></pre>
 <em>Model fits for GC content and gene length under the CQN model.
 Variability is clearly visible at either end</em>
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
+Past versions of unnamed-chunk-10-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-10-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
 </div>
@@ -1097,6 +1456,43 @@ more variable.</p>
   labels = &quot;AUTO&quot;
 )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-11-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
+Past versions of unnamed-chunk-11-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-11-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="de-with-cqn" class="section level2">
@@ -1153,8 +1549,47 @@ toptables_cqn.ab &lt;- design.ab %&gt;% colnames() %&gt;% .[2:4] %&gt;%
        y = &quot;Contrast&quot;,
        colour = &quot;Direction of change&quot;, 
        title = &quot;Number of DE genes in each comparison&quot;)</code></pre>
-<p><img src="figure/analysis_final.rmd/unnamed-chunk-13-1.png" width="75%" height="75%" style="display: block; margin: auto;" />
-### Volcano plot</p>
+<p><img src="figure/analysis_final.rmd/unnamed-chunk-13-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-1">
+Past versions of unnamed-chunk-13-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-13-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-13-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="volcano-plot-1" class="section level3">
+<h3>Volcano plot</h3>
 <pre class="r"><code>toptables_cqn.ab %&gt;%
   bind_rows() %&gt;% 
   ggplot(aes(y = -log10(PValue), x = logFC, colour = DE)) +
@@ -1172,6 +1607,43 @@ toptables_cqn.ab &lt;- design.ab %&gt;% colnames() %&gt;% .[2:4] %&gt;%
   theme(legend.position = &quot;none&quot;) +
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;)) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-14-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
+Past versions of unnamed-chunk-14-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-14-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#ggsave(&quot;output/plots/volvano.png&quot;, width = 18, height = 10, units = &quot;cm&quot;, dpi = 300, scale = 1.5)</code></pre>
 </div>
 <div id="md-plot-1" class="section level3">
@@ -1188,6 +1660,43 @@ toptables_cqn.ab &lt;- design.ab %&gt;% colnames() %&gt;% .[2:4] %&gt;%
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;)) +
   geom_smooth(se = F)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-15-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-15-1">
+Past versions of unnamed-chunk-15-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-15-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-15-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="recheck-the-gc-and-length-bias" class="section level2">
@@ -1236,6 +1745,43 @@ is less genes. So this should be ok.</p>
   labels = &quot;AUTO&quot;
 ) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-16-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-1">
+Past versions of unnamed-chunk-16-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-16-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="gene-set-enrichment-analysis" class="section level2">
 <h2>Gene set enrichment analysis</h2>
@@ -1370,6 +1916,43 @@ the covariate.</p>
     )
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-18-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-1">
+Past versions of unnamed-chunk-18-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-18-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>goseq(pwf, gene2cat = GO) %&gt;% 
   as_tibble() %&gt;% 
   dplyr::filter(numDEInCat &gt; 0) %&gt;% 
@@ -1585,6 +2168,43 @@ GO_POSITIVE_REGULATION_OF_NON_CANONICAL_WNT_SIGNALING_PATHWAY
     )
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-18-2.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-2">
+Past versions of unnamed-chunk-18-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-18-2.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>goseq(pwf, gene2cat = GO) %&gt;% 
   as_tibble() %&gt;% 
   dplyr::filter(numDEInCat &gt; 0) %&gt;% 
@@ -1800,6 +2420,43 @@ GO_VASCULATURE_DEVELOPMENT
     )
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-18-3.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-3">
+Past versions of unnamed-chunk-18-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-18-3.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>goseq(pwf, gene2cat = GO) %&gt;% 
   as_tibble() %&gt;% 
   dplyr::filter(numDEInCat &gt; 0) %&gt;% 
@@ -1853,6 +2510,43 @@ fryKEGG.ab$`MPS-IIIB` %&gt;%
        x = &quot;-log10(PValue)&quot;, 
        y = &quot;&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-19-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-1">
+Past versions of unnamed-chunk-19-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-19-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-19-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>fryKEGG.ab$`MPS-IIIA` %&gt;% 
   dplyr::slice(1:10) %&gt;% 
   mutate(pathway = str_remove(pathway, pattern = &quot;KEGG_&quot;)) %&gt;% 
@@ -1864,6 +2558,43 @@ fryKEGG.ab$`MPS-IIIB` %&gt;%
        x = &quot;-log10(PValue)&quot;, 
        y = &quot;&quot;)  </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-19-2.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-2">
+Past versions of unnamed-chunk-19-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-19-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-19-2.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>fryKEGG.ab$`sgsh/+` %&gt;% 
   dplyr::slice(1:10) %&gt;% 
   mutate(pathway = str_remove(pathway, pattern = &quot;KEGG_&quot;)) %&gt;% 
@@ -1875,6 +2606,43 @@ fryKEGG.ab$`MPS-IIIB` %&gt;%
        x = &quot;-log10(PValue)&quot;, 
        y = &quot;&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-19-3.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-3">
+Past versions of unnamed-chunk-19-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-19-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-19-3.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>sigpaths &lt;- fryKEGG.ab %&gt;% 
   bind_rows() %&gt;% 
   dplyr::filter(FDR.Mixed &lt; 0.05) %&gt;% 
@@ -1895,6 +2663,43 @@ fryKEGG.ab %&gt;%
        x = &quot;-log10(PValue)&quot;, 
        y = &quot;&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-19-4.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-4">
+Past versions of unnamed-chunk-19-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-19-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-19-4.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#ggsave(&quot;output/plots/AB_KEGG.png&quot;, width = 20, height = 10, units = &quot;cm&quot;, dpi = 400, scale = 2)</code></pre>
 <pre class="r"><code>fryC2.ab &lt;- 
   design.ab %&gt;% colnames() %&gt;% .[2:4] %&gt;% 
@@ -1932,6 +2737,43 @@ fryC2.ab %&gt;%
        x = &quot;-log10(PValue)&quot;, 
        y = &quot;&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-20-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-1">
+Past versions of unnamed-chunk-20-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-20-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="go" class="section level3">
 <h3>GO</h3>
@@ -1966,6 +2808,43 @@ fryC2.ab %&gt;%
            treeheight_row = 0, treeheight_col = 0
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-22-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-22-1">
+Past versions of unnamed-chunk-22-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-22-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-22-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>toptables_cqn.ab %&gt;% 
   bind_rows() %&gt;% 
   dplyr::filter(gene_id %in% KEGG$KEGG_OXIDATIVE_PHOSPHORYLATION) %&gt;% 
@@ -1983,6 +2862,43 @@ fryC2.ab %&gt;%
            treeheight_row = 0, treeheight_col = 0
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-22-2.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-22-2">
+Past versions of unnamed-chunk-22-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-22-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-22-2.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="ire" class="section level3">
 <h3>IRE</h3>
@@ -2012,6 +2928,43 @@ fryIRE.ab %&gt;%
   geom_vline(xintercept = 1.88) +
   annotate(geom = &quot;label&quot;, x = 1.8, y = &quot;ire5_HQ&quot;, label = &quot;FDR = 0.05&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-23-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-23-1">
+Past versions of unnamed-chunk-23-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-23-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-23-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="cell-type-prop-check" class="section level3">
 <h3>Cell type prop check</h3>
@@ -2048,6 +3001,43 @@ celltypes.ab %&gt;%
   geom_vline(xintercept = -log10(0.012)) +
   annotate(geom = &quot;label&quot;, x = -log10(0.01), y = 23, label = &quot;FDR = 0.05&quot;) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-24-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-24-1">
+Past versions of unnamed-chunk-24-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-24-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-24-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="chrosomosomes-gene-sets" class="section level3">
 <h3>Chrosomosomes gene sets</h3>
@@ -2072,6 +3062,43 @@ fry_chr.ab %&gt;%
   ggplot(aes(y = pathway, x = -log10(PValue.Mixed), fill = coef)) +
   geom_col(position = &quot;dodge&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-25-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-25-1">
+Past versions of unnamed-chunk-25-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-25-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-25-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>An enrichment of DE genes is observed on the same chromosome as the
 mutation. This is obsevred in the manhat plots below.</p>
 <pre class="r"><code>manhat_input.ab &lt;- 
@@ -2139,6 +3166,43 @@ ggplot(manhat_input.ab, aes(x = midCum, y = -log10(PValue))) +
     panel.grid.minor.x = element_blank()
   ) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-26-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-26-1">
+Past versions of unnamed-chunk-26-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-26-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-26-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>I also compared the log2 fold changes of genes on chr22 in the
 heterozygous and homozygous sgsh samples.</p>
 <pre class="r"><code>DEgenesIIIA &lt;- toptables_cqn.ab$`MPS-IIIA` %&gt;% 
@@ -2184,6 +3248,43 @@ toptables_cqn.ab %&gt;%
   scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;grey50&quot;)) +
   ggtitle(&quot;LogFC of genes on chromosome 22 in sgsh het vs hom &quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-27-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-27-1">
+Past versions of unnamed-chunk-27-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-27-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-27-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2340,6 +3441,43 @@ b &lt;- featureCounts2 %&gt;%
 
 ggarrange(a, b, common.legend = TRUE)</code></pre>
 <p><img src="figure/analysis_final.rmd/filt_2-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-filt_2-1">
+Past versions of filt_2-1.png
+</button>
+</p>
+<div id="fig-filt_2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/filt_2-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>x2 &lt;- featureCounts2 %&gt;% 
   as.matrix() %&gt;% 
   .[rowSums(cpm(.) &gt;= 2.435138) &gt;= 6,] %&gt;% 
@@ -2378,6 +3516,43 @@ analyse them seperately</p>
   labs(colour = &quot;MPS comparison family&quot;) +
   scale_color_brewer(palette = &quot;Set2&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-31-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-31-1">
+Past versions of unnamed-chunk-31-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-31-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-31-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="ac-only" class="section level3">
 <h3>AC only</h3>
@@ -2422,6 +3597,43 @@ ggarrange(
     ggtitle(&quot;by tank&quot;)
 )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-32-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-32-1">
+Past versions of unnamed-chunk-32-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-32-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-32-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="bc-only" class="section level3">
 <h3>BC only</h3>
@@ -2457,8 +3669,45 @@ cannot be ignored in a DE analysis.</p>
     labs(colour = &quot;&quot;) +
     ggtitle(&quot;by tank&quot;)
 )</code></pre>
-<p><img src="figure/analysis_final.rmd/unnamed-chunk-33-1.png" width="75%" height="75%" style="display: block; margin: auto;" />
-From hereout, I will process the 2 comparisons separately.</p>
+<p><img src="figure/analysis_final.rmd/unnamed-chunk-33-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-33-1">
+Past versions of unnamed-chunk-33-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-33-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-33-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>From hereout, I will process the 2 comparisons separately.</p>
 </div>
 </div>
 </div>
@@ -2512,6 +3761,43 @@ toptable_1.ac &lt;- design.ac %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   ggtitle(&quot;Number of DE genes in each comparison&quot;,
           subtitle = &quot;The MPS-IIIA zebrafish samples have the most DE genes&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-35-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-35-1">
+Past versions of unnamed-chunk-35-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-35-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-35-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="volcano-plots" class="section level3">
 <h3>Volcano plots</h3>
@@ -2532,6 +3818,43 @@ toptable_1.ac &lt;- design.ac %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   theme(legend.position = &quot;none&quot;) +
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;)) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-36-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-36-1">
+Past versions of unnamed-chunk-36-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-36-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-36-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="md-plots" class="section level3">
 <h3>MD plots</h3>
@@ -2546,6 +3869,43 @@ toptable_1.ac &lt;- design.ac %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   theme(legend.position = &quot;none&quot;) +
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;))</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-37-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-37-1">
+Past versions of unnamed-chunk-37-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-37-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-37-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="gc-and-length-check-1" class="section level3">
 <h3>%GC AND LENGTH CHECK</h3>
@@ -2590,6 +3950,43 @@ toptable_1.ac &lt;- design.ac %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   labels = &quot;AUTO&quot;
 ) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-38-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-38-1">
+Past versions of unnamed-chunk-38-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-38-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-38-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="cqn-1" class="section level2">
@@ -2619,6 +4016,43 @@ cqnplot(cqn.ac, n = 2, xlab = &quot;Length&quot;)</code></pre>
 <em>Model fits for GC content and gene length under the CQN model.
 Variability is clearly visible at either end</em>
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plotCQN_AC-1">
+Past versions of plotCQN_AC-1.png
+</button>
+</p>
+<div id="fig-plotCQN_AC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/plotCQN_AC-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
 </div>
@@ -2652,6 +4086,43 @@ across PC1. However, samples appeared closer together.</p>
   labels = &quot;AUTO&quot;
 ) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-40-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-40-1">
+Past versions of unnamed-chunk-40-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-40-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-40-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#ggsave(&quot;plotsforpub/PCA_cqn.png&quot;, width = 18, height = 8, units = &quot;cm&quot;, scale = 1.4)</code></pre>
 </div>
 </div>
@@ -2707,6 +4178,43 @@ toptables_cqn.ac &lt;- design.ac %&gt;% colnames() %&gt;% .[2:3] %&gt;%
        y = &quot;Contrast&quot;,
        colour = &quot;Direction of change&quot;) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-42-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-42-1">
+Past versions of unnamed-chunk-42-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-42-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-42-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="volcano-plots-1" class="section level3">
 <h3>Volcano plots</h3>
@@ -2727,6 +4235,43 @@ toptables_cqn.ac &lt;- design.ac %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   theme(legend.position = &quot;none&quot;) +
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;)) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-43-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-43-1">
+Past versions of unnamed-chunk-43-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-43-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-43-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="md-plots-1" class="section level3">
 <h3>MD plots</h3>
@@ -2741,6 +4286,43 @@ toptables_cqn.ac &lt;- design.ac %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   theme(legend.position = &quot;none&quot;) +
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;))</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-44-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-44-1">
+Past versions of unnamed-chunk-44-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-44-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-44-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="recheck-the-gc-and-length-bias-1" class="section level3">
 <h3>Recheck the %GC and length bias</h3>
@@ -2785,6 +4367,43 @@ toptables_cqn.ac &lt;- design.ac %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   labels = &quot;AUTO&quot;
 ) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-45-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-45-1">
+Past versions of unnamed-chunk-45-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-45-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-45-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="gene-set-enrichment-analysis-1" class="section level2">
@@ -2918,6 +4537,43 @@ allC2.bcac &lt;- allC2.bcac[sizes_allc2 %&gt;% dplyr::filter(n_genes &gt; 5) %&g
     )
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-47-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-47-1">
+Past versions of unnamed-chunk-47-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-47-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-47-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>goseqac.a &lt;- goseq(pwf, gene2cat = c(GO)) %&gt;% 
   as_tibble() %&gt;% 
   dplyr::filter(numDEInCat &gt; 0) %&gt;% 
@@ -2934,6 +4590,43 @@ pwf &lt;- toptables_cqn.ac$`MPS-IIIC` %&gt;%
     )
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-47-2.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-47-2">
+Past versions of unnamed-chunk-47-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-47-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-47-2.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>goseqac.c &lt;- goseq(pwf, gene2cat = GO) %&gt;% 
   as_tibble() %&gt;% 
   dplyr::filter(numDEInCat &gt; 0) %&gt;% 
@@ -2951,6 +4644,43 @@ goseqac.a %&gt;%
   ggplot(aes(x = coef, y = category)) + 
   geom_tile(aes(fill = -log10(over_represented_pvalue)))</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-47-3.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-47-3">
+Past versions of unnamed-chunk-47-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-47-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-47-3.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="kegg-1" class="section level2">
 <h2>KEGG</h2>
@@ -2980,6 +4710,43 @@ fryKEGG.ac$`MPS-IIIA` %&gt;%
        x = &quot;-log10(PValue)&quot;, 
        y = &quot;&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-48-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-48-1">
+Past versions of unnamed-chunk-48-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-48-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-48-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>fryKEGG.ac$`MPS-IIIC` %&gt;% 
   dplyr::filter(FDR.Mixed &lt; 0.05) %&gt;%  
   mutate(pathway = str_remove(pathway, pattern = &quot;KEGG_&quot;)) %&gt;% 
@@ -2991,6 +4758,43 @@ fryKEGG.ac$`MPS-IIIA` %&gt;%
        x = &quot;-log10(PValue)&quot;, 
        y = &quot;&quot;)  </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-48-2.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-48-2">
+Past versions of unnamed-chunk-48-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-48-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-48-2.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>sigpaths.ac &lt;- fryKEGG.ac %&gt;% 
   bind_rows() %&gt;% 
   dplyr::filter(FDR.Mixed &lt; 0.05) %&gt;% 
@@ -3011,6 +4815,43 @@ fryKEGG.ac %&gt;%
        x = &quot;-log10(PValue)&quot;, 
        y = &quot;&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-48-3.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-48-3">
+Past versions of unnamed-chunk-48-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-48-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-48-3.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#ggsave(&quot;output/plots/AC_KEGG.png&quot;, width = 20, height = 20, units = &quot;cm&quot;, dpi = 400, scale = 2)</code></pre>
 <!-- ### GO -->
 <!-- ```{r} -->
@@ -3047,8 +4888,46 @@ fryKEGG.ac %&gt;%
            angle_col = 45,
            treeheight_row = 0, treeheight_col = 0
   )</code></pre>
-<p><img src="figure/analysis_final.rmd/unnamed-chunk-49-1.png" width="75%" height="75%" style="display: block; margin: auto;" />
-### IRE</p>
+<p><img src="figure/analysis_final.rmd/unnamed-chunk-49-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-49-1">
+Past versions of unnamed-chunk-49-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-49-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-49-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="ire-1" class="section level3">
+<h3>IRE</h3>
 <pre class="r"><code>fryIRE.ac &lt;- design.ac %&gt;% colnames() %&gt;% .[2:3] %&gt;% 
   sapply(function(y) {
     logCPM.ac %&gt;% 
@@ -3074,6 +4953,43 @@ fryIRE.ac %&gt;%
   scale_alpha_manual(values = c(0.5,1)) +
   annotate(geom = &quot;label&quot;, x = 1.1, y = &quot;ire5_HQ&quot;, label = &quot;FDR = 0.05&quot;) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-50-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-50-1">
+Past versions of unnamed-chunk-50-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-50-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-50-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#ggsave(&quot;output/plots/AC_ire.png&quot;, width = 20, height = 10, units = &quot;cm&quot;, dpi = 400, scale = 2)
 
 
@@ -3098,6 +5014,44 @@ toptables_cqn.ac %&gt;%
            show_colnames = T
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-50-2.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-50-2">
+Past versions of unnamed-chunk-50-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-50-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-50-2.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 <div id="cell-type-prop-check-1" class="section level3">
 <h3>Cell type prop check</h3>
 <p>Since this experiment was performed on whole brains, we need to have
@@ -3133,6 +5087,43 @@ celltype.ac %&gt;%
   geom_vline(xintercept = 2.1) +
   annotate(geom = &quot;label&quot;, x = 2, y = 4.5, label = &quot;FDR = 0.05&quot;) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-51-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-51-1">
+Past versions of unnamed-chunk-51-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-51-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-51-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>toptables_cqn.ac %&gt;% 
   bind_rows() %&gt;% 
   dplyr::filter(gene_id %in% cell_type_markers$Oligodendrocyte) %&gt;% 
@@ -3155,6 +5146,43 @@ celltype.ac %&gt;%
            treeheight_row = 0, treeheight_col = 0
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-52-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-52-1">
+Past versions of unnamed-chunk-52-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-52-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-52-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>toptables_cqn.ac %&gt;% 
   bind_rows() %&gt;% 
   dplyr::filter(gene_id %in% cell_type_markers$Oligodendrocyte) %&gt;% 
@@ -3177,6 +5205,43 @@ celltype.ac %&gt;%
            treeheight_row = 0, treeheight_col = 0
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-52-2.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-52-2">
+Past versions of unnamed-chunk-52-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-52-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-52-2.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="chrosomosomes-gene-sets-1" class="section level3">
 <h3>Chrosomosomes gene sets</h3>
@@ -3201,6 +5266,43 @@ fry_chr.ac %&gt;%
   ggplot(aes(y = pathway, x = -log10(PValue.Mixed), fill = coef)) +
   geom_col(position = &quot;dodge&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-53-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-53-1">
+Past versions of unnamed-chunk-53-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-53-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-53-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>An enrichment of DE genes is observed on the same chromosome as the
 mutation. This is obsevred in the manhat plots below.</p>
 <pre class="r"><code>manhat_input.ac &lt;- 
@@ -3265,6 +5367,43 @@ ggplot(manhat_input.ac, aes(x = midCum, y = -log10(PValue))) +
     panel.grid.minor.x = element_blank()
   ) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-54-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-54-1">
+Past versions of unnamed-chunk-54-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-54-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-54-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -3316,6 +5455,43 @@ toptable_1.bc &lt;- design.bc %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   ggtitle(&quot;Number of DE genes in each comparison&quot;,
           subtitle = &quot;The MPS-IIIA zebrafish samples have the most DE genes&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-56-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-56-1">
+Past versions of unnamed-chunk-56-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-56-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-56-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="volcano-plots-2" class="section level3">
 <h3>Volcano plots</h3>
@@ -3337,6 +5513,43 @@ toptable_1.bc &lt;- design.bc %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   theme(legend.position = &quot;none&quot;) +
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;)) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-57-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-57-1">
+Past versions of unnamed-chunk-57-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-57-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-57-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="md-plots-2" class="section level3">
 <h3>MD plots</h3>
@@ -3351,6 +5564,43 @@ toptable_1.bc &lt;- design.bc %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   theme(legend.position = &quot;none&quot;) +
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;))</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-58-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-58-1">
+Past versions of unnamed-chunk-58-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-58-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-58-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="gc-and-length-check-2" class="section level3">
 <h3>%GC AND LENGTH CHECK</h3>
@@ -3395,6 +5645,43 @@ toptable_1.bc &lt;- design.bc %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   labels = &quot;AUTO&quot;
 ) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-59-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-59-1">
+Past versions of unnamed-chunk-59-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-59-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-59-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="cqn-2" class="section level2">
 <h2>CQN</h2>
@@ -3423,6 +5710,43 @@ cqnplot(cqn.bc, n = 2, xlab = &quot;Length&quot;)</code></pre>
 <em>Model fits for GC content and gene length under the CQN model.
 Variability is clearly visible at either end</em>
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plotCQN_2-1">
+Past versions of plotCQN_2-1.png
+</button>
+</p>
+<div id="fig-plotCQN_2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/plotCQN_2-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
 </div>
@@ -3456,6 +5780,43 @@ across PC1. However, samples appeared closer together.</p>
   labels = &quot;AUTO&quot;
 ) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-61-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-61-1">
+Past versions of unnamed-chunk-61-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-61-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-61-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="de-with-cqn-2" class="section level1">
@@ -3509,6 +5870,43 @@ toptables_cqn.bc &lt;- design.bc %&gt;% colnames() %&gt;% .[2:3] %&gt;%
        y = &quot;Contrast&quot;,
        colour = &quot;Direction of change&quot;) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-63-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-63-1">
+Past versions of unnamed-chunk-63-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-63-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-63-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="volcano-plots-3" class="section level3">
 <h3>Volcano plots</h3>
@@ -3530,6 +5928,43 @@ toptables_cqn.bc &lt;- design.bc %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   theme(legend.position = &quot;none&quot;) +
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;)) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-64-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-64-1">
+Past versions of unnamed-chunk-64-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-64-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-64-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="md-plots-3" class="section level3">
 <h3>MD plots</h3>
@@ -3544,6 +5979,43 @@ toptables_cqn.bc &lt;- design.bc %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   theme(legend.position = &quot;none&quot;) +
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;))</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-65-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-65-1">
+Past versions of unnamed-chunk-65-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-65-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-65-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="recheck-the-gc-and-length-bias-2" class="section level3">
 <h3>Recheck the %GC and length bias</h3>
@@ -3588,6 +6060,43 @@ toptables_cqn.bc &lt;- design.bc %&gt;% colnames() %&gt;% .[2:3] %&gt;%
   labels = &quot;AUTO&quot;
 ) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-66-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-66-1">
+Past versions of unnamed-chunk-66-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-66-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-66-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="gene-set-enrichment-analysis-2" class="section level2">
@@ -3603,6 +6112,43 @@ toptables_cqn.bc &lt;- design.bc %&gt;% colnames() %&gt;% .[2:3] %&gt;%
     )
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-67-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-67-1">
+Past versions of unnamed-chunk-67-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-67-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-67-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>goseq(pwf, gene2cat = GO) %&gt;% 
   as_tibble() %&gt;% 
   dplyr::filter(numDEInCat &gt; 0) %&gt;% 
@@ -3633,6 +6179,43 @@ toptables_cqn.bc &lt;- design.bc %&gt;% colnames() %&gt;% .[2:3] %&gt;%
     )
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-67-2.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-67-2">
+Past versions of unnamed-chunk-67-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-67-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-67-2.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>goseq(pwf, gene2cat = GO) %&gt;% 
   as_tibble() %&gt;% 
   dplyr::filter(numDEInCat &gt; 0) %&gt;% 
@@ -3685,6 +6268,43 @@ fryKEGG.bc$`MPS-IIIB` %&gt;%
        x = &quot;-log10(PValue)&quot;, 
        y = &quot;&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-68-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-68-1">
+Past versions of unnamed-chunk-68-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-68-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-68-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>fryKEGG.bc$`MPS-IIIC` %&gt;% 
   dplyr::filter(FDR.Mixed &lt; 0.05) %&gt;%  
   mutate(pathway = str_remove(pathway, pattern = &quot;KEGG_&quot;)) %&gt;% 
@@ -3696,6 +6316,43 @@ fryKEGG.bc$`MPS-IIIB` %&gt;%
        x = &quot;-log10(PValue)&quot;, 
        y = &quot;&quot;)  </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-68-2.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-68-2">
+Past versions of unnamed-chunk-68-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-68-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-68-2.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="go-1" class="section level3">
 <h3>GO</h3>
 <pre class="r"><code>fry_GO.bc &lt;-  design.bc %&gt;% colnames() %&gt;% .[2:3] %&gt;% 
@@ -3713,7 +6370,7 @@ fryKEGG.bc$`MPS-IIIB` %&gt;%
              sig = FDR.Mixed &lt; 0.05)
   }, simplify = FALSE)</code></pre>
 </div>
-<div id="ire-1" class="section level3">
+<div id="ire-2" class="section level3">
 <h3>IRE</h3>
 <pre class="r"><code>fryIRE.bc &lt;- design.bc %&gt;% colnames() %&gt;% .[2:3] %&gt;% 
   sapply(function(y) {
@@ -3740,6 +6397,43 @@ fryIRE.bc %&gt;%
   geom_vline(xintercept = 1.5) +
   annotate(geom = &quot;label&quot;, x = 1.8, y = &quot;ire5_HQ&quot;, label = &quot;FDR = 0.05&quot;) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-70-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-70-1">
+Past versions of unnamed-chunk-70-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-70-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-70-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#ggsave(&quot;output/plots/AC_ire.png&quot;, width = 20, height = 10, units = &quot;cm&quot;, dpi = 400, scale = 2)
 
 
@@ -3764,6 +6458,43 @@ toptables_cqn.bc %&gt;%
            show_colnames = F
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-70-2.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-70-2">
+Past versions of unnamed-chunk-70-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-70-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-70-2.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="cell-type-prop-check-2" class="section level3">
 <h3>Cell type prop check</h3>
@@ -3800,6 +6531,43 @@ celltype.bc %&gt;%
   geom_vline(xintercept = 2.1) +
   annotate(geom = &quot;label&quot;, x = 2, y = 4.5, label = &quot;FDR = 0.05&quot;) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-71-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-71-1">
+Past versions of unnamed-chunk-71-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-71-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-71-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="chrosomosomes-gene-sets-2" class="section level3">
 <h3>Chrosomosomes gene sets</h3>
@@ -3824,6 +6592,43 @@ fry_chr.bc %&gt;%
   ggplot(aes(y = pathway, x = -log10(PValue.Mixed), fill = coef)) +
   geom_col(position = &quot;dodge&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-72-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-72-1">
+Past versions of unnamed-chunk-72-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-72-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-72-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>An enrichment of DE genes is observed on the same chromosome as the
 mutation. This is obsevred in the manhat plots below.</p>
 <pre class="r"><code>manhat_input.bc &lt;- 
@@ -3888,6 +6693,43 @@ ggplot(manhat_input.bc, aes(x = midCum, y = -log10(PValue))) +
     panel.grid.minor.x = element_blank()
   ) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-73-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-73-1">
+Past versions of unnamed-chunk-73-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-73-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-73-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -3980,6 +6822,43 @@ b &lt;- featureCounts.B %&gt;%
 
 ggarrange(a, b, common.legend = TRUE)</code></pre>
 <p><img src="figure/analysis_final.rmd/filt_3-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-filt_3-1">
+Past versions of filt_3-1.png
+</button>
+</p>
+<div id="fig-filt_3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/filt_3-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>x.b2 &lt;- featureCounts.B %&gt;% 
   as.matrix() %&gt;% 
   .[rowSums(cpm(.) &gt;= 0.5) &gt;= 4,] %&gt;%
@@ -4030,6 +6909,43 @@ transcriptome. Nothing really obvious.</p>
     scale_color_viridis_d(option = &quot;turbo&quot;, end = 0.8) 
 )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-75-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-75-1">
+Past versions of unnamed-chunk-75-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-75-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-75-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>design.b2 &lt;- model.matrix(~genotype, data = x.b2$samples %&gt;% 
                             droplevels()) %&gt;% # get rid of the unused factor levels
   set_colnames(gsub(colnames(.), pattern = &quot;genotype&quot;, replacement = &quot;&quot;))</code></pre>
@@ -4061,6 +6977,43 @@ cqnplot(cqn.b2, n = 2, xlab = &quot;Length&quot;)</code></pre>
 <em>Model fits for GC content and gene length under the CQN model.
 Variability is clearly visible at either end</em>
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plotCQN_3-1">
+Past versions of plotCQN_3-1.png
+</button>
+</p>
+<div id="fig-plotCQN_3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/plotCQN_3-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
 </div>
@@ -4116,6 +7069,43 @@ toptables_cqn.b2 &lt;- design.b2 %&gt;% colnames() %&gt;% .[2] %&gt;%
        y = &quot;Contrast&quot;,
        colour = &quot;Direction of change&quot;) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-79-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-79-1">
+Past versions of unnamed-chunk-79-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-79-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-79-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="volcano-plots-4" class="section level3">
 <h3>Volcano plots</h3>
@@ -4132,6 +7122,43 @@ toptables_cqn.b2 &lt;- design.b2 %&gt;% colnames() %&gt;% .[2] %&gt;%
   theme(legend.position = &quot;none&quot;) +
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;)) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-80-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-80-1">
+Past versions of unnamed-chunk-80-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-80-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-80-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="md-plots-4" class="section level3">
 <h3>MD plots</h3>
@@ -4146,6 +7173,43 @@ toptables_cqn.b2 &lt;- design.b2 %&gt;% colnames() %&gt;% .[2] %&gt;%
   theme(legend.position = &quot;none&quot;) +
   scale_color_manual(values = c(&quot;grey50&quot;, &quot;red&quot;))</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-81-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-81-1">
+Past versions of unnamed-chunk-81-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-81-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-81-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="gene-set-enrichment-analysis-3" class="section level2">
@@ -4245,6 +7309,43 @@ cell_type_markers %&lt;&gt;%
     )
   )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-83-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-83-1">
+Past versions of unnamed-chunk-83-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-83-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-83-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>goseq(pwf, gene2cat = GO) %&gt;% 
   as_tibble() %&gt;% 
   dplyr::filter(numDEInCat &gt; 0) %&gt;% 
@@ -4296,7 +7397,44 @@ fryKEGG.b2$`MPS-IIIB` %&gt;%
        x = &quot;-log10(PValue)&quot;, 
        y = &quot;&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-84-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
-<div id="ire-2" class="section level3">
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-84-1">
+Past versions of unnamed-chunk-84-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-84-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-84-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="ire-3" class="section level3">
 <h3>IRE</h3>
 <pre class="r"><code>fryIRE.b2 &lt;- design.b2 %&gt;% colnames() %&gt;% .[2] %&gt;% 
   sapply(function(y) {
@@ -4323,6 +7461,43 @@ fryIRE.b2 %&gt;%
   geom_vline(xintercept = 1.5) +
   annotate(geom = &quot;label&quot;, x = 1.8, y = &quot;ire5_HQ&quot;, label = &quot;FDR = 0.05&quot;) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-85-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-85-1">
+Past versions of unnamed-chunk-85-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-85-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-85-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="cell-type-prop-check-3" class="section level3">
 <h3>Cell type prop check</h3>
@@ -4359,6 +7534,43 @@ celltype.b2 %&gt;%
   geom_vline(xintercept = 2.1) +
   annotate(geom = &quot;label&quot;, x = 2, y = 4.5, label = &quot;FDR = 0.05&quot;) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-86-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-86-1">
+Past versions of unnamed-chunk-86-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-86-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-86-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="chrosomosomes-gene-sets-3" class="section level3">
 <h3>Chrosomosomes gene sets</h3>
@@ -4383,6 +7595,43 @@ fry_chr.b2 %&gt;%
   ggplot(aes(y = pathway, x = -log10(PValue.Mixed), fill = coef)) +
   geom_col(position = &quot;dodge&quot;)</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-87-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-87-1">
+Past versions of unnamed-chunk-87-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-87-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-87-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>An enrichment of DE genes is observed on the same chromosome as the
 mutation. This is obsevred in the manhat plots below.</p>
 <pre class="r"><code>manhat_input.bc &lt;- 
@@ -4447,6 +7696,43 @@ ggplot(manhat_input.bc, aes(x = midCum, y = -log10(PValue))) +
     panel.grid.minor.x = element_blank()
   ) </code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-88-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-88-1">
+Past versions of unnamed-chunk-88-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-88-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-88-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -4478,6 +7764,43 @@ abPowerPlot &lt;- ssizeRNA_vary(nGenes = dim(x.ab$counts)[1], # Num detectable g
                              replace = TRUE
 )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-89-1.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-89-1">
+Past versions of unnamed-chunk-89-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-89-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-89-1.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ac.A.samps &lt;- x.ac$samples %&gt;% 
   dplyr::filter(genotype == &quot;WT&quot;) %&gt;% 
   .$sample
@@ -4508,6 +7831,43 @@ ac.powerplot &lt;- ssizeRNA_vary(nGenes = dim(x.ac$counts)[1], # Num detectable 
                               replace = T
 )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-89-2.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-89-2">
+Past versions of unnamed-chunk-89-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-89-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-89-2.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># BC sans
 bc.A.samps &lt;- x.bc$samples %&gt;% 
   dplyr::filter(genotype == &quot;WT&quot;) %&gt;% 
@@ -4537,6 +7897,43 @@ dim(x.bc$counts)</code></pre>
                              replace = T
 )</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-89-3.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-89-3">
+Past versions of unnamed-chunk-89-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-89-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-89-3.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>abPowerPlot$power %&gt;% 
   as_tibble() %&gt;% 
   mutate(exp = &quot;A and B&quot;) %&gt;% 
@@ -4554,6 +7951,43 @@ dim(x.bc$counts)</code></pre>
   scale_x_continuous(limits = c(0,15), breaks = seq(0,15, by = 1)) +
   theme(panel.grid = element_blank())</code></pre>
 <p><img src="figure/analysis_final.rmd/unnamed-chunk-89-4.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-89-4">
+Past versions of unnamed-chunk-89-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-89-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/58caa9f16178e8c0c5c7c1733e78e96c575e792d/docs/figure/analysis_final.rmd/unnamed-chunk-89-4.png" target="_blank">58caa9f</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># ggsave(&quot;output/plots/powerplots.png&quot;, width = 10, height = 2.5, units = &quot;cm&quot;, dpi = 600, scale  =2)
 # 
 # 
