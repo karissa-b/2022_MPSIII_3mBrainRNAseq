@@ -17,6 +17,14 @@ navbar:
         href: dar-analysis_AC.html
       - text: MPS-IIIB/C
         href: dar-analysis_BC.html
+  - text: Enrichment analysis
+    menu:
+      - text: MPS-IIIA/B
+        href: enrichment_AB.html
+      - text: MPS-IIIA/C
+        href: enrichment_AC.html
+      - text: MPS-IIIB/C
+        href: enrichment_BC.html
 
 output:
   workflowr::wflow_html:

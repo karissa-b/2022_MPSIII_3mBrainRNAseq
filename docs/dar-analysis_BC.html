@@ -14,10 +14,10 @@
 
 <title>DAR Analysis</title>
 
-<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.22/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -30,10 +30,11 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
@@ -232,6 +233,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -358,6 +362,24 @@ div.tocify {
     </li>
   </ul>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Enrichment analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="enrichment_AB.html">MPS-IIIA/B</a>
+    </li>
+    <li>
+      <a href="enrichment_AC.html">MPS-IIIA/C</a>
+    </li>
+    <li>
+      <a href="enrichment_BC.html">MPS-IIIB/C</a>
+    </li>
+  </ul>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -368,13 +390,21 @@ div.tocify {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">DAR Analysis</h1>
 <h3 class="subtitle">2022_MPSIII_3mBrainRNAseq dataset - BC
 comparison</h3>
 <h4 class="author">Lachlan Baer</h4>
-<h4 class="date">10 March, 2023</h4>
+<h4 class="date">16 August, 2023</h4>
 
 </div>
 
@@ -403,7 +433,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-03-10
+<strong>Last updated:</strong> 2023-08-16
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -441,10 +471,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -537,15 +567,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomkarissab2022MPSIII3mBrainRNAseqtree8749c94f633222d045a62abfd37bf8684d7a7955targetblank8749c94a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomkarissab2022MPSIII3mBrainRNAseqtreef605249d259f82c12f1a833142d993a44d0a64cdtargetblankf605249a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/tree/8749c94f633222d045a62abfd37bf8684d7a7955" target="_blank">8749c94</a>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/tree/f605249d259f82c12f1a833142d993a44d0a64cd" target="_blank">f605249</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomkarissab2022MPSIII3mBrainRNAseqtree8749c94f633222d045a62abfd37bf8684d7a7955targetblank8749c94a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomkarissab2022MPSIII3mBrainRNAseqtreef605249d259f82c12f1a833142d993a44d0a64cdtargetblankf605249a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -555,7 +585,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/tree/8749c94f633222d045a62abfd37bf8684d7a7955" target="_blank">8749c94</a>.
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/tree/f605249d259f82c12f1a833142d993a44d0a64cd" target="_blank">f605249</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -571,11 +601,32 @@ were generated:
 <pre><code>
 Ignored files:
     Ignored:    .Rproj.user/
+    Ignored:    analysis/dar-analysis_BC.html
+    Ignored:    analysis/enrichment_AC.html
+    Ignored:    analysis/enrichment_BC.html
 
 Untracked files:
-    Untracked:  analysis/dar-analysis_AB.Rmd
-    Untracked:  analysis/dar-analysis_BC.Rmd
-    Untracked:  data/dar-analysis/BC/
+    Untracked:  analysis/enrichment_AB.Rmd
+    Untracked:  analysis/enrichment_AC.Rmd
+    Untracked:  analysis/enrichment_BC.Rmd
+    Untracked:  data/dar-analysis/AB/geneDar.Rds
+    Untracked:  data/dar-analysis/AC/geneDar.Rds
+    Untracked:  data/dar-analysis/BC/geneDar.Rds
+
+Unstaged changes:
+    Modified:   analysis/_site.yml
+    Modified:   analysis/dar-analysis_AB.Rmd
+    Modified:   analysis/dar-analysis_AC.Rmd
+    Modified:   analysis/dar-analysis_BC.Rmd
+    Deleted:    data/dar-analysis/AB/DAR.Rds
+    Deleted:    data/dar-analysis/AB/alleleCounts.Rds
+    Deleted:    data/dar-analysis/AB/geneDAR.Rds
+    Deleted:    data/dar-analysis/AC/DAR.Rds
+    Deleted:    data/dar-analysis/AC/alleleCounts.Rds
+    Deleted:    data/dar-analysis/AC/geneDAR.Rds
+    Deleted:    data/dar-analysis/BC/DAR.Rds
+    Deleted:    data/dar-analysis/BC/alleleCounts.Rds
+    Deleted:    data/dar-analysis/BC/geneDAR.Rds
 
 </code></pre>
 <p>
@@ -590,10 +641,74 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/dar-analysis_BC.Rmd</code>) and
+HTML (<code>docs/dar-analysis_BC.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/karissa-b/2022_MPSIII_3mBrainRNAseq/blob/788e886f5c3df31bea4504f2f290875be4e628f0/analysis/dar-analysis_BC.Rmd" target="_blank">788e886</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-10
+</td>
+<td>
+Initial DAR analysis on BC
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/karissa-b/2022_MPSIII_3mBrainRNAseq/788e886f5c3df31bea4504f2f290875be4e628f0/docs/dar-analysis_BC.html" target="_blank">788e886</a>
+</td>
+<td>
+baerlachlan
+</td>
+<td>
+2023-03-10
+</td>
+<td>
+Initial DAR analysis on BC
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -625,6 +740,15 @@ There are no past versions. Publish this analysis with
   library(readxl)
   library(limma)
 })</code></pre>
+<p>An R package for DAR analysis is currently under development and will
+be used for the following analysis. The core functionally of the package
+is complete (as of 21/06/23). However some subtleties may change and new
+features will be added as its developmentment progresses. This means
+some of the following code may break, but a simple fix that produces the
+same results will always exist. To install the package while it is still
+in development, uncomment the code in the chunk below.</p>
+<pre class="r"><code># BiocManager::install(&quot;baerlachlan/darr&quot;)
+library(darr)</code></pre>
 <pre class="r"><code>if (interactive()) setwd(here::here())
 theme_set(theme_bw())</code></pre>
 <pre class="r"><code># By default Gviz expects UCSC chromosome names
@@ -633,7 +757,7 @@ options(ucscChromosomeNames = FALSE)</code></pre>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>This document contains the Differential Allelic Representation (DAR)
-analysis for the MPS-III B/C arm of the experiment.</p>
+analysis for the MPS-III A/B arm of the experiment.</p>
 </div>
 <div id="ensdb" class="section level2">
 <h2>EnsDb</h2>
@@ -663,7 +787,7 @@ mcols(genes) &lt;- mcols(genes)[
 factors. Also append sample file basenames from a file I created
 (<code>data/sample_basenames.csv</code>), as we will need these later.
 This metadata contains information for all samples in the experiment, so
-let’s filter for only samples in the B/C dataset.</p>
+let’s filter for only samples in the A/B dataset.</p>
 <pre class="r"><code>expArm &lt;- &quot;BC&quot;</code></pre>
 <pre class="r"><code>metadata &lt;- read_xlsx(here(&quot;data/meta_final.xlsx&quot;)) %&gt;%
   dplyr::rename(
@@ -679,9 +803,9 @@ let’s filter for only samples in the B/C dataset.</p>
   mutate(
     sex = as.factor(sex),
     genotype = case_when(
-      genotype == &quot;wt&quot; ~ &quot;WT&quot;, 
+      genotype == &quot;wt&quot; ~ &quot;WT&quot;,
       genotype == &quot;het&quot; ~ &quot;sgsh_het&quot;,
-      genotype == &quot;naglu&quot; ~ &quot;MPSIIIB&quot;, 
+      genotype == &quot;naglu&quot; ~ &quot;MPSIIIB&quot;,
       genotype == &quot;sgsh&quot; ~ &quot;MPSIIIA&quot;,
       genotype == &quot;hgsnat&quot; ~ &quot;MPSIIIC&quot;
     ),
@@ -694,14 +818,14 @@ let’s filter for only samples in the B/C dataset.</p>
 <pre class="r"><code>metadata %&gt;%
   kable(
     align = &quot;l&quot;,
-    caption = &quot;Sample metadata for the MPS-III A/C arm of the experiment&quot;
+    caption = &quot;Sample metadata for the MPS-III A/B arm of the experiment&quot;
   ) %&gt;%
   kable_styling(
     bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;)
   )</code></pre>
 <table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <caption>
-Sample metadata for the MPS-III A/C arm of the experiment
+Sample metadata for the MPS-III A/B arm of the experiment
 </caption>
 <thead>
 <tr>
@@ -1626,393 +1750,179 @@ accessibility.</p>
   length() %&gt;%
   brewer.pal(&quot;Set2&quot;) %&gt;%
   setNames(levels(metadata$genotype))</code></pre>
-<p>Now define our samples that belong to each group (genotype). We will
-use this later in the analysis when accessing relevant samples from the
-<code>VCF</code> file.</p>
-<pre class="r"><code>samplesByGroup &lt;- metadata %&gt;%
-  split(f = .$genotype) %&gt;%
-  sapply(function(x){
-    pull(x, basename)
-  }, simplify = FALSE)</code></pre>
 </div>
 </div>
 <div id="de-data" class="section level1">
 <h1>DE data</h1>
 <p>Load in the <code>dgeList</code> and <code>topTable</code>s from
 Karissa’s DE analysis.</p>
-<pre class="r"><code>dgeList &lt;- readRDS(here(&quot;data/R_objects/dge_bc.rds&quot;))
-topTables &lt;- readRDS(here(&quot;data/R_objects/toptab_bc_cqn.rds&quot;))</code></pre>
-<p>Let’s also pull the gene IDs for DE genes.</p>
+<pre class="r"><code>dgeList &lt;- readRDS(here(&quot;data/R_objects/dge_bc.rds&quot;))</code></pre>
+<pre class="r"><code>topTables &lt;- readRDS(here(&quot;data/R_objects/toptab_bc_cqn.rds&quot;))</code></pre>
+<p>Also pull the gene IDs for DE genes.</p>
 <pre class="r"><code>deGenes &lt;- sapply(topTables, function(x){
   dplyr::filter(x, DE) %&gt;%
     pull(gene_id)
 }, simplify = FALSE)</code></pre>
 </div>
-<div id="variant-data" class="section level1">
-<h1>Variant data</h1>
-<p>Variant data from the <code>GVCF</code> file is parsed into a
-<code>VCF</code> class object using the <code>VariantAnnotation</code>
-package. Note that this file is large and therefore does not exist in
-the Git repository.</p>
+<div id="differential-allelic-representation" class="section level1">
+<h1>Differential Allelic Representation</h1>
+<p>DAR analysis is performed using genotype calls from variant calling
+software. Here the <code>GATK</code> best practices workflow for RNAseq
+short variant discovery was followed to produce a multi-sample
+<code>VCF</code> file containing information for any single nucleotide
+locus that varied in at least one sample. Note that specific filters
+were applied to only select loci with considerable evidence for
+variation (see the Snakemake workflow in this repository for more
+information).</p>
+<div id="genotypes" class="section level2">
+<h2>Genotypes</h2>
+<p>Genotype data from the <code>VCF</code> file is parsed into a
+<code>GRanges</code> class object using the <code>darr</code> package.
+This file is large and therefore does not exist in the Git repository.
+Phasing information is also removed when reading the genotypes as it is
+not required for DAR analysis and complicates downstream processing.</p>
 <pre class="r"><code>vcf_path &lt;- file.path(
   &quot;/hpcfs/users/a1647910/2022_MPSIII_3mBrainRNAseq/code&quot;,
   &quot;analysis-variants_BC/results/09_variants/6_select/all_samples.vcf.gz&quot;
 )
-svp &lt;- ScanVcfParam(info = &quot;&quot;, geno = c(&quot;GT&quot;, &quot;GQ&quot;))
-vcf &lt;- suppressWarnings({
-  readVcf(vcf_path, genome = genome(ensDb))
-})</code></pre>
-<p>A number of accessor functions exist for the <code>VCF</code> object.
-We will use the following.</p>
-<ul>
-<li><p><code>rowRanges()</code>: Contains information from the CHROM,
-POS, and ID fields of the VCF file. Returned as a <code>GRanges</code>
-object. We will save this object to our <code>rr</code>
-variable.</p></li>
-<li><p><code>geno()</code>: Contains data described in the FORMAT fields
-of the VCF. Returned as a <code>SimpleList</code>. We will extract the
-genotype information (GT) and save to the <code>gt</code>
-variable.</p></li>
-</ul>
-<pre class="r"><code>rr &lt;- rowRanges(vcf) %&gt;%
-  plyranges::select(-paramRangeID)</code></pre>
-<p>Below is a snippet of the <code>rr</code> data:</p>
-<pre class="r"><code>head(rr)</code></pre>
-<pre><code>GRanges object with 6 ranges and 4 metadata columns:
-             seqnames    ranges strand |            REF                ALT
-                &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;DNAStringSet&gt; &lt;DNAStringSetList&gt;
-  1:6568_G/A        1      6568      * |              G                  A
-  1:6698_G/A        1      6698      * |              G                  A
-  1:7092_G/T        1      7092      * |              G                  T
-  1:7214_G/A        1      7214      * |              G                  A
-  1:7218_A/G        1      7218      * |              A                  G
-  1:9758_G/A        1      9758      * |              G                  A
-                  QUAL      FILTER
-             &lt;numeric&gt; &lt;character&gt;
-  1:6568_G/A    830.05        PASS
-  1:6698_G/A  81610.91        PASS
-  1:7092_G/T     61.06        PASS
-  1:7214_G/A     98.78        PASS
-  1:7218_A/G    102.07        PASS
-  1:9758_G/A     79.87        PASS
-  -------
-  seqinfo: 993 sequences from GRCz11 genome</code></pre>
-<pre class="r"><code>gt &lt;- geno(vcf)$GT</code></pre>
-<p>The genotype data contains phasing information where possible.
-Phasing is indicated by the use of <code>|</code> as opposed to
-<code>/</code> for SNPs that are not phased. This information is not
-required for DAR analysis and complicates downstream processing, so
-let’s remove the phasing information and make all fields consistent.</p>
-<pre class="r"><code>unphase_gt &lt;- function(x){
-  str_replace(x, &quot;\\|&quot;, &quot;\\/&quot;)
-}
-gt &lt;- gt %&gt;%
-  as.data.frame() %&gt;%
-  mutate(across(everything(), unphase_gt))</code></pre>
-<p>Below is a snippet of the <code>gt</code> data:</p>
-<pre class="r"><code>head(gt)</code></pre>
-<pre><code>           22-01859_S21 22-01860_S22 22-01861_S23 22-01862_S24 22-01863_S25
-1:6568_G/A          ./.          ./.          ./.          1/1          ./.
-1:6698_G/A          0/1          1/1          1/1          0/1          0/1
-1:7092_G/T          ./.          ./.          ./.          ./.          ./.
-1:7214_G/A          ./.          ./.          ./.          ./.          ./.
-1:7218_A/G          ./.          ./.          ./.          ./.          ./.
-1:9758_G/A          ./.          ./.          ./.          0/0          ./.
-           22-01864_S26 22-01865_S27 22-01866_S28 22-01867_S29 22-01868_S30
-1:6568_G/A          1/1          ./.          ./.          ./.          1/1
-1:6698_G/A          0/0          1/1          0/1          1/1          0/0
-1:7092_G/T          ./.          ./.          ./.          ./.          1/1
-1:7214_G/A          ./.          ./.          ./.          ./.          ./.
-1:7218_A/G          ./.          ./.          ./.          ./.          ./.
-1:9758_G/A          ./.          ./.          ./.          ./.          ./.
-           22-01869_S31 22-01870_S32 22-01871_S33 22-01872_S34 22-01873_S35
-1:6568_G/A          ./.          1/1          ./.          ./.          ./.
-1:6698_G/A          0/1          0/0          1/1          0/0          0/1
-1:7092_G/T          ./.          ./.          ./.          ./.          ./.
-1:7214_G/A          ./.          ./.          0/0          1/1          ./.
-1:7218_A/G          ./.          ./.          ./.          1/1          ./.
-1:9758_G/A          ./.          ./.          0/0          ./.          ./.
-           22-01874_S36 22-01875_S37 22-01876_S38 22-01877_S39 22-01879_S40
-1:6568_G/A          ./.          1/1          ./.          ./.          ./.
-1:6698_G/A          0/1          0/1          1/1          0/1          0/0
-1:7092_G/T          ./.          ./.          ./.          ./.          ./.
-1:7214_G/A          ./.          ./.          ./.          ./.          ./.
-1:7218_A/G          ./.          ./.          ./.          ./.          ./.
-1:9758_G/A          0/0          ./.          1/1          ./.          0/0
-           22-01881_S41 22-01882_S42 22-01883_S43 22-01884_S44 22-01885_S45
-1:6568_G/A          ./.          1/1          1/1          ./.          ./.
-1:6698_G/A          0/0          0/1          0/1          0/0          0/1
-1:7092_G/T          ./.          ./.          ./.          ./.          ./.
-1:7214_G/A          ./.          ./.          ./.          ./.          ./.
-1:7218_A/G          ./.          ./.          ./.          ./.          ./.
-1:9758_G/A          ./.          ./.          ./.          ./.          ./.</code></pre>
-</div>
-<div id="differential-allelic-representation" class="section level1">
-<h1>Differential Allelic Representation</h1>
+genotypes &lt;- readGenotypes(
+  file = vcf_path,
+  unphase = TRUE,
+  genome = genome(ensDb)
+)</code></pre>
 <p>Genotypes are reported as numeric indices. <code>0</code> indicates
 the reference allele, <code>1</code> is the first alternate allele,
-<code>2</code> is the second alternate allele, and so on. The reference
-and alternate allele information is contained in our <code>rr</code>
-object if ever required. However, for DAR analysis, we can work directly
-with the indices as they are consistent across all samples for a single
-variant position.</p>
+<code>2</code> is the second alternate allele, and so on. For DAR
+analysis, we work directly with the indices as they are consistent
+across all samples for a single variant position.</p>
+</div>
+<div id="allele-counts" class="section level2">
+<h2>Allele counts</h2>
 <p>We aim to calculate a DAR metric at each suitable variant locus. This
 requires us to firstly summarise the genotype data into counts of the
-alleles reported at each variant locus.</p>
-<pre class="r"><code>## This code takes a while (~15mins) to execute
-## So save as Rds file for quicker processing in future
-alleleCounts_path &lt;- file.path(
-  here(&quot;data/dar-analysis&quot;),
-  expArm,
-  &quot;alleleCounts.Rds&quot;
-)
-if (!file.exists(alleleCounts_path)) {
-  if (!dir.exists(dirname(alleleCounts_path))) {
-    dir.create(dirname(alleleCounts_path), recursive = TRUE)
-  }
-  alleleCounts &lt;- lapply(samplesByGroup, function(samples){
-    apply(gt[,samples], 1, function(gtInGroup){
-      alleles &lt;- gtInGroup %&gt;%
-        as.character() %&gt;%
-        str_split(&quot;/&quot;) %&gt;%
-        unlist()
-      tibble(
-        n_called = sum(alleles != &quot;.&quot;),
-        n_nocall = sum(alleles == &quot;.&quot;),
-        n_0 = sum(alleles == &quot;0&quot;),
-        n_1 = sum(alleles == &quot;1&quot;),
-        n_2 = sum(alleles == &quot;2&quot;),
-        n_3 = sum(alleles == &quot;3&quot;)
-      )
-    }) %&gt;%
-      bind_rows()
-  })
-  saveRDS(alleleCounts, alleleCounts_path)
-} else {
-  alleleCounts &lt;- readRDS(alleleCounts_path)
-}</code></pre>
+alleles reported at each variant locus. First we define our sample
+grouping structure as a <code>list</code>, where each element contains a
+character vector of samples within a single group.</p>
+<pre class="r"><code>samplesByGroup &lt;- metadata %&gt;%
+  split(f = .$genotype) %&gt;%
+  sapply(function(x){
+    pull(x, basename)
+  }, simplify = FALSE)</code></pre>
+<p>Now at each locus we can count the number of alleles that exist
+within the groups. This returns a <code>GRangesList</code> with each
+element corresponding to a different sample group.</p>
+<pre class="r"><code>alleleCounts &lt;- countAlleles(genotypes = genotypes, groups = samplesByGroup)</code></pre>
+</div>
+<div id="normalisation" class="section level2">
+<h2>Normalisation</h2>
 <p>Not all samples have genotype calls, so we normalise by converting
-the allele counts into a proportion of total counts at each variant
-locus. We also filter variant loci within each sample group with the
-criterion number of called genotypes &gt; number of missing genotypes.
-Loci that do not satisfy this criterion have their proportions are
-returned as <code>NA</code>’s, so that we can retain the object
-structure and join it back to our <code>rowRanges</code> before removing
-the filtered loci.</p>
-<pre class="r"><code>alleleProps &lt;- lapply(alleleCounts, function(counts){
-  counts %&gt;%
-    bind_rows() %&gt;%
-    mutate(
-      across(
-        .cols = c(&quot;n_0&quot;, &quot;n_1&quot;, &quot;n_2&quot;, &quot;n_3&quot;),
-        .fns = ~ ifelse(n_called &gt; n_nocall, .x / n_called, NA)
-      )
-    ) %&gt;%
-    dplyr::select(-n_called, -n_nocall) %&gt;%
-    set_colnames(str_replace(colnames(.), &quot;n_&quot;, &quot;prop_&quot;))
-})</code></pre>
+the allele counts into a proportion of total counts at each locus. We
+also filter variant loci independently within each sample group with the
+default criterion: number of samples with called genotypes &gt; number
+of samples with missing genotypes.</p>
+<pre class="r"><code>alleleProps &lt;- countsToProps(counts = alleleCounts, filter = TRUE)</code></pre>
+</div>
+<div id="dar" class="section level2">
+<h2>DAR</h2>
 <p>Now that we have normalised values of allelic representation at each
 variant locus within our sample groups, we can calculate the DAR metric
-between groups. Firstly, we manually define our contrasts of
-interest.</p>
+between groups. Firstly, we define our contrasts of interest.</p>
 <pre class="r"><code>contrasts &lt;- makeContrasts(
   B_vs_WT = MPSIIIB - WT,
   C_vs_WT = MPSIIIC - WT,
   levels = names(alleleProps)
 )</code></pre>
-<p>Also choose the number of variant loci to define our elastic window
-size for smoothing the DAR metric. This needs to be an odd number, as we
-need to include the variant position and an equal number of loci either
-side.</p>
-<pre class="r"><code>winSize &lt;- 11</code></pre>
-<p>With a chosen elastic window size of 11 variants, this will smooth
-the DAR metric at each locus with the DAR values of the 5 loci either
-side. Note that for loci at the ends of each chromosome, the window size
-will be slightly smaller to avoid including DAR values from other
-chromosomes.</p>
-<p>Now we calculate the Euclidean distance between normalised allelic
-representation of the contrasted sample groups. Any variant loci that
-were previously filtered due to not containing enough genotype
-information are returned as <code>NA</code>, which we can now remove. We
-convert the Euclidean distance to the DAR metric by dividing by <span
-class="math inline">\(\sqrt{2}\)</span>, resulting in an
+<p>DAR is calculated by firstly determining the Euclidean distance
+between allelic proportions of the contrasted sample groups. The
+Euclidean distance is then converted to the DAR metric by dividing by
+<span class="math display">\[\sqrt{2}\]</span>, resulting in an
 easy-to-interpret value between 0 and 1, where 0 represents identical
-allelic representation and 1 represents complete diversity. Lastly we
-smooth the DAR values as described above.</p>
-<pre class="r"><code>## This code takes a while (~7mins) to execute
-## So save as Rds file for quicker processing in future
-DAR_path &lt;- file.path(
-  here(&quot;data/dar-analysis&quot;),
-  expArm,
-  &quot;DAR.Rds&quot;
-)
-if (!file.exists(DAR_path)) {
-  if (!dir.exists(dirname(DAR_path))) {
-    dir.create(dirname(DAR_path), recursive = TRUE)
-  }
-  DAR &lt;- apply(contrasts, 2, function(col){
-    ## Grab the sample groups in each contrast
-    contrast &lt;- col %&gt;%
-      enframe(name = &quot;group&quot;, value = &quot;contrast&quot;) %&gt;%
-      dplyr::filter(contrast != 0) %&gt;%
-      pull(group)
-    stopifnot(length(contrast) == 2)
-    ## Return the allele proportions for each sample group in each contrast
-    alleleProps[contrast]
-  }, simplify = FALSE) %&gt;%
-    sapply(function(props){
-      ## Calculate the Euclidean distance
-      dist &lt;- vapply(seq(length(rr)), function(ind){
-        rbind(props[[1]][ind,], props[[2]][ind,]) %&gt;%
-          dist() %&gt;%
-          as.numeric()
-      }, numeric(1))
-      ## Bind the calculated Euclidean distance to our rowRanges
-      rr %&gt;%
-        plyranges::select(-everything()) %&gt;%
-        as_tibble() %&gt;%
-        mutate(dist = dist) %&gt;%
-        ## Remove any loci with NA DAR as this means they were filtered
-        ## in at least one of the contrasted sample groups
-        dplyr::filter(!is.na(dist)) %&gt;%
-        ## Drop levels so we don&#39;t loop over chromosomes/scaffolds with no data
-        droplevels() %&gt;%
-        ## Split by chromosome to avoid including DAR values from multiple
-        ## chromosomes when smoothing
-        split(f = .$seqnames) %&gt;%
-        lapply(function(chr){
-          dplyr::mutate(
-            chr,
-            ## sqrt(2) is the maximum dist
-            dar = dist / sqrt(2),
-            dar_smooth = rollapply(dar, width = winSize, mean, partial = TRUE),
-            win_start = lag(start, n = (winSize - 1) / 2),
-            win_end = lead(start, n = (winSize - 1) / 2),
-            ## lag() and lead() will return NA if index is out of range,
-            ## so let&#39;s adjust these
-            win_start = ifelse(is.na(win_start), start[1], win_start), 
-            win_end = ifelse(is.na(win_end), start[nrow(chr)], win_end),
-            win_size = win_end - win_start
-          )
-        }) %&gt;%
-        bind_rows() %&gt;%
-        GRanges()
-    }, simplify = FALSE)
-  saveRDS(DAR, DAR_path)
-} else {
-  DAR &lt;- readRDS(DAR_path)
-}</code></pre>
-<div id="dar-distribution" class="section level2">
-<h2>DAR distribution</h2>
-<p>Plotting the cumulative distribution of DAR by chromosome is useful
-to determine if the mutant chromosome is affected by high DAR values
-more so than other chromosomes.</p>
-<p>Let’s first define a plotting function so we can apply it for each
-contrast.</p>
-<pre class="r"><code>plotCumDAR &lt;- function(DAR, mutChr, title){
-  DAR %&gt;%
-    split(seqnames(.)) %&gt;%
-    lapply(function(chr){
-      tibble(
-        chromosome = as.vector(seqnames(chr)),
-        dar_smooth = chr$dar_smooth
-      )
-    }) %&gt;%
-    purrr::reduce(rbind) %&gt;%
-    mutate(
-      chromosome = factor(
-        chromosome,
-        # Draw mutant chr on top
-        levels = unique(c(
-          chromosome[chromosome != mutChr],
-          chromosome[chromosome == mutChr]
-        ))
-      ),
-      mutant_chromosome = chromosome == mutChr
-    ) %&gt;%
-    ggplot(aes(
-      x = dar_smooth,
-      group = chromosome,
-      colour = mutant_chromosome
-    )) +
-    stat_ecdf() +
-    scale_colour_manual(
-      values = c(&quot;red&quot;, &quot;grey50&quot;),
-      breaks = c(&quot;TRUE&quot;, &quot;FALSE&quot;)
-    ) +
-    labs(
-      title = title,
-      colour = &quot;Mutant chromosome&quot;,
-      x = &quot;DAR&quot;,
-      y = &quot;F(DAR)&quot;
-    )
-}</code></pre>
-<p>Now let’s see how DAR on the mutant chromosome compares to other
-chromosomes.</p>
-<pre class="r"><code>plotCumDAR(DAR$B_vs_WT, &quot;24&quot;, &quot;MPS-IIIB vs. WT&quot;)</code></pre>
-<p><img src="figure/dar-analysis_BC.Rmd/cumDAR_MPSIIIB-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>plotCumDAR(DAR$C_vs_WT, &quot;1&quot;, &quot;MPS-IIIC vs. WT&quot;)</code></pre>
-<p><img src="figure/dar-analysis_BC.Rmd/cumDAR_MPSIIIC-1.png" width="672" style="display: block; margin: auto;" /></p>
+allelic representation and 1 represents complete diversity. This is
+handled within the <code>dar()</code> function by passing our allelic
+proportions and intended contrasts as arguments.</p>
+<p>Two types of DAR values are reported by the <code>dar()</code>
+function as metadata columns of the resulting <code>GRanges</code>
+objects:</p>
+<ul>
+<li><code>dar_origin</code>: The raw DAR values calculated at single
+nucleotide positions (the origin) between sample groups. This represents
+a DAR estimate at a precise locus.</li>
+<li><code>dar_region</code>: The mean of raw DAR values in a region
+surrounding the origin. The size of the region is controlled using the
+<code>winSize</code> argument, which establishes an elastic sliding
+window to average the specified number of dar_origin values. This
+represents a DAR estimate for the genomic region surrounding the origin
+locus.</li>
+</ul>
+<pre class="r"><code>winSize &lt;- 5</code></pre>
+<p>With a chosen elastic window size of 5 loci, this will smooth the DAR
+metric at each origin locus with the DAR values of the 2 loci either
+side.</p>
+<pre class="r"><code>dar &lt;- dar(props = alleleProps, contrasts = contrasts, winSize = winSize)</code></pre>
+<p>We now have DAR values for the common loci between the two sample
+groups in each contrast. Each element of the resulting
+<code>GRangesList</code> object represents a single contrast and are
+named as defined in our <code>contrasts</code> object.</p>
 </div>
-<div id="elastic-window-ranges" class="section level2">
-<h2>Elastic window ranges</h2>
-<p>Define a <code>GRanges</code> object that contains the ranges of the
-elastic sliding window. We will use this to assign DAR values to genes
-for the range(s) they overlap.</p>
-<pre class="r"><code>winRanges &lt;- lapply(DAR, function(x){
-  x %&gt;%
-    as_tibble() %&gt;%
-    dplyr::select(
-      seqnames, start = win_start, end = win_end, width = win_size, strand,
-      dar_smooth
-    ) %&gt;%
-    split(f = .$seqnames) %&gt;%
-    ## Extend the start and ends so that the whole chromosome is covered
-    lapply(function(chr){
-      seqname &lt;- unique(chr$seqnames)
-      chr$start[1] &lt;- 1
-      chr$width[1] &lt;- chr$end[1] - chr$start[1]
-      last_ind &lt;- nrow(chr)
-      chr$end[last_ind] &lt;- chrInfo$length[chrInfo$name == seqname]
-      chr$width[last_ind] &lt;- chr$end[last_ind] - chr$start[last_ind]
-      chr
-    }) %&gt;%
-    bind_rows() %&gt;%
-    GRanges()
-})</code></pre>
-<p>Let’s define another function to visualise the distribution of
-elastic window sizes.</p>
-<pre class="r"><code>plotWinRanges &lt;- function(winRanges, title, bins = 100){
-  winRanges %&gt;%
-    width() %&gt;%
-    enframe(name = NULL, value = &quot;winSize&quot;) %&gt;%
-    ggplot(aes(winSize)) +
-    geom_histogram(
-      bins = bins,
-      colour = &quot;black&quot;,
-      fill = &quot;grey70&quot;
-    ) +
-    scale_x_log10() +
-    labs(
-      title = title,
-      x = &quot;Window size (bp)&quot;,
-      y = &quot;Count&quot;
-    )
-}</code></pre>
-<pre class="r"><code>plotWinRanges(winRanges$B_vs_WT, title = &quot;MPS-IIIB vs. WT&quot;)</code></pre>
-<p><img src="figure/dar-analysis_BC.Rmd/winRanges_MPSIIIB-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>plotWinRanges(winRanges$C_vs_WT, title = &quot;MPS-IIIB vs. WT&quot;)</code></pre>
-<p><img src="figure/dar-analysis_BC.Rmd/winRanges_MPSIIIC-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="dar-ecdf" class="section level2">
+<h2>DAR ECDF</h2>
+<p>Plotting the empirical cumulative distribution function of DAR by
+chromosome is useful to determine whether the mutant chromosome contains
+higher DAR relative to other chromosomes. Here we highlight the
+chromosome containing the mutation to visually identify if this is the
+case. The <em>naglu</em> gene implicated with MPS-IIIB is located on
+chromosome 24. The <em>hgnsat</em> gene implicated with MPS-IIIC is
+located on chromosome 1.</p>
+<pre class="r"><code>plotDarECDF(dar$B_vs_WT, darVal = &quot;region&quot;, highlight = &quot;24&quot;) +
+  scale_colour_manual(values = c(&quot;red&quot;, &quot;grey&quot;)) +
+  labs(title = &quot;MPSIIIB vs WT&quot;)</code></pre>
+<p><img src="figure/dar-analysis_BC.Rmd/darECDF_B_chr24-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>This dataset provides an interesting scenario where samples were
+genotyped at both the <em>naglu</em> and <em>hgsnat</em> loci. Samples
+within the MPS-IIIB experimental groups were selected so that they were
+wildtype at the <em>hgsnat</em> locus. All samples in the dataset
+originated from a single cross of double heterozygous parents, meaning
+that all samples in the MPS-IIIA experimental groups should share
+identical wildtype homologues of chromosome 1 (the chromosome of the
+<em>hgsnat</em> locus), disregarding recombination. This means that
+chromosome 1 should display relatively low DAR in the MPS-IIIA
+comparisons, so let’s take a look.</p>
+<pre class="r"><code>plotDarECDF(dar$B_vs_WT, darVal = &quot;region&quot;, highlight = &quot;1&quot;) +
+  scale_colour_manual(values = c(&quot;red&quot;, &quot;grey&quot;)) +
+  labs(title = &quot;MPSIIIB vs WT&quot;)</code></pre>
+<p><img src="figure/dar-analysis_BC.Rmd/darECDF_B_chr1-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>Chromosome 1 does indeed have very low DAR relative to the other
+chromosomes. This contributes evidence to the argument that
+genotype-based selection of samples is a key driver of DAR outcomes in
+RNA-seq experiments.</p>
+<p>An analogous situation is present in the MPS-IIIC samples, where the
+samples should share near-identical wildtype homologues of chromosome
+24. Let’s take a look at both.</p>
+<pre class="r"><code>plotDarECDF(dar$C_vs_WT, darVal = &quot;region&quot;, highlight = &quot;1&quot;) +
+  scale_colour_manual(values = c(&quot;red&quot;, &quot;grey&quot;)) +
+  labs(title = &quot;MPSIIIC vs WT&quot;)</code></pre>
+<p><img src="figure/dar-analysis_BC.Rmd/darECDF_C_chr1-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plotDarECDF(dar$C_vs_WT, darVal = &quot;region&quot;, highlight = &quot;24&quot;) +
+  scale_colour_manual(values = c(&quot;red&quot;, &quot;grey&quot;)) +
+  labs(title = &quot;MPSIIIC vs WT&quot;)</code></pre>
+<p><img src="figure/dar-analysis_BC.Rmd/darECDF_C_chr24-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>Again we see relatively high DAR on the mutant chromosome (1), and
+relatively low DAR on the wildtype controlled chromosome (24).</p>
+<p>From these plots we can predict that for each comparison, an
+overrepresentation of DE genes may exist on the respective mutant
+chromosomes, due to the potential of eQTL differences. However, the
+controlled wildtype chromosomes should exhibit far less of these false
+positives due to low DAR.</p>
 </div>
 <div id="deg-dar-relationship" class="section level2">
 <h2>DEG-DAR relationship</h2>
-<p>We can visualise whether differentially expressed genes (DEG) may be
-prone eQTL artefacts by plotting the DAR values along a chromosomal axis
-and overlaying the position of DEGs. Let’s define a plotting function
-that we can easily use to select a chromosome and the genomic features
-of interest.</p>
-<pre class="r"><code>plotChrDAR &lt;- function(
-    DAR, chromosome, features = GRanges(), foi = GRanges(),
+<p>We can produce a localised visualisation to assess whether
+differentially expressed genes (DEG) may be prone eQTL artefacts by
+plotting the trend in DAR along a chromosomal axis and overlaying the
+position of DEGs. This functionality has not yet been implemented in the
+<code>darr</code> package, so let’s define a function here instead.</p>
+<pre class="r"><code>plotChrDar &lt;- function(
+    dar, chromosome, features = GRanges(), foi = GRanges(),
     darType = &quot;b&quot;, highlight_features = TRUE,
     title = &quot;&quot;
 ){
@@ -2069,7 +1979,7 @@ of interest.</p>
     tracks &lt;- append(tracks, features_track)
   }
   
-  dar_track &lt;- DAR[,&quot;dar_smooth&quot;] %&gt;%
+  dar_track &lt;- dar[,&quot;dar_region&quot;] %&gt;%
     plyranges::filter(seqnames == chromosome) %&gt;%
     DataTrack(
       type = darType,
@@ -2114,85 +2024,58 @@ of interest.</p>
 <div id="mps-iiib" class="section level3">
 <h3>MPS-IIIB</h3>
 <p>First let’s look at the mutant chromosome, as this was identified as
-having the highest average DAR from the cumulative distributions we
-plotted above.</p>
-<pre class="r"><code>plotChrDAR(
-  DAR = DAR$B_vs_WT,
+having the highest average DAR from the ECDF we plotted above.</p>
+<pre class="r"><code>plotChrDar(
+  dar = dar$B_vs_WT,
   chromosome = &quot;24&quot;,
   features = genes[genes$gene_id %in% deGenes$`MPS-IIIB`],
   foi = genes[genes$gene_name == &quot;naglu&quot;]
 )</code></pre>
-<p><img src="figure/dar-analysis_BC.Rmd/DAR_MPSIIIB_chr24-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>And comparing this to a non-mutant chromosome:</p>
-<pre class="r"><code>plotChrDAR(
-  DAR = DAR$B_vs_WT,
-  chromosome = &quot;16&quot;,
+<p><img src="figure/dar-analysis_BC.Rmd/chrDar_B_chr24-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>And comparing this to the controlled wildtype chromosome 1:</p>
+<pre class="r"><code>plotChrDar(
+  dar = dar$B_vs_WT,
+  chromosome = &quot;1&quot;,
   features = genes[genes$gene_id %in% deGenes$`MPS-IIIB`]
 )</code></pre>
-<p><img src="figure/dar-analysis_BC.Rmd/DAR_MPSIIIB_chr16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/dar-analysis_BC.Rmd/chrDar_B_chr1-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="mps-iiic" class="section level3">
 <h3>MPS-IIIC</h3>
-<p>The mutant chromosome also showed the highest average DAR in the
-MPS-IIIC vs. WT comparison.</p>
-<pre class="r"><code>plotChrDAR(
-  DAR = DAR$C_vs_WT,
+<p>The mutant chromosome also showed high DAR in the MPS-IIIC vs. WT
+comparison.</p>
+<pre class="r"><code>plotChrDar(
+  dar = dar$C_vs_WT,
   chromosome = &quot;1&quot;,
   features = genes[genes$gene_id %in% deGenes$`MPS-IIIC`],
   foi = genes[genes$gene_name == &quot;hgsnat&quot;]
 )</code></pre>
-<p><img src="figure/dar-analysis_BC.Rmd/DAR_MPSIIIC_chr1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Interestingly we see two regions of low DAR along the mutant
-chromosome, however no DEGs exist in these regions. It is likely that
-many of the genes classified as DE are eQTLs as they are found within
-regions of high DAR.</p>
-<p>Again comparing to a non-mutant chromosome:</p>
-<pre class="r"><code>plotChrDAR(
-  DAR = DAR$C_vs_WT,
-  chromosome = &quot;2&quot;,
+<p><img src="figure/dar-analysis_BC.Rmd/chrDar_C_chr1-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>Again comparing to the controlled wildtype chromosome 24:</p>
+<pre class="r"><code>plotChrDar(
+  dar = dar$C_vs_WT,
+  chromosome = &quot;24&quot;,
   features = genes[genes$gene_id %in% deGenes$`MPS-IIIC`]
 )</code></pre>
-<p><img src="figure/dar-analysis_BC.Rmd/DAR_MPSIIIC_chr2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/dar-analysis_BC.Rmd/chrDar_C_chr24-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="assign-gene-dar" class="section level2">
 <h2>Assign gene DAR</h2>
-<p>Assigning each gene within the dataset a DAR value is useful for
-further analysis such as the weighting of gene rankings for GSEA. Let’s
-do this now and save the resulting <code>GRanges</code> object for
-further use.</p>
-<pre class="r"><code>assignDAR &lt;- function(features, ranges){
-  overlaps &lt;- findOverlaps(features, ranges)
-  lapply(unique(queryHits(overlaps)), function(query){
-    subjects &lt;- subjectHits(overlaps)[queryHits(overlaps) == query]
-    dar &lt;- ranges$dar_smooth[subjects] %&gt;%
-      mean()
-    features[query,] %&gt;%
-      as.data.frame() %&gt;%
-      dplyr::mutate(dar = dar)
-  }) %&gt;%
-    bind_rows() %&gt;%
-    GRanges()
-}</code></pre>
-<pre class="r"><code>## This code takes a while (~10mins) to execute
-## So save as Rds file for quicker processing in future
-geneDAR_path &lt;- file.path(
-  here(&quot;data/dar-analysis&quot;),
-  expArm,
-  &quot;geneDAR.Rds&quot;
-)
-if (!file.exists(geneDAR_path)) {
-  if (!dir.exists(dirname(geneDAR_path))) {
-    dir.create(dirname(geneDAR_path), recursive = TRUE)
-  }
-  geneDAR &lt;- map2(topTables, winRanges, function(tt, wr){
-    features &lt;- genes[genes$gene_id %in% tt$gene_id]
-    assignDAR(features, wr)
-  })
-  saveRDS(geneDAR, geneDAR_path)
-} else {
-  geneDAR &lt;- readRDS(geneDAR_path)
-}</code></pre>
+<p>We can assign DAR values to genes within the dataset to provide an
+estimate of the potential for a gene’s expression to be impacted by
+eQTLs. eQTLs don’t necessarily exist within the gene itself, so it is
+preferable to use smoothed DAR values (<code>dar_region</code> metadata
+column in the <code>dar</code> object) as an estimate of DAR within a
+region. First we need to convert the ranges of our <code>dar</code>
+object to represent regions. Here we also extend the edge ranges of each
+chromosome to encompass the entire chromosome, such that genes in these
+regions also get assigned a DAR value.</p>
+<pre class="r"><code>darRegions &lt;- convertRanges(dar, extendEdges = TRUE)</code></pre>
+<pre class="r"><code>geneDar &lt;- assignFeatureDar(genes, darRegions, darVal = &quot;region&quot;)</code></pre>
+<p>We will save these assigned values for use in further analysis.</p>
+<pre class="r"><code>geneDar_path &lt;- file.path(here(&quot;data/dar-analysis&quot;), expArm, &quot;geneDar.Rds&quot;)
+saveRDS(geneDar, geneDar_path)</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -2202,12 +2085,12 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.2.2 Patched (2022-11-10 r83330)
+<pre><code>R version 4.3.1 (2023-06-16)
 Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Ubuntu 20.04.5 LTS
+Running under: Ubuntu 20.04.6 LTS
 
 Matrix products: default
-BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0 
 LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
 
 locale:
@@ -2218,99 +2101,104 @@ locale:
  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
 [11] LC_MEASUREMENT=en_AU.UTF-8 LC_IDENTIFICATION=C       
 
+time zone: Australia/Adelaide
+tzcode source: system (glibc)
+
 attached base packages:
 [1] grid      stats4    stats     graphics  grDevices utils     datasets 
 [8] methods   base     
 
 other attached packages:
- [1] ensembldb_2.22.0            AnnotationFilter_1.22.0    
- [3] GenomicFeatures_1.50.4      AnnotationDbi_1.60.0       
- [5] limma_3.54.1                readxl_1.4.2               
- [7] msigdbr_7.5.1               zoo_1.8-11                 
- [9] Gviz_1.42.1                 VariantAnnotation_1.44.1   
-[11] Rsamtools_2.14.0            Biostrings_2.66.0          
-[13] XVector_0.38.0              SummarizedExperiment_1.28.0
-[15] Biobase_2.58.0              GenomicRanges_1.50.2       
-[17] GenomeInfoDb_1.34.9         IRanges_2.32.0             
-[19] S4Vectors_0.36.1            MatrixGenerics_1.10.0      
-[21] matrixStats_0.63.0          viridis_0.6.2              
-[23] viridisLite_0.4.1           rmarkdown_2.20             
-[25] pander_0.6.5                ggpubr_0.6.0               
-[27] RColorBrewer_1.1-3          ggrepel_0.9.3              
-[29] kableExtra_1.3.4            scales_1.2.1               
-[31] AnnotationHub_3.6.0         BiocFileCache_2.6.1        
-[33] dbplyr_2.3.0                BiocGenerics_0.44.0        
-[35] here_1.0.1                  magrittr_2.0.3             
-[37] lubridate_1.9.2             forcats_1.0.0              
-[39] stringr_1.5.0               dplyr_1.1.0                
-[41] purrr_1.0.1                 readr_2.1.4                
-[43] tidyr_1.3.0                 tibble_3.1.8               
-[45] ggplot2_3.4.1               tidyverse_2.0.0            
+ [1] ensembldb_2.24.0            AnnotationFilter_1.24.0    
+ [3] GenomicFeatures_1.52.1      AnnotationDbi_1.62.1       
+ [5] darr_0.99.0                 limma_3.56.2               
+ [7] readxl_1.4.2                msigdbr_7.5.1              
+ [9] zoo_1.8-12                  Gviz_1.44.0                
+[11] VariantAnnotation_1.46.0    Rsamtools_2.16.0           
+[13] Biostrings_2.68.1           XVector_0.40.0             
+[15] SummarizedExperiment_1.30.2 Biobase_2.60.0             
+[17] GenomicRanges_1.52.0        GenomeInfoDb_1.36.1        
+[19] IRanges_2.34.1              S4Vectors_0.38.1           
+[21] MatrixGenerics_1.12.2       matrixStats_1.0.0          
+[23] viridis_0.6.3               viridisLite_0.4.2          
+[25] rmarkdown_2.22              pander_0.6.5               
+[27] ggpubr_0.6.0                RColorBrewer_1.1-3         
+[29] ggrepel_0.9.3               kableExtra_1.3.4           
+[31] scales_1.2.1                AnnotationHub_3.8.0        
+[33] BiocFileCache_2.8.0         dbplyr_2.3.2               
+[35] BiocGenerics_0.46.0         here_1.0.1                 
+[37] magrittr_2.0.3              lubridate_1.9.2            
+[39] forcats_1.0.0               stringr_1.5.0              
+[41] dplyr_1.1.2                 purrr_1.0.1                
+[43] readr_2.1.4                 tidyr_1.3.0                
+[45] tibble_3.2.1                ggplot2_3.4.2              
+[47] tidyverse_2.0.0             workflowr_1.7.0            
 
 loaded via a namespace (and not attached):
-  [1] utf8_1.2.3                    tidyselect_1.2.0             
-  [3] RSQLite_2.3.0                 htmlwidgets_1.6.1            
-  [5] BiocParallel_1.32.5           munsell_0.5.0                
-  [7] codetools_0.2-19              interp_1.1-3                 
-  [9] withr_2.5.0                   colorspace_2.1-0             
- [11] filelock_1.0.2                highr_0.10                   
- [13] knitr_1.42                    rstudioapi_0.14              
- [15] ggsignif_0.6.4                labeling_0.4.2               
- [17] git2r_0.31.0                  GenomeInfoDbData_1.2.9       
- [19] farver_2.1.1                  bit64_4.0.5                  
- [21] rprojroot_2.0.3               vctrs_0.5.2                  
- [23] generics_0.1.3                xfun_0.37                    
- [25] biovizBase_1.46.0             timechange_0.2.0             
- [27] R6_2.5.1                      bitops_1.0-7                 
- [29] cachem_1.0.6                  DelayedArray_0.24.0          
- [31] assertthat_0.2.1              vroom_1.6.1                  
- [33] promises_1.2.0.1              BiocIO_1.8.0                 
- [35] nnet_7.3-18                   gtable_0.3.1                 
- [37] workflowr_1.7.0               rlang_1.0.6                  
- [39] systemfonts_1.0.4             splines_4.2.2                
- [41] rtracklayer_1.58.0            rstatix_0.7.2                
- [43] lazyeval_0.2.2                dichromat_2.0-0.1            
- [45] plyranges_1.18.0              broom_1.0.3                  
- [47] checkmate_2.1.0               BiocManager_1.30.20          
- [49] yaml_2.3.7                    abind_1.4-5                  
- [51] backports_1.4.1               httpuv_1.6.9                 
- [53] Hmisc_4.8-0                   tools_4.2.2                  
- [55] ellipsis_0.3.2                jquerylib_0.1.4              
- [57] Rcpp_1.0.10                   base64enc_0.1-3              
- [59] progress_1.2.2                zlibbioc_1.44.0              
- [61] RCurl_1.98-1.10               prettyunits_1.1.1            
- [63] rpart_4.1.19                  deldir_1.0-6                 
- [65] cluster_2.1.4                 fs_1.6.1                     
- [67] data.table_1.14.8             ProtGenerics_1.30.0          
- [69] hms_1.1.2                     mime_0.12                    
- [71] evaluate_0.20                 xtable_1.8-4                 
- [73] XML_3.99-0.13                 jpeg_0.1-10                  
- [75] gridExtra_2.3                 compiler_4.2.2               
- [77] biomaRt_2.54.0                crayon_1.5.2                 
- [79] htmltools_0.5.4               later_1.3.0                  
- [81] tzdb_0.3.0                    Formula_1.2-4                
- [83] DBI_1.1.3                     rappdirs_0.3.3               
- [85] babelgene_22.9                Matrix_1.5-3                 
- [87] car_3.1-1                     cli_3.6.0                    
- [89] parallel_4.2.2                pkgconfig_2.0.3              
- [91] GenomicAlignments_1.34.0      foreign_0.8-84               
- [93] xml2_1.3.3                    svglite_2.1.1                
- [95] bslib_0.4.2                   webshot_0.5.4                
- [97] rvest_1.0.3                   digest_0.6.31                
- [99] cellranger_1.1.0              htmlTable_2.4.1              
-[101] restfulr_0.0.15               curl_5.0.0                   
-[103] shiny_1.7.4                   rjson_0.2.21                 
-[105] lifecycle_1.0.3               jsonlite_1.8.4               
-[107] carData_3.0-5                 BSgenome_1.66.3              
-[109] fansi_1.0.4                   pillar_1.8.1                 
-[111] lattice_0.20-45               KEGGREST_1.38.0              
-[113] fastmap_1.1.0                 httr_1.4.4                   
-[115] survival_3.5-3                interactiveDisplayBase_1.36.0
-[117] glue_1.6.2                    png_0.1-8                    
-[119] BiocVersion_3.16.0            bit_4.0.5                    
-[121] stringi_1.7.12                sass_0.4.5                   
-[123] blob_1.2.3                    latticeExtra_0.6-30          
-[125] memoise_2.0.1                </code></pre>
+  [1] later_1.3.1                   BiocIO_1.10.0                
+  [3] bitops_1.0-7                  filelock_1.0.2               
+  [5] cellranger_1.1.0              XML_3.99-0.14                
+  [7] rpart_4.1.19                  lifecycle_1.0.3              
+  [9] rstatix_0.7.2                 rprojroot_2.0.3              
+ [11] vroom_1.6.3                   processx_3.8.1               
+ [13] lattice_0.21-8                backports_1.4.1              
+ [15] Hmisc_5.1-0                   sass_0.4.6                   
+ [17] jquerylib_0.1.4               yaml_2.3.7                   
+ [19] httpuv_1.6.11                 DBI_1.1.3                    
+ [21] abind_1.4-5                   zlibbioc_1.46.0              
+ [23] rvest_1.0.3                   biovizBase_1.48.0            
+ [25] RCurl_1.98-1.12               nnet_7.3-19                  
+ [27] rappdirs_0.3.3                git2r_0.32.0                 
+ [29] GenomeInfoDbData_1.2.10       svglite_2.1.1                
+ [31] codetools_0.2-19              DelayedArray_0.26.3          
+ [33] xml2_1.3.4                    tidyselect_1.2.0             
+ [35] farver_2.1.1                  base64enc_0.1-3              
+ [37] webshot_0.5.4                 GenomicAlignments_1.36.0     
+ [39] jsonlite_1.8.5                ellipsis_0.3.2               
+ [41] Formula_1.2-5                 systemfonts_1.0.4            
+ [43] tools_4.3.1                   progress_1.2.2               
+ [45] Rcpp_1.0.10                   glue_1.6.2                   
+ [47] gridExtra_2.3                 xfun_0.39                    
+ [49] withr_2.5.0                   BiocManager_1.30.21          
+ [51] fastmap_1.1.1                 latticeExtra_0.6-30          
+ [53] fansi_1.0.4                   callr_3.7.3                  
+ [55] digest_0.6.32                 timechange_0.2.0             
+ [57] R6_2.5.1                      mime_0.12                    
+ [59] colorspace_2.1-0              jpeg_0.1-10                  
+ [61] dichromat_2.0-0.1             biomaRt_2.56.1               
+ [63] RSQLite_2.3.1                 utf8_1.2.3                   
+ [65] generics_0.1.3                data.table_1.14.8            
+ [67] rtracklayer_1.60.0            prettyunits_1.1.1            
+ [69] httr_1.4.6                    htmlwidgets_1.6.2            
+ [71] S4Arrays_1.0.4                whisker_0.4.1                
+ [73] pkgconfig_2.0.3               gtable_0.3.3                 
+ [75] blob_1.2.4                    htmltools_0.5.5              
+ [77] carData_3.0-5                 plyranges_1.20.0             
+ [79] ProtGenerics_1.32.0           png_0.1-8                    
+ [81] knitr_1.43                    rstudioapi_0.14              
+ [83] tzdb_0.4.0                    rjson_0.2.21                 
+ [85] checkmate_2.2.0               curl_5.0.1                   
+ [87] cachem_1.0.8                  BiocVersion_3.17.1           
+ [89] parallel_4.3.1                foreign_0.8-84               
+ [91] restfulr_0.0.15               pillar_1.9.0                 
+ [93] vctrs_0.6.3                   promises_1.2.0.1             
+ [95] car_3.1-2                     xtable_1.8-4                 
+ [97] cluster_2.1.4                 htmlTable_2.4.1              
+ [99] evaluate_0.21                 cli_3.6.1                    
+[101] compiler_4.3.1                rlang_1.1.1                  
+[103] crayon_1.5.2                  ggsignif_0.6.4               
+[105] labeling_0.4.2                interp_1.1-4                 
+[107] ps_1.7.5                      getPass_0.2-2                
+[109] fs_1.6.2                      stringi_1.7.12               
+[111] deldir_1.0-9                  BiocParallel_1.34.2          
+[113] babelgene_22.9                munsell_0.5.0                
+[115] lazyeval_0.2.2                Matrix_1.5-4.1               
+[117] BSgenome_1.68.0               hms_1.1.3                    
+[119] bit64_4.0.5                   KEGGREST_1.40.0              
+[121] shiny_1.7.4                   highr_0.10                   
+[123] interactiveDisplayBase_1.38.0 broom_1.0.5                  
+[125] memoise_2.0.1                 bslib_0.5.0                  
+[127] bit_4.0.5                    </code></pre>
 </div>
 </div>
 </div>
@@ -2364,6 +2252,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {
@@ -2378,7 +2271,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2,h3",
+      selectors: "h1,h2,h3,h4",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
