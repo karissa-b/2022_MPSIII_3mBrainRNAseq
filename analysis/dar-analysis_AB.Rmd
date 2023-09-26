@@ -271,7 +271,7 @@ contrasts <- makeContrasts(
 ```
 
 DAR is calculated by firstly determining the Euclidean distance between allelic proportions of the contrasted sample groups.
-The Euclidean distance is then converted to the DAR metric by dividing by $$\sqrt{2}$$, resulting in an easy-to-interpret value between 0 and 1, where 0 represents identical allelic representation and 1 represents complete diversity.
+The Euclidean distance is then converted to the DAR metric by dividing by $\sqrt{2}$, resulting in an easy-to-interpret value between 0 and 1, where 0 represents identical allelic representation and 1 represents complete diversity.
 This is handled within the `dar()` function by passing our allelic proportions and intended contrasts as arguments.
 
 Two types of DAR values are reported by the `dar()` function as metadata columns of the resulting `GRanges` objects:
@@ -364,7 +364,7 @@ We can produce a localised visualisation to assess whether differentially expres
 This functionality has not yet been implemented in the `darr` package, so let's define a function here instead.
 
 ```{r plotChrDar}
-plotChrDar <- function(
+plotChrDar2 <- function(
     dar, chromosome, features = GRanges(), foi = GRanges(),
     darType = "b", highlight_features = TRUE,
     title = ""
@@ -470,8 +470,22 @@ plotChrDar <- function(
 
 First let's look at the mutant chromosome, as this was identified as having the highest average DAR from the ECDF we plotted above.
 
-```{r chrDar_A_chr22}
+```{r}
 plotChrDar(
+  dar = dar$A_vs_WT,
+  darVal = "region",
+  chr = "22",
+  foi = genes[genes$gene_name == "sgsh"],
+  foi_anno = "gene_name",
+  foi_highlight = TRUE,
+  features = genes[genes$gene_id %in% deGenes$`MPS-IIIA`],
+  features_anno = "gene_name",
+  features_highlight = TRUE
+)
+```
+
+```{r chrDar_A_chr22}
+plotChrDar2(
   dar = dar$A_vs_WT,
   chromosome = "22",
   features = genes[genes$gene_id %in% deGenes$`MPS-IIIA`],
@@ -641,7 +655,7 @@ lfc_goi <- lfc_comp %>%
   # dplyr::filter(DE != "None")
   # dplyr::filter(lfc_hom > 0)
   dplyr::filter(lfc_hom > 0 & DE != "None")
-  # dplyr::filter(DE == "Hom only" & lfc_hom > 0)
+# dplyr::filter(DE == "Hom only" & lfc_hom > 0)
 soi <- metadata %>%
   dplyr::filter(genotype == "sgsh_het") %>%
   # dplyr::filter(genotype == "MPSIIIA") %>%
